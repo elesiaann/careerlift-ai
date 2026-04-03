@@ -1045,11 +1045,6 @@ function forgotPassword(){
   showToast('Password reset link sent to '+e);
 }
 
-async function callClaude(systemPrompt, userMessage){
-  const resp=await fetch(const resp=await fetch('https://anthropic-proxy.esha-ann133.workers.dev',{
-    method:'POST',
-// ... more code
-
 
 function setUser(name){
   const initials=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
@@ -1109,19 +1104,18 @@ function removeFile(page){
    CLAUDE API CALL
 ════════════════════════════════════ */
 async function callClaude(systemPrompt, userMessage){
-  const resp=await fetch('https://api.anthropic.com/v1/messages',{
+  const resp=await fetch('https://fusxcijaklbrfkszlzsv.supabase.co/functions/v1/ai-proxy',{
     method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:1000,
-      system:systemPrompt,
-      messages:[{role:'user',content:userMessage}]
-    })
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer sb_publishable_jwwBwa_k4Rdzz8WTP6B97A_Zo3qBq3n'
+    },
+    body:JSON.stringify({systemPrompt,userMessage})
   });
   if(!resp.ok)throw new Error('API error '+resp.status);
   const data=await resp.json();
-  return data.content.map(b=>b.text||'').join('');
+  if(data.error)throw new Error(data.error);
+  return data.text;
 }
 
 /* ════════════════════════════════════
