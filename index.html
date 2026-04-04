@@ -1419,7 +1419,68 @@ function setUser(name){
   const el=document.getElementById('dash-av');if(el)el.textContent=initials;
   const nm=document.getElementById('dash-nm');if(nm)nm.textContent=name;
   const wl=document.getElementById('dash-welcome');if(wl)wl.textContent='Welcome back, '+name.split(' ')[0]+'!';
+  updateNavForAuth(true);
 }
+
+/* ════════════════════════════════════
+   AUTH NAV VISIBILITY
+════════════════════════════════════ */
+function updateNavForAuth(loggedIn){
+  const nr=document.querySelector('.nav-right');
+  if(!nr)return;
+  if(loggedIn){
+    nr.innerHTML='<button class="btn-ghost" onclick="signOut()">Sign out</button>';
+  }else{
+    nr.innerHTML='<button class="btn-ghost" onclick="openModal(\'login-modal\')">Log in</button><button class="btn-indigo" onclick="openModal(\'signup-modal\')">Sign up free</button>';
+  }
+}
+
+async function signOut(){
+  if(_sb)await _sb.auth.signOut();
+  updateNavForAuth(false);
+  go('landing',null,'careerliftai.com');
+  showToast('Signed out successfully');
+}
+
+/* ════════════════════════════════════
+   SUPABASE AUTH INIT — handles OAuth
+   callback and session restore
+════════════════════════════════════ */
+async function initAuth(){
+  if(!_sb)return;
+  // Listen for all auth state changes (OAuth callback, session restore, sign out)
+  _sb.auth.onAuthStateChange((event,session)=>{
+    if((event==='SIGNED_IN'||event==='TOKEN_REFRESHED')&&session){
+      const u=session.user;
+      const name=u.user_metadata?.full_name||u.user_metadata?.name||(u.email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
+      hideAuthLoading();
+      closeModal('login-modal');closeModal('signup-modal');closeModal('otp-modal');
+      setUser(name);
+      go('dashboard',null,'careerliftai.com/dashboard');
+      // Clean the token hash from URL
+      if(window.location.hash&&window.location.hash.includes('access_token')){
+        history.replaceState(null,'',window.location.pathname);
+      }
+      showToast('Welcome, '+name.split(' ')[0]+'! ✓');
+    }
+    if(event==='SIGNED_OUT'){
+      updateNavForAuth(false);
+      go('landing',null,'careerliftai.com');
+    }
+  });
+  // Check for existing session on page load
+  const {data:{session}}=await _sb.auth.getSession();
+  if(session){
+    const u=session.user;
+    const name=u.user_metadata?.full_name||u.user_metadata?.name||(u.email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
+    setUser(name);
+    go('dashboard',null,'careerliftai.com/dashboard');
+    if(window.location.hash&&window.location.hash.includes('access_token')){
+      history.replaceState(null,'',window.location.pathname);
+    }
+  }
+}
+initAuth();
 
 /* ════════════════════════════════════
    FAQ TOGGLE
