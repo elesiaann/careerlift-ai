@@ -9,19 +9,15 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111;font-size:13px;background:#e8e8e8;display:flex;align-items:flex-start;justify-content:center;padding:24px;min-height:100vh}
-.frame-wrap{width:100%;max-width:1200px;border:1px solid #c8c8c8;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 4px 28px rgba(0,0,0,.12)}
-.topbar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:#f2f2f2;border-bottom:1px solid #e0e0e0}
-.dots{display:flex;gap:6px}
-.dot{width:11px;height:11px;border-radius:50%}
-.dot-r{background:#FF5F57}.dot-y{background:#FFBD2E}.dot-g{background:#28C840}
-.url-bar{flex:1;background:#e4e4e4;border:1px solid #cecece;border-radius:6px;padding:4px 12px;font-size:11px;color:#888;margin:0 10px;text-align:center}
-.tabs{display:flex;gap:2px;flex-wrap:wrap}
-.tab{padding:5px 10px;font-size:11px;border-radius:5px;cursor:pointer;color:#777;border:1px solid transparent;background:transparent;white-space:nowrap}
-.tab:hover{background:#fff;color:#111}
-.tab.on{background:#fff;border-color:#d0d0d0;color:#111;font-weight:500}
-.frame-body{height:660px;overflow:hidden}
-.screen{display:none;height:100%;overflow-y:auto;background:#fff}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111;font-size:13px;background:#fff;min-height:100vh}
+.frame-wrap{width:100%;background:#fff}
+.topbar{display:none}
+.dots{display:none}
+.dot{display:none}
+.tabs{display:none}
+.tab{display:none}
+.frame-body{min-height:100vh;overflow:visible}
+.screen{display:none;min-height:100vh;background:#fff}
 .screen.on{display:block}
 
 /* ═══ MODALS ═══ */
@@ -90,8 +86,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1
 .feat-card p{font-size:12px;color:#888;line-height:1.55}
 
 /* ═══ DASHBOARD ═══ */
-.dash-layout{display:grid;grid-template-columns:205px 1fr;height:100%}
-.sidebar{background:#fafafa;border-right:1px solid #eee;display:flex;flex-direction:column;padding:12px 0;height:100%}
+.dash-layout{display:grid;grid-template-columns:205px 1fr;min-height:100vh}
+.sidebar{background:#fafafa;border-right:1px solid #eee;display:flex;flex-direction:column;padding:12px 0;min-height:100vh}
 .sb-logo{padding:6px 15px 12px;font-size:14px;font-weight:700;color:#6366F1;border-bottom:1px solid #eee;margin-bottom:8px}
 .sb-user{display:flex;align-items:center;gap:9px;padding:7px 11px 11px;border-bottom:1px solid #eee;margin-bottom:6px}
 .sb-av{width:30px;height:30px;border-radius:50%;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#6366F1;flex-shrink:0}
@@ -141,7 +137,7 @@ tr:last-child td{border-bottom:none}
 .row-btn:hover{background:#f5f5f5}
 
 /* ═══ INNER PAGES ═══ */
-.inner-page{background:#f4f4f4;padding:22px;overflow-y:auto;height:100%}
+.inner-page{background:#f4f4f4;padding:22px;min-height:100vh}
 .page-h{font-size:19px;font-weight:700;color:#111;margin-bottom:3px}
 .page-s{font-size:12px;color:#888;margin-bottom:20px}
 .two-col{display:grid;grid-template-columns:1fr 270px;gap:14px}
@@ -414,6 +410,64 @@ tr:last-child td{border-bottom:none}
 .forgot-link{font-size:12px;color:#6366F1;cursor:pointer;text-align:center;display:block;margin-top:10px}
 .forgot-link:hover{text-decoration:underline}
 
+/* ═══ MOBILE RESPONSIVE ═══ */
+@media(max-width:768px){
+  /* Nav */
+  .site-nav{padding:12px 16px}
+  .nav-logo{font-size:14px}
+  .btn-ghost,.btn-indigo{padding:5px 12px;font-size:11px}
+  /* Hero */
+  .hero{padding:36px 20px 32px}
+  .hero h1{font-size:26px;letter-spacing:-.3px}
+  .hero p{font-size:13px}
+  .hero-btns{flex-direction:column;align-items:center;gap:10px}
+  .btn-primary,.btn-secondary{width:100%;max-width:300px;text-align:center}
+  /* Stats */
+  .stats-strip{grid-template-columns:1fr}
+  .stat{border-right:none;border-bottom:1px solid #eee}
+  .stat:last-child{border-bottom:none}
+  /* Features */
+  .feat-section{padding:28px 16px 32px}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  /* Reviews */
+  .reviews-section{padding:36px 16px}
+  .reviews-grid{grid-template-columns:1fr}
+  /* FAQ */
+  .faq-section{padding:36px 16px}
+  /* Footer */
+  .site-footer{padding:32px 16px 16px}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:20px}
+  /* Dashboard */
+  .dash-layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .sidebar{height:auto;flex-direction:row;flex-wrap:wrap;padding:8px;gap:4px;border-right:none;border-bottom:1px solid #eee}
+  .sb-logo{display:none}
+  .sb-user{border-bottom:none;padding:4px 8px}
+  .sb-link{padding:6px 10px;margin:1px;font-size:11px}
+  .sb-foot{display:none}
+  .dash-content{padding:12px}
+  .metrics{grid-template-columns:1fr 1fr}
+  .qa-grid{grid-template-columns:1fr}
+  /* Inner pages */
+  .inner-page{padding:12px}
+  .two-col{grid-template-columns:1fr}
+  .li-grid{grid-template-columns:1fr}
+  .cl-layout{grid-template-columns:1fr;height:auto}
+  .ats-layout{grid-template-columns:1fr}
+  /* Pricing */
+  .plans-grid{grid-template-columns:1fr 1fr}
+  /* Modals */
+  .modal-box{padding:20px;width:95vw}
+  .otp-input{width:38px;height:44px;font-size:18px}
+}
+@media(max-width:480px){
+  .feat-grid{grid-template-columns:1fr}
+  .plans-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .hero h1{font-size:22px}
+  .cmp-grid{grid-template-columns:1fr}
+  .cv-panel.right{border-left:none;border-top:1px solid #eee}
+}
+
 /* ═══ AUTH LOADING OVERLAY ═══ */
 .auth-loading-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.97);z-index:9998;flex-direction:column;align-items:center;justify-content:center;gap:16px}
 .auth-loading-overlay.show{display:flex}
@@ -471,6 +525,12 @@ tr:last-child td{border-bottom:none}
 .footer-divider{height:1px;background:#222;margin-bottom:16px}
 .footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 .footer-bottom span{font-size:11px;color:#555}
+/* Template Picker Modal */
+.tpl-pick-card{border:2px solid #e5e7eb;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .18s}
+.tpl-pick-card:hover{border-color:#6366F1;background:#FAFAFE;box-shadow:0 2px 12px rgba(99,102,241,.12)}
+.tpl-pick-name{font-size:13px;font-weight:700;color:#111;margin-bottom:3px}
+.tpl-pick-meta{font-size:11px;color:#6366F1;font-weight:500;margin-bottom:4px}
+.tpl-pick-badge{font-size:10.5px;color:#555;background:#f4f4f5;border-radius:4px;padding:2px 7px;display:inline-block}
 </style>
 </head>
 <body>
@@ -546,6 +606,46 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<!-- ═══════ TEMPLATE PICKER MODAL ═══════ -->
+<div class="modal-overlay" id="tpl-picker-modal" style="display:none;z-index:3000">
+  <div class="modal-box" style="max-width:560px;width:90%">
+    <div class="modal-title" style="font-size:17px;font-weight:700;margin-bottom:4px">Choose a Template</div>
+    <div class="modal-tagline" style="margin-bottom:20px">Your optimized CV will be auto-populated into the template</div>
+    <div id="tpl-picker-loading" style="display:none;text-align:center;padding:20px 0">
+      <div class="spinner" style="margin:0 auto 10px"></div>
+      <p style="font-size:13px;color:#555">Mapping your CV to template fields…</p>
+    </div>
+    <div id="tpl-picker-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="tpl-pick-card" onclick="populateTemplate('Classic Professional')">
+        <div class="tpl-pick-name">Classic Professional</div>
+        <div class="tpl-pick-meta">ATS Score: 96/100 · Single column</div>
+        <div class="tpl-pick-badge">Best for: All industries</div>
+      </div>
+      <div class="tpl-pick-card" onclick="populateTemplate('Modern Two-Column')">
+        <div class="tpl-pick-name">Modern Two-Column</div>
+        <div class="tpl-pick-meta">ATS Score: 91/100 · Dark sidebar</div>
+        <div class="tpl-pick-badge">Best for: Tech, Creative</div>
+      </div>
+      <div class="tpl-pick-card" onclick="populateTemplate('Indigo Header')">
+        <div class="tpl-pick-name">Indigo Header</div>
+        <div class="tpl-pick-meta">ATS Score: 94/100 · Bold header</div>
+        <div class="tpl-pick-badge">Best for: Finance, All markets</div>
+      </div>
+      <div class="tpl-pick-card" onclick="populateTemplate('Minimal Classic')">
+        <div class="tpl-pick-name">Minimal Classic</div>
+        <div class="tpl-pick-meta">ATS Score: 98/100 · Highest rating</div>
+        <div class="tpl-pick-badge">Best for: Executive, Law, Finance</div>
+      </div>
+      <div class="tpl-pick-card" onclick="populateTemplate('Developer Dark')">
+        <div class="tpl-pick-name">Developer Dark</div>
+        <div class="tpl-pick-meta">ATS Score: 88/100 · Tech-focused</div>
+        <div class="tpl-pick-badge">Best for: Tech, Startups</div>
+      </div>
+    </div>
+    <button class="btn-ghost" style="margin-top:16px;width:100%" onclick="document.getElementById('tpl-picker-modal').style.display='none'">Cancel</button>
+  </div>
+</div>
+
 <!-- ═══════ EDITOR MODAL ═══════ -->
 <div class="editor-overlay" id="editor-modal">
   <div class="editor-box">
@@ -589,19 +689,6 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
 <!-- ═══════ MAIN FRAME ═══════ -->
 <div class="frame-wrap">
-  <div class="topbar">
-    <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
-    <div class="tabs">
-      <div class="tab on" onclick="go('landing',this,'careerliftai.com')">Home</div>
-      <div class="tab" onclick="go('analyze',this,'careerliftai.com/analyze')">Analyze</div>
-      <div class="tab" onclick="go('linkedin',this,'careerliftai.com/linkedin')">LinkedIn</div>
-      <div class="tab" onclick="go('coverletter',this,'careerliftai.com/cover-letter')">Cover Letter</div>
-      <div class="tab" onclick="go('atsscore',this,'careerliftai.com/ats-score')">ATS Score</div>
-      <div class="tab" onclick="go('templates',this,'careerliftai.com/templates')">Templates</div>
-      <div class="tab" onclick="go('pricing',this,'careerliftai.com/pricing')">Pricing</div>
-    </div>
-  </div>
-
   <div class="frame-body">
 
     <!-- ══ LANDING ══ -->
@@ -907,6 +994,7 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
             <button class="dl-btn" onclick="downloadAnalysisTXT()">&#8595; Download TXT</button>
             <button class="dl-btn" onclick="copyOptimized()">Copy text</button>
             <button class="dl-btn" id="save-hist-btn" onclick="saveToHistory()" style="background:#10B981;color:#fff;border-color:#10B981">&#10003; Save to History</button>
+            <button class="dl-btn" onclick="showTemplatePicker()" style="background:#6366F1;color:#fff;border-color:#6366F1">Use in Template →</button>
           </div>
         </div>
         <!-- HISTORY PANEL -->
@@ -1070,6 +1158,14 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
               <div class="score-grade" id="ats-score-grade" style="color:#EF4444">—</div>
               <div class="score-desc" id="ats-score-desc">—</div>
               <div class="gauge-bars" id="ats-gauge-bars"></div>
+              <div id="ats-sections" style="margin-top:16px;display:none">
+                <div style="font-size:11px;font-weight:600;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Section Detection</div>
+                <div id="ats-sections-grid" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+              </div>
+              <div id="ats-missing-kw" style="margin-top:14px;display:none">
+                <div style="font-size:11px;font-weight:600;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Suggested Keywords to Add</div>
+                <div id="ats-missing-kw-list" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+              </div>
               <button class="action-btn" style="margin-top:16px" onclick="go('analyze',null,'careerliftai.com/analyze')">Fix with AI Rewrite →</button>
             </div>
             <div class="ats-tips">
@@ -1419,7 +1515,68 @@ function setUser(name){
   const el=document.getElementById('dash-av');if(el)el.textContent=initials;
   const nm=document.getElementById('dash-nm');if(nm)nm.textContent=name;
   const wl=document.getElementById('dash-welcome');if(wl)wl.textContent='Welcome back, '+name.split(' ')[0]+'!';
+  updateNavForAuth(true);
 }
+
+/* ════════════════════════════════════
+   AUTH NAV VISIBILITY
+════════════════════════════════════ */
+function updateNavForAuth(loggedIn){
+  const nr=document.querySelector('.nav-right');
+  if(!nr)return;
+  if(loggedIn){
+    nr.innerHTML='<button class="btn-ghost" onclick="signOut()">Sign out</button>';
+  }else{
+    nr.innerHTML='<button class="btn-ghost" onclick="openModal(\'login-modal\')">Log in</button><button class="btn-indigo" onclick="openModal(\'signup-modal\')">Sign up free</button>';
+  }
+}
+
+async function signOut(){
+  if(_sb)await _sb.auth.signOut();
+  updateNavForAuth(false);
+  go('landing',null,'careerliftai.com');
+  showToast('Signed out successfully');
+}
+
+/* ════════════════════════════════════
+   SUPABASE AUTH INIT — handles OAuth
+   callback and session restore
+════════════════════════════════════ */
+async function initAuth(){
+  if(!_sb)return;
+  // Listen for all auth state changes (OAuth callback, session restore, sign out)
+  _sb.auth.onAuthStateChange((event,session)=>{
+    if((event==='SIGNED_IN'||event==='TOKEN_REFRESHED')&&session){
+      const u=session.user;
+      const name=u.user_metadata?.full_name||u.user_metadata?.name||(u.email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
+      hideAuthLoading();
+      closeModal('login-modal');closeModal('signup-modal');closeModal('otp-modal');
+      setUser(name);
+      go('dashboard',null,'careerliftai.com/dashboard');
+      // Clean the token hash from URL
+      if(window.location.hash&&window.location.hash.includes('access_token')){
+        history.replaceState(null,'',window.location.pathname);
+      }
+      showToast('Welcome, '+name.split(' ')[0]+'! ✓');
+    }
+    if(event==='SIGNED_OUT'){
+      updateNavForAuth(false);
+      go('landing',null,'careerliftai.com');
+    }
+  });
+  // Check for existing session on page load
+  const {data:{session}}=await _sb.auth.getSession();
+  if(session){
+    const u=session.user;
+    const name=u.user_metadata?.full_name||u.user_metadata?.name||(u.email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
+    setUser(name);
+    go('dashboard',null,'careerliftai.com/dashboard');
+    if(window.location.hash&&window.location.hash.includes('access_token')){
+      history.replaceState(null,'',window.location.pathname);
+    }
+  }
+}
+initAuth();
 
 /* ════════════════════════════════════
    FAQ TOGGLE
@@ -1606,23 +1763,21 @@ async function runATSCheck(){
   document.getElementById('ats-loading').style.display='flex';
 
   try{
-    const systemPrompt=`You are an ATS scoring expert. Analyze the CV and return ONLY valid JSON:
-{
-  "score": <integer 20-95>,
-  "grade": "<Excellent|Good|Needs Improvement|Poor>",
-  "description": "<1-2 sentence description of what this score means>",
-  "keywords": <integer 20-90>,
-  "format": <integer 30-95>,
-  "completeness": <integer 20-90>,
-  "readability": <integer 40-95>,
-  "issues": [
-    {"type": "<err|warn|ok>", "title": "<short title>", "detail": "<concise explanation>"},
-    ... (5-6 items total)
-  ]
-}
-Return ONLY JSON, no markdown, no backticks.`;
+    const systemPrompt=`You are a senior ATS (Applicant Tracking System) analyst with expert knowledge of how enterprise ATS platforms — including Taleo, Workday, Greenhouse, Lever, iCIMS, SmartRecruiters, and BambooHR — parse, score, and rank CVs. Your analysis must be accurate, detailed, and actionable.
 
-    const userMsg=`Role: ${role}\nCountry: ${country}\nATS System: ${atsSystem}\n\nCV:\n${cvText}`;
+Scoring dimensions:
+- keywords (0-100): % match of role-specific hard skills, soft skills, industry terms, action verbs, and certifications found in the CV vs. expected for the target role/country
+- format (0-100): ATS parse compatibility — deduct for: columns/tables/text boxes (severe), headers/footers with text, graphics/logos, fancy fonts, missing standard section headings; award high scores for clean single-column plain text
+- completeness (0-100): presence and quality of: contact info, professional summary, work experience with quantified achievements, education, skills section, and (if relevant) certifications
+- readability (0-100): consistent date formats, clear job titles, proper bullet structure, no excessive abbreviations, correct spelling
+
+Return ONLY this exact JSON (no markdown, no backticks, no extra text):
+{"score":<int 10-97>,"grade":"<Excellent|Good|Needs Improvement|Poor>","description":"<2-3 sentences: overall ATS compatibility verdict, main strength, main weakness>","keywords":<int 0-100>,"format":<int 0-100>,"completeness":<int 0-100>,"readability":<int 0-100>,"sections":{"contact":<true|false>,"summary":<true|false>,"experience":<true|false>,"education":<true|false>,"skills":<true|false>,"certifications":<true|false>},"missingKeywords":["<kw1>","<kw2>","<kw3>","<kw4>","<kw5>","<kw6>"],"issues":[{"type":"<err|warn|ok>","title":"<concise title max 8 words>","detail":"<specific actionable advice, mention exact fix>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"}]}
+
+Score calibration (be realistic, not generous): 88-97=Excellent (near-perfect, rare), 70-87=Good (strong but improvable), 50-69=Needs Improvement (significant gaps), 10-49=Poor (major issues).
+For ATS System "Auto-detect": analyze for broadest ATS compatibility.`;
+
+    const userMsg=`Target Role: ${role}\nCountry: ${country}\nATS System: ${atsSystem}\n\nCV:\n${cvText}`;
     const raw=await callClaude(systemPrompt,userMsg);
     document.getElementById('ats-loading').style.display='none';
 
@@ -1645,7 +1800,30 @@ Return ONLY JSON, no markdown, no backticks.`;
       <div class="bar-row"><span class="bar-name">Completeness</span><div class="bar-track"><div class="b-after" style="width:${p.completeness}%;background:${scoreColor}"></div></div><span class="bar-nums">${p.completeness}%</span></div>
       <div class="bar-row"><span class="bar-name">Readability</span><div class="bar-track"><div class="b-after" style="width:${p.readability}%;background:${scoreColor}"></div></div><span class="bar-nums">${p.readability}%</span></div>`;
 
-    // Tips
+    // Section detection
+    if(p.sections){
+      const secEl=document.getElementById('ats-sections');
+      const secGrid=document.getElementById('ats-sections-grid');
+      const labels={contact:'Contact Info',summary:'Summary',experience:'Experience',education:'Education',skills:'Skills',certifications:'Certifications'};
+      secGrid.innerHTML='';
+      Object.entries(p.sections).forEach(([k,v])=>{
+        secGrid.innerHTML+=`<span style="padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;background:${v?'#D1FAE5':'#FEE2E2'};color:${v?'#065F46':'#991B1B'}">${v?'✓':'✕'} ${labels[k]||k}</span>`;
+      });
+      secEl.style.display='block';
+    }
+
+    // Missing keywords
+    if(p.missingKeywords&&p.missingKeywords.length){
+      const mkEl=document.getElementById('ats-missing-kw');
+      const mkList=document.getElementById('ats-missing-kw-list');
+      mkList.innerHTML='';
+      p.missingKeywords.forEach(kw=>{
+        mkList.innerHTML+=`<span style="padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE">+ ${kw}</span>`;
+      });
+      mkEl.style.display='block';
+    }
+
+    // Tips / issues
     const tipsList=document.getElementById('ats-tips-list');
     tipsList.innerHTML='';
     (p.issues||[]).forEach(issue=>{
@@ -1878,6 +2056,51 @@ function downloadEditorCV(){
   const doc=makePDF(name+' — CV',text);
   doc.save('CareerLift_CV_'+name.replace(/\s+/g,'_')+'.pdf');
   showToast('CV downloaded as PDF ✓');
+}
+
+/* ════════════════════════════════════
+   TEMPLATE PICKER & AUTO-POPULATION
+════════════════════════════════════ */
+function showTemplatePicker(){
+  if(!window._optimizedCV){showToast('Please run an ATS analysis first.');return;}
+  document.getElementById('tpl-picker-modal').style.display='flex';
+}
+
+async function populateTemplate(templateName){
+  const cvText=window._optimizedCV;
+  if(!cvText){showToast('No optimized CV found. Please run ATS analysis first.');return;}
+  document.getElementById('tpl-picker-grid').style.display='none';
+  document.getElementById('tpl-picker-loading').style.display='block';
+  try{
+    const sp=`You are a CV data extractor. Extract structured data from the provided CV text and return ONLY valid JSON with no markdown:
+{"name":"<full name or empty string>","title":"<job title or empty string>","email":"<email or empty string>","phone":"<phone or empty string>","location":"<city, country or empty string>","url":"<linkedin or portfolio url or empty string>","summary":"<professional summary paragraph>","job1":"<most recent: Job Title — Company Name>","dates1":"<date range e.g. Jan 2020 – Present>","bullets1":"<achievements as newline-separated list, 3-5 items, each on own line>","edu":"<Degree — Institution>","eduYear":"<year range or graduation year>","skills":"<comma-separated list of skills>"}
+Return ONLY JSON, no extra text.`;
+    const raw=await callClaude(sp,cvText);
+    let d;
+    try{d=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){throw new Error('Could not parse CV fields.');}
+    if(d.name)document.getElementById('ed-name').value=d.name;
+    if(d.title)document.getElementById('ed-title').value=d.title;
+    if(d.email)document.getElementById('ed-email').value=d.email;
+    if(d.phone)document.getElementById('ed-phone').value=d.phone;
+    if(d.location)document.getElementById('ed-location').value=d.location;
+    if(d.url)document.getElementById('ed-url').value=d.url;
+    if(d.summary)document.getElementById('ed-summary').value=d.summary;
+    if(d.job1)document.getElementById('ed-job1').value=d.job1;
+    if(d.dates1)document.getElementById('ed-dates1').value=d.dates1;
+    if(d.bullets1)document.getElementById('ed-bullets1').value=d.bullets1;
+    if(d.edu)document.getElementById('ed-edu').value=d.edu;
+    if(d.eduYear)document.getElementById('ed-edu-year').value=d.eduYear;
+    if(d.skills)document.getElementById('ed-skills').value=d.skills;
+    document.getElementById('tpl-picker-modal').style.display='none';
+    document.getElementById('tpl-picker-loading').style.display='none';
+    document.getElementById('tpl-picker-grid').style.display='grid';
+    openEditor(templateName);
+    showToast('Template populated with your optimized CV ✓');
+  }catch(err){
+    document.getElementById('tpl-picker-loading').style.display='none';
+    document.getElementById('tpl-picker-grid').style.display='grid';
+    showToast('Error: '+err.message);
+  }
 }
 
 /* ════════════════════════════════════
@@ -2241,54 +2464,6 @@ function setBar(key,data){
   document.getElementById('bar-'+key+'-b').style.width=data.before+'%';
   document.getElementById('bar-'+key+'-a').style.width=data.after+'%';
   document.getElementById('bar-'+key+'-t').textContent=data.before+'% → '+data.after+'%';
-}
-
-/* ════════════════════════════════════
-   ATS SCORE CHECK
-════════════════════════════════════ */
-async function runATSCheck(){
-  const cvText=document.getElementById('ats-cv-text').value.trim();
-  const role=document.getElementById('ats-role').value||'Professional';
-  const country=document.getElementById('ats-country').value||'United States';
-  const atsSystem=document.getElementById('ats-system').value||'Auto-detect';
-  if(!cvText){showToast('Please paste your CV text or upload a PDF.');return;}
-  const btn=document.getElementById('ats-btn');
-  btn.disabled=true;btn.textContent='Scoring…';
-  document.getElementById('ats-results').style.display='none';
-  document.getElementById('ats-loading').style.display='flex';
-  try{
-    const systemPrompt=`You are an ATS scoring expert. Return ONLY valid JSON:
-{"score":<int 20-95>,"grade":"<Excellent|Good|Needs Improvement|Poor>","description":"<1-2 sentences>","keywords":<int>,"format":<int>,"completeness":<int>,"readability":<int>,"issues":[{"type":"<err|warn|ok>","title":"<title>","detail":"<detail>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<detail>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<detail>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<detail>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<detail>"}]}
-Return ONLY JSON, no markdown, no backticks.`;
-    const userMsg=`Role: ${role}\nCountry: ${country}\nATS System: ${atsSystem}\n\nCV:\n${cvText}`;
-    const raw=await callClaude(systemPrompt,userMsg);
-    document.getElementById('ats-loading').style.display='none';
-    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){throw new Error('Parse error. Try again.');}
-    const sc=p.score>=70?'#10B981':p.score>=50?'#F59E0B':'#EF4444';
-    document.getElementById('ats-score-num').textContent=p.score;
-    document.getElementById('ats-score-num').style.color=sc;
-    document.getElementById('ats-score-grade').textContent=p.grade;
-    document.getElementById('ats-score-grade').style.color=sc;
-    document.getElementById('ats-score-desc').textContent=p.description;
-    document.getElementById('ats-gauge-bars').innerHTML=`
-      <div class="bar-row"><span class="bar-name">Keywords match</span><div class="bar-track"><div class="b-after" style="width:${p.keywords}%;background:${sc}"></div></div><span class="bar-nums">${p.keywords}%</span></div>
-      <div class="bar-row"><span class="bar-name">Format compat.</span><div class="bar-track"><div class="b-after" style="width:${p.format}%;background:${sc}"></div></div><span class="bar-nums">${p.format}%</span></div>
-      <div class="bar-row"><span class="bar-name">Completeness</span><div class="bar-track"><div class="b-after" style="width:${p.completeness}%;background:${sc}"></div></div><span class="bar-nums">${p.completeness}%</span></div>
-      <div class="bar-row"><span class="bar-name">Readability</span><div class="bar-track"><div class="b-after" style="width:${p.readability}%;background:${sc}"></div></div><span class="bar-nums">${p.readability}%</span></div>`;
-    const tl=document.getElementById('ats-tips-list');tl.innerHTML='';
-    (p.issues||[]).forEach(issue=>{
-      const ic=issue.type==='err'?'tip-ic-err':issue.type==='warn'?'tip-ic-warn':'tip-ic-ok';
-      const it=issue.type==='err'?'✕':issue.type==='warn'?'!':'✓';
-      tl.innerHTML+=`<div class="tip-item"><div class="tip-icon ${ic}">${it}</div><div class="tip-content"><h4>${issue.title}</h4><p>${issue.detail}</p></div></div>`;
-    });
-    document.getElementById('ats-results').style.display='block';
-    setTimeout(()=>document.getElementById('ats-results').scrollIntoView({behavior:'smooth'}),100);
-    showToast('ATS Score: '+p.score+'/100 ✓');
-  }catch(err){
-    document.getElementById('ats-loading').style.display='none';
-    showToast('Error: '+err.message);
-  }
-  btn.disabled=false;btn.textContent='Check ATS Score — Free';
 }
 
 /* ════════════════════════════════════
