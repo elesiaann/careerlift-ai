@@ -477,8 +477,8 @@ tr:last-child td{border-bottom:none}
 
 /* ═══ OTP MODAL ═══ */
 .otp-inputs{display:flex;gap:10px;justify-content:center;margin:20px 0}
-.otp-input{width:46px;height:52px;border:2px solid #d8d8d8;border-radius:8px;font-size:22px;font-weight:600;text-align:center;color:#111;outline:none;transition:border-color .15s;background:#fafafa}
-.otp-input:focus{border-color:#6366F1;background:#fff}
+.otp-single-input{width:200px;height:54px;border:2px solid #d8d8d8;border-radius:10px;font-size:26px;font-weight:700;text-align:center;color:#111;outline:none;transition:border-color .15s;background:#fafafa;letter-spacing:6px}
+.otp-single-input:focus{border-color:#6366F1;background:#fff}
 .otp-email-hint{font-size:12px;color:#888;text-align:center;margin-bottom:4px}
 .otp-email-hint strong{color:#6366F1}
 .otp-timer{text-align:center;font-size:12px;color:#888;margin-top:10px}
@@ -550,15 +550,10 @@ tr:last-child td{border-bottom:none}
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('otp-modal')">✕</button>
     <div class="modal-logo">CareerLift AI</div>
-    <div class="modal-tagline">We sent a 6-digit code to your email</div>
+    <div class="modal-tagline" id="otp-tagline">We sent a verification code to your email</div>
     <div class="otp-email-hint">Code sent to <strong id="otp-email-display">your email</strong></div>
-    <div class="otp-inputs">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-0" oninput="otpNext(this,0)" onkeydown="otpBack(event,0)">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-1" oninput="otpNext(this,1)" onkeydown="otpBack(event,1)">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-2" oninput="otpNext(this,2)" onkeydown="otpBack(event,2)">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-3" oninput="otpNext(this,3)" onkeydown="otpBack(event,3)">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-4" oninput="otpNext(this,4)" onkeydown="otpBack(event,4)">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-5" oninput="otpNext(this,5)" onkeydown="otpBack(event,5)">
+    <div class="otp-inputs" style="justify-content:center">
+      <input class="otp-single-input" type="text" inputmode="numeric" id="otp-code-input" maxlength="8" placeholder="Enter code" autocomplete="one-time-code" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
     </div>
     <div class="otp-err" id="otp-err"></div>
     <button class="modal-btn" onclick="verifyOTP()">Verify &amp; Continue</button>
@@ -640,6 +635,11 @@ tr:last-child td{border-bottom:none}
         <div class="tpl-pick-name">Developer Dark</div>
         <div class="tpl-pick-meta">ATS Score: 88/100 · Tech-focused</div>
         <div class="tpl-pick-badge">Best for: Tech, Startups</div>
+      </div>
+      <div class="tpl-pick-card" onclick="populateTemplate('A4 Federal Resume')">
+        <div class="tpl-pick-name">A4 Federal Resume</div>
+        <div class="tpl-pick-meta">ATS Score: 97/100 · US Federal Format</div>
+        <div class="tpl-pick-badge">Best for: US Government, Executive</div>
       </div>
     </div>
     <button class="btn-ghost" style="margin-top:16px;width:100%" onclick="document.getElementById('tpl-picker-modal').style.display='none'">Cancel</button>
@@ -1219,6 +1219,10 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
           <div class="tpl-card" data-cat="executive">
             <div class="tpl-preview"><div class="tpl-preview-inner"><div style="padding:32px 36px;font-family:-apple-system,sans-serif;font-size:11px;color:#1a1a1a;background:#fff"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:3px solid #1a1a1a;padding-bottom:14px"><div><div style="font-size:22px;font-weight:700;color:#111;margin-bottom:2px">John Davis</div><div style="font-size:13px;color:#6366F1;font-weight:600">Senior Software Engineer</div></div><div style="text-align:right;font-size:10px;color:#666"><div><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ff95909791bf9a929e9693d19c9092">[email&#160;protected]</a></div><div>+1 555 0123</div><div>New York, NY</div></div></div></div></div><div class="premium-badge">PRO</div></div>
             <div class="tpl-info"><div class="tpl-name">Executive Split</div><div class="tpl-meta">ATS Score: 93/100 · Pro only</div><div class="tpl-tags"><span class="tpl-tag">Executive</span><span class="tpl-tag">Management</span><span class="tpl-tag">Pro</span></div><div class="tpl-actions"><button class="tpl-btn tpl-btn-ghost" onclick="openEditor('Executive Split')">Preview</button><button class="tpl-btn tpl-btn-fill" onclick="go('pricing',null,'careerliftai.com/pricing')">Unlock Pro</button></div></div>
+          <!-- Template 7 — A4 Federal Resume -->
+          <div class="tpl-card" data-cat="classic">
+            <div class="tpl-preview"><div class="tpl-preview-inner"><div style="font-family:Georgia,serif;font-size:10px;color:#222;background:#fff;padding:20px 22px"><div style="text-align:center;border-bottom:2px solid #222;padding-bottom:10px;margin-bottom:10px"><div style="font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase">JOHN DAVIS</div><div style="font-size:9px;color:#555;margin-top:3px">Senior Software Engineer</div></div><div style="display:flex;justify-content:space-between;font-size:8px;color:#555;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #ddd;flex-wrap:wrap;gap:3px"><span><strong>Phone:</strong> +1 555 0123</span><span><strong>Email:</strong> john@email.com</span><span><strong>Location:</strong> New York, NY</span></div><div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid #222;padding-bottom:2px;margin-bottom:6px">Professional Statement</div><p style="font-size:7.5px;color:#444;line-height:1.5;margin-bottom:8px">Results-driven engineer with 5+ years building scalable systems. Reduced latency 40%, led teams of 6, delivered 3 product launches.</p><div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid #222;padding-bottom:2px;margin-bottom:6px">Work Experiences</div><div style="font-size:8.5px;font-weight:700">Senior SWE | Jan 2019 – Present</div><div style="font-size:7.5px;color:#666;margin-bottom:5px">Acme Corp | 40 hrs/week</div><div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;border-bottom:1px solid #222;padding-bottom:2px;margin-bottom:5px">Education &amp; Certification</div><div style="font-size:8px">B.S. Computer Science | 2019 — State University</div></div></div></div>
+            <div class="tpl-info"><div class="tpl-name">A4 Federal Resume</div><div class="tpl-meta">ATS Score: 97/100 · US Federal Format</div><div class="tpl-tags"><span class="tpl-tag">US Federal</span><span class="tpl-tag">Government</span><span class="tpl-tag">Executive</span></div><div class="tpl-actions"><button class="tpl-btn tpl-btn-ghost" onclick="openEditor('A4 Federal Resume')">Preview</button><button class="tpl-btn tpl-btn-fill" onclick="openEditor('A4 Federal Resume')">Edit &amp; Use</button></div></div>
           </div>
         </div>
       </div>
@@ -1422,9 +1426,9 @@ async function doSignup(){
 function openOTPModal(email){
   document.getElementById('otp-email-display').textContent=email;
   document.getElementById('otp-err').textContent='';
-  [0,1,2,3,4,5].forEach(i=>{document.getElementById('otp-'+i).value='';});
+  document.getElementById('otp-code-input').value='';
   document.getElementById('otp-modal').classList.add('open');
-  document.getElementById('otp-0').focus();
+  setTimeout(()=>document.getElementById('otp-code-input').focus(),100);
   startOTPTimer();
 }
 
@@ -1445,17 +1449,9 @@ function startOTPTimer(){
   },1000);
 }
 
-function otpNext(el,idx){
-  el.value=el.value.replace(/[^0-9]/g,'');
-  if(el.value&&idx<5)document.getElementById('otp-'+(idx+1)).focus();
-}
-function otpBack(e,idx){
-  if(e.key==='Backspace'&&!e.target.value&&idx>0)document.getElementById('otp-'+(idx-1)).focus();
-}
-
 async function verifyOTP(){
-  const code=[0,1,2,3,4,5].map(i=>document.getElementById('otp-'+i).value).join('');
-  if(code.length<6){document.getElementById('otp-err').textContent='Please enter the full 6-digit code.';return;}
+  const code=document.getElementById('otp-code-input').value.trim();
+  if(code.length<4){document.getElementById('otp-err').textContent='Please enter the full verification code.';return;}
   document.getElementById('otp-err').textContent='';
   if(_sb){
     try{
@@ -2107,6 +2103,7 @@ Return ONLY JSON, no extra text.`;
    CV EDITOR
 ════════════════════════════════════ */
 function openEditor(name){
+  window._currentTemplate=name||'Classic Professional';
   document.getElementById('editor-title').textContent='Edit Template — '+name;
   document.getElementById('editor-modal').classList.add('open');
   updatePreview();
@@ -2130,10 +2127,47 @@ function updatePreview(){
   const job1=document.getElementById('ed-job1').value||'Job Title — Company';
   const dates1=document.getElementById('ed-dates1').value||'2020 – Present';
   const rawBullets=(document.getElementById('ed-bullets1').value||'').split('\n').filter(b=>b.trim());
-  const bulletsHTML=rawBullets.map(b=>`<div style="font-size:10px;color:#444;padding-left:12px;position:relative;margin-bottom:3px"><span style="position:absolute;left:0;color:#6366F1">▸</span>${b.trim()}</div>`).join('');
   const edu=document.getElementById('ed-edu').value||'Degree — University';
   const eduYear=document.getElementById('ed-edu-year').value||'Year';
   const skillsList=(document.getElementById('ed-skills').value||'').split(',').filter(s=>s.trim());
+
+  const tpl=window._currentTemplate||'Classic Professional';
+
+  if(tpl==='A4 Federal Resume'){
+    const bulletsHTML=rawBullets.map(b=>`<div style="font-size:10px;color:#444;padding-left:14px;position:relative;margin-bottom:3px"><span style="position:absolute;left:0">▪</span>${b.trim()}</div>`).join('');
+    const skillsHTML=skillsList.map(s=>`<span style="display:inline-block;margin:2px 6px 2px 0;font-size:10px">${s.trim()}</span>`).join('·');
+    // Parse job1 for "Title | Company" or "Title — Company" format
+    const jobParts=job1.split(/[|—–]/);
+    const jobTitle=(jobParts[0]||job1).trim();
+    const company=(jobParts[1]||'').trim();
+    document.getElementById('cv-live-preview').innerHTML=`
+<div style="font-family:Georgia,Times,serif;padding:32px 36px;color:#222;font-size:11px;line-height:1.5;background:#fff">
+  <div style="text-align:center;border-bottom:2.5px solid #222;padding-bottom:14px;margin-bottom:12px">
+    <div style="font-size:22px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#111">${name}</div>
+    <div style="font-size:12px;color:#555;margin-top:5px;font-style:italic">${title}</div>
+  </div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;font-size:10px;color:#444;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #ccc">
+    <span><strong>Phone:</strong> ${phone}</span>
+    <span><strong>Email:</strong> ${email}</span>
+    <span><strong>Location:</strong> ${location}</span>
+    ${url?`<span><strong>Portfolio:</strong> ${url}</span>`:''}
+  </div>
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1.5px solid #222;padding-bottom:3px;margin-bottom:8px;margin-top:14px">Professional Statement</div>
+  <p style="font-size:10px;color:#333;line-height:1.65;margin-bottom:12px">${summary}</p>
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1.5px solid #222;padding-bottom:3px;margin-bottom:8px;margin-top:14px">Work Experiences</div>
+  <div style="font-size:11px;font-weight:700;color:#111">${jobTitle}${company?' | '+company:''} &nbsp;<span style="font-weight:400;color:#555;font-size:10px">${dates1}</span></div>
+  <div style="font-size:10px;color:#666;margin-bottom:5px">Hours per week: 40</div>
+  ${bulletsHTML}
+  <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1.5px solid #222;padding-bottom:3px;margin-bottom:8px;margin-top:14px">Education &amp; Certification</div>
+  <div style="font-size:11px;font-weight:700;color:#111">${edu}</div>
+  <div style="font-size:10px;color:#888;margin-bottom:8px">${eduYear}</div>
+  ${skillsList.length?`<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1.5px solid #222;padding-bottom:3px;margin-bottom:8px;margin-top:14px">Skills</div><p style="font-size:10px;color:#444;line-height:1.7">${skillsHTML}</p>`:''}
+</div>`;
+    return;
+  }
+
+  // Default preview (Classic style)
+  const bulletsHTML=rawBullets.map(b=>`<div style="font-size:10px;color:#444;padding-left:12px;position:relative;margin-bottom:3px"><span style="position:absolute;left:0;color:#6366F1">▸</span>${b.trim()}</div>`).join('');
   const skillsHTML=skillsList.map(s=>`<span style="padding:3px 9px;background:#EEF2FF;color:#4338CA;border-radius:4px;font-size:10px;font-weight:500;margin:2px;display:inline-block">${s.trim()}</span>`).join('');
 
   document.getElementById('cv-live-preview').innerHTML=`
