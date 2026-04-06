@@ -47,7 +47,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1
 .terms-txt a{color:#6366F1;cursor:pointer}
 
 /* ═══ LANDING ═══ */
-.site-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 48px;border-bottom:1px solid #eee}
+.site-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;border-bottom:1px solid #eee}
 .nav-logo{font-size:15px;font-weight:700;color:#6366F1}
 .nav-right{display:flex;gap:8px;align-items:center}
 .btn-ghost{padding:6px 16px;border-radius:7px;border:1px solid #d8d8d8;background:#fff;font-size:12px;cursor:pointer;color:#111}
@@ -570,8 +570,8 @@ tr:last-child td{border-bottom:none}
 .tpl-pick-badge{font-size:10.5px;color:#555;background:#f4f4f5;border-radius:4px;padding:2px 7px;display:inline-block}
 
 /* ═══ NAV LINKS ═══ */
-.nav-links{display:flex;gap:20px;flex-wrap:nowrap}
-.nav-links a{font-size:12px;color:#555;cursor:pointer;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+.nav-links{display:flex;gap:18px;flex-wrap:nowrap;overflow:hidden}
+.nav-links a{font-size:12px;color:#555;cursor:pointer;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;flex-shrink:0}
 .nav-links a:hover,.nav-links a.active{color:#6366F1;border-bottom-color:#6366F1}
 .nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px}
 .nav-hamburger span{display:block;width:22px;height:2px;background:#555;margin:4px 0;transition:.2s}
@@ -580,7 +580,7 @@ tr:last-child td{border-bottom:none}
 .nav-mobile-menu a{font-size:13px;color:#555;cursor:pointer;padding:10px 0;border-bottom:1px solid #f0f0f0;text-decoration:none}
 .nav-mobile-menu a:last-child{border-bottom:none}
 .nav-mobile-menu a:hover{color:#6366F1}
-.service-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 36px;border-bottom:1px solid #eee;background:#fff;position:relative;flex-shrink:0}
+.service-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid #eee;background:#fff;position:relative;flex-shrink:0}
 @media(max-width:900px){.nav-links{gap:14px}.nav-links a{font-size:11px}}
 @media(max-width:768px){.nav-links{display:none}.nav-hamburger{display:block}.service-nav{padding:10px 16px}}
 </style>
@@ -647,8 +647,9 @@ tr:last-child td{border-bottom:none}
     <div class="form-field"><label>Full name</label><input type="text" placeholder="John Davis" id="signup-name"></div>
     <div class="form-field"><label>Email address</label><input type="email" placeholder="you@email.com" id="signup-email"></div>
     <div class="form-field"><label>Password</label><input type="password" placeholder="Min. 8 characters" id="signup-pass"></div>
+    <div id="signup-err" style="font-size:12px;color:#ef4444;text-align:center;margin-bottom:6px;display:none"></div>
     <button class="modal-btn" onclick="doSignup()">Create free account</button>
-    <div class="terms-txt">By signing up you agree to our <a>Terms of Service</a> and <a>Privacy Policy</a></div>
+    <div class="terms-txt">By signing up you agree to our <a onclick="go('terms',null,'/terms');closeModal('signup-modal')">Terms of Service</a> and <a onclick="go('privacy',null,'/privacy');closeModal('signup-modal')">Privacy Policy</a></div>
     <div class="modal-switch" style="margin-top:10px">Already have an account? <a onclick="switchModal('signup-modal','login-modal')">Sign in</a></div>
   </div>
 </div>
@@ -1152,8 +1153,6 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
             <div class="fg"><label>Include in analysis</label>
               <label class="chk"><input type="checkbox" id="chk-rewrite" checked> Full ATS Rewrite</label>
               <label class="chk"><input type="checkbox" id="chk-score" checked> ATS Score Analysis</label>
-              <label class="chk"><input type="checkbox" id="chk-linkedin"> LinkedIn Optimization</label>
-              <label class="chk"><input type="checkbox" id="chk-cover"> Cover Letter</label>
             </div>
             <button class="action-btn" id="analyze-btn" onclick="runAnalysis()">Analyze Now — uses 1 credit</button>
           </div>
@@ -1319,13 +1318,13 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
         <div class="cl-layout">
           <div class="cl-form">
             <h3>Cover letter details</h3>
-            <div class="fg"><label>Company name *</label><input type="text" id="cl-company" value="Google"></div>
-            <div class="fg"><label>Job title *</label><input type="text" id="cl-jobtitle" value="Senior Software Engineer"></div>
-            <div class="fg"><label>Your name *</label><input type="text" id="cl-yourname" value="John Davis"></div>
+            <div class="fg"><label>Company name *</label><input type="text" id="cl-company" placeholder="e.g. Google"></div>
+            <div class="fg"><label>Job title *</label><input type="text" id="cl-jobtitle" placeholder="e.g. Senior Software Engineer"></div>
+            <div class="fg"><label>Your name *</label><input type="text" id="cl-yourname" placeholder="e.g. Jane Smith"></div>
             <div class="fg"><label>Target country</label><select id="cl-country"></select></div>
-            <div class="fg"><label>Job description *</label><textarea id="cl-jd" style="min-height:90px">We are looking for a Senior Software Engineer to join our Search Infrastructure team. You will design and build large-scale distributed systems handling billions of queries daily. Requirements: 5+ years experience, proficiency in distributed systems, strong problem-solving skills.</textarea></div>
-            <div class="fg"><label>Your key skills / highlights</label><input type="text" id="cl-skills" value="React, Node.js, AWS, microservices, team leadership"></div>
-            <div class="fg"><label>Why this company? (optional)</label><textarea id="cl-why" style="min-height:50px">I admire Google's mission to organize the world's information. I have followed Google's research on Search infrastructure for years.</textarea></div>
+            <div class="fg"><label>Job description *</label><textarea id="cl-jd" style="min-height:90px" placeholder="Paste the job description here…"></textarea></div>
+            <div class="fg"><label>Your key skills / highlights</label><input type="text" id="cl-skills" placeholder="e.g. React, Node.js, AWS, leadership"></div>
+            <div class="fg"><label>Why this company? (optional)</label><textarea id="cl-why" style="min-height:50px" placeholder="What excites you about this company or role?"></textarea></div>
             <div class="fg"><label>Tone</label>
               <div class="tone-options">
                 <div class="tone-opt on" onclick="selectTone(this)">Professional</div>
@@ -1943,7 +1942,7 @@ function finishLogin(name){
   setTimeout(()=>{
     hideAuthLoading();
     setUser(name);
-    go('dashboard',null,'careerliftai.com/dashboard');
+    go('dashboard',null,'/dashboard');
   },1400);
 }
 
@@ -1953,20 +1952,27 @@ function finishLogin(name){
 async function googleAuth(){
   closeModal('login-modal');closeModal('signup-modal');
   if(_sb){
+    showAuthLoading('Redirecting to Google…');
     try{
+      const origin=window.location.origin||'https://careerlifty.netlify.app';
       const {error}=await _sb.auth.signInWithOAuth({
         provider:'google',
-        options:{queryParams:{prompt:'select_account'},redirectTo:window.location.href}
+        options:{
+          queryParams:{access_type:'offline',prompt:'select_account'},
+          redirectTo:origin+'/'
+        }
       });
-      if(error)throw error;
+      if(error){hideAuthLoading();throw error;}
+      // Redirect handled by Supabase — page will reload
     }catch(err){
+      hideAuthLoading();
       showToast('Google sign-in failed: '+err.message);
     }
     return;
   }
   // Fallback demo mode
   showAuthLoading('Connecting to Google…');
-  setTimeout(()=>{hideAuthLoading();setUser('Google User');go('dashboard',null,'careerliftai.com/dashboard');showToast('Signed in with Google ✓');},1600);
+  setTimeout(()=>{hideAuthLoading();setUser('Google User');go('dashboard',null,'/dashboard');showToast('Signed in with Google ✓');},1600);
 }
 
 /* ════════════════════════════════════
@@ -2008,18 +2014,46 @@ let _otpName='';
 let _otpPass='';
 let _otpTimer=null;
 
+function _showSignupErr(msg){
+  const el=document.getElementById('signup-err');
+  if(el){el.textContent=msg;el.style.display=msg?'block':'none';}
+  else showToast(msg);
+}
+
 async function doSignup(){
   const n=document.getElementById('signup-name').value.trim();
   const e=document.getElementById('signup-email').value.trim();
   const p=document.getElementById('signup-pass').value;
-  if(!n||!e||!p){showToast('Please fill in all fields.');return;}
-  if(p.length<8){showToast('Password must be at least 8 characters.');return;}
+  _showSignupErr('');
+  if(!n||!e||!p){_showSignupErr('Please fill in all fields.');return;}
+  if(p.length<8){_showSignupErr('Password must be at least 8 characters.');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)){_showSignupErr('Please enter a valid email address.');return;}
   _otpName=n;_otpEmail=e;_otpPass=p;
   closeModal('signup-modal');
   showAuthLoading('Sending verification code…');
   if(_sb){
     try{
-      const {error}=await _sb.auth.signInWithOtp({email:e,options:{shouldCreateUser:true,data:{full_name:n}}});
+      // signUp first to detect duplicate emails (identities array empty = already registered)
+      const {data:sd,error:se}=await _sb.auth.signUp({email:e,password:p,options:{data:{full_name:n}}});
+      if(se){
+        hideAuthLoading();
+        openModal('signup-modal');
+        if(se.message&&se.message.toLowerCase().includes('already')){
+          _showSignupErr('This email is already registered. Please log in instead.');
+        }else{
+          _showSignupErr(se.message||'Signup failed. Please try again.');
+        }
+        return;
+      }
+      // Supabase returns identities:[] for an existing confirmed user
+      if(sd?.user&&Array.isArray(sd.user.identities)&&sd.user.identities.length===0){
+        hideAuthLoading();
+        openModal('signup-modal');
+        _showSignupErr('This email is already in use. Please log in instead.');
+        return;
+      }
+      // New user — send OTP for verification
+      const {error}=await _sb.auth.signInWithOtp({email:e,options:{shouldCreateUser:false,data:{full_name:n}}});
       if(error)throw error;
       hideAuthLoading();
       openOTPModal(e);
@@ -2027,7 +2061,7 @@ async function doSignup(){
     }catch(err){
       hideAuthLoading();
       openModal('signup-modal');
-      showToast('Could not send OTP: '+err.message);
+      _showSignupErr(err.message||'Could not create account. Please try again.');
       return;
     }
   }
@@ -2141,7 +2175,7 @@ function updateNavForAuth(loggedIn){
 async function signOut(){
   if(_sb)await _sb.auth.signOut();
   updateNavForAuth(false);
-  go('landing',null,'careerliftai.com');
+  go('landing',null,'/');
   showToast('Signed out successfully');
 }
 
@@ -2152,14 +2186,21 @@ async function signOut(){
 async function initAuth(){
   if(!_sb)return;
   // Listen for all auth state changes (OAuth callback, session restore, sign out)
-  _sb.auth.onAuthStateChange((event,session)=>{
+  _sb.auth.onAuthStateChange(async(event,session)=>{
     if((event==='SIGNED_IN'||event==='TOKEN_REFRESHED')&&session){
       const u=session.user;
       const name=u.user_metadata?.full_name||u.user_metadata?.name||(u.email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
       hideAuthLoading();
       closeModal('login-modal');closeModal('signup-modal');closeModal('otp-modal');
       setUser(name);
-      go('dashboard',null,'careerliftai.com/dashboard');
+      go('dashboard',null,'/dashboard');
+      // Save/update user profile in database (upsert = create if new, update if exists)
+      try{
+        await _sb.from('profiles').upsert({
+          id:u.id,email:u.email,full_name:name,
+          updated_at:new Date().toISOString()
+        },{onConflict:'id',ignoreDuplicates:false});
+      }catch(_){}
       // Clean the token hash from URL
       if(window.location.hash&&window.location.hash.includes('access_token')){
         history.replaceState(null,'',window.location.pathname);
@@ -2168,7 +2209,7 @@ async function initAuth(){
     }
     if(event==='SIGNED_OUT'){
       updateNavForAuth(false);
-      go('landing',null,'careerliftai.com');
+      go('landing',null,'/');
     }
   });
   // Check for existing session on page load
@@ -2177,7 +2218,7 @@ async function initAuth(){
     const u=session.user;
     const name=u.user_metadata?.full_name||u.user_metadata?.name||(u.email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
     setUser(name);
-    go('dashboard',null,'careerliftai.com/dashboard');
+    go('dashboard',null,'/dashboard');
     if(window.location.hash&&window.location.hash.includes('access_token')){
       history.replaceState(null,'',window.location.pathname);
     }
@@ -3274,8 +3315,8 @@ async function submitContact(){
   status.textContent='Sending…';
   try{
     // Store in Supabase contact_messages table if available
-    if(window._supabase){
-      await window._supabase.from('contact_messages').insert([{name,email,subject,message,created_at:new Date().toISOString()}]);
+    if(_sb){
+      await _sb.from('contact_messages').insert([{name,email,subject,message,created_at:new Date().toISOString()}]);
     }
     status.style.color='#10B981';
     status.textContent='Message sent! We\'ll reply within 24 hours.';
