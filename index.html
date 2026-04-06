@@ -49,10 +49,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1
 /* ═══ LANDING ═══ */
 .site-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 48px;border-bottom:1px solid #eee}
 .nav-logo{font-size:15px;font-weight:700;color:#6366F1}
-.nav-links{display:flex;gap:24px}
-.nav-links a{font-size:12px;color:#777;cursor:pointer;text-decoration:none}
-.nav-links a:hover{color:#111}
-.nav-right{display:flex;gap:8px}
+.nav-right{display:flex;gap:8px;align-items:center}
 .btn-ghost{padding:6px 16px;border-radius:7px;border:1px solid #d8d8d8;background:#fff;font-size:12px;cursor:pointer;color:#111}
 .btn-ghost:hover{background:#f5f5f5}
 .btn-indigo{padding:6px 16px;border-radius:7px;background:#6366F1;color:#fff;border:none;font-size:12px;cursor:pointer;font-weight:500}
@@ -457,7 +454,6 @@ tr:last-child td{border-bottom:none}
   .plans-grid{grid-template-columns:1fr 1fr}
   /* Modals */
   .modal-box{padding:20px;width:95vw}
-  .otp-input{width:38px;height:44px;font-size:18px}
 }
 @media(max-width:480px){
   .feat-grid{grid-template-columns:1fr}
@@ -477,8 +473,8 @@ tr:last-child td{border-bottom:none}
 
 /* ═══ OTP MODAL ═══ */
 .otp-inputs{display:flex;gap:10px;justify-content:center;margin:20px 0}
-.otp-input{width:46px;height:52px;border:2px solid #d8d8d8;border-radius:8px;font-size:22px;font-weight:600;text-align:center;color:#111;outline:none;transition:border-color .15s;background:#fafafa}
-.otp-input:focus{border-color:#6366F1;background:#fff}
+.otp-single-input{width:200px;height:54px;border:2px solid #d8d8d8;border-radius:10px;font-size:26px;font-weight:700;text-align:center;color:#111;outline:none;transition:border-color .15s;background:#fafafa;letter-spacing:6px}
+.otp-single-input:focus{border-color:#6366F1;background:#fff}
 .otp-email-hint{font-size:12px;color:#888;text-align:center;margin-bottom:4px}
 .otp-email-hint strong{color:#6366F1}
 .otp-timer{text-align:center;font-size:12px;color:#888;margin-top:10px}
@@ -525,6 +521,27 @@ tr:last-child td{border-bottom:none}
 .footer-divider{height:1px;background:#222;margin-bottom:16px}
 .footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
 .footer-bottom span{font-size:11px;color:#555}
+/* Template Picker Modal */
+.tpl-pick-card{border:2px solid #e5e7eb;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .18s}
+.tpl-pick-card:hover{border-color:#6366F1;background:#FAFAFE;box-shadow:0 2px 12px rgba(99,102,241,.12)}
+.tpl-pick-name{font-size:13px;font-weight:700;color:#111;margin-bottom:3px}
+.tpl-pick-meta{font-size:11px;color:#6366F1;font-weight:500;margin-bottom:4px}
+.tpl-pick-badge{font-size:10.5px;color:#555;background:#f4f4f5;border-radius:4px;padding:2px 7px;display:inline-block}
+
+/* ═══ NAV LINKS ═══ */
+.nav-links{display:flex;gap:20px;flex-wrap:nowrap}
+.nav-links a{font-size:12px;color:#555;cursor:pointer;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+.nav-links a:hover,.nav-links a.active{color:#6366F1;border-bottom-color:#6366F1}
+.nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px}
+.nav-hamburger span{display:block;width:22px;height:2px;background:#555;margin:4px 0;transition:.2s}
+.nav-mobile-menu{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border-top:1px solid #eee;border-bottom:1px solid #eee;padding:10px 16px;z-index:200;flex-direction:column;gap:0}
+.nav-mobile-menu.open{display:flex}
+.nav-mobile-menu a{font-size:13px;color:#555;cursor:pointer;padding:10px 0;border-bottom:1px solid #f0f0f0;text-decoration:none}
+.nav-mobile-menu a:last-child{border-bottom:none}
+.nav-mobile-menu a:hover{color:#6366F1}
+.service-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 36px;border-bottom:1px solid #eee;background:#fff;position:relative;flex-shrink:0}
+@media(max-width:900px){.nav-links{gap:14px}.nav-links a{font-size:11px}}
+@media(max-width:768px){.nav-links{display:none}.nav-hamburger{display:block}.service-nav{padding:10px 16px}}
 </style>
 </head>
 <body>
@@ -544,15 +561,10 @@ tr:last-child td{border-bottom:none}
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('otp-modal')">✕</button>
     <div class="modal-logo">CareerLift AI</div>
-    <div class="modal-tagline">We sent a 6-digit code to your email</div>
+    <div class="modal-tagline" id="otp-tagline">We sent a verification code to your email</div>
     <div class="otp-email-hint">Code sent to <strong id="otp-email-display">your email</strong></div>
-    <div class="otp-inputs">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-0" oninput="otpNext(this,0)" onkeydown="otpBack(event,0)">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-1" oninput="otpNext(this,1)" onkeydown="otpBack(event,1)">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-2" oninput="otpNext(this,2)" onkeydown="otpBack(event,2)">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-3" oninput="otpNext(this,3)" onkeydown="otpBack(event,3)">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-4" oninput="otpNext(this,4)" onkeydown="otpBack(event,4)">
-      <input class="otp-input" type="text" inputmode="numeric" maxlength="1" id="otp-5" oninput="otpNext(this,5)" onkeydown="otpBack(event,5)">
+    <div class="otp-inputs" style="justify-content:center">
+      <input class="otp-single-input" type="text" inputmode="numeric" id="otp-code-input" maxlength="8" placeholder="Enter code" autocomplete="one-time-code" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
     </div>
     <div class="otp-err" id="otp-err"></div>
     <button class="modal-btn" onclick="verifyOTP()">Verify &amp; Continue</button>
@@ -597,6 +609,51 @@ tr:last-child td{border-bottom:none}
     <button class="modal-btn" onclick="doSignup()">Create free account</button>
     <div class="terms-txt">By signing up you agree to our <a>Terms of Service</a> and <a>Privacy Policy</a></div>
     <div class="modal-switch" style="margin-top:10px">Already have an account? <a onclick="switchModal('signup-modal','login-modal')">Sign in</a></div>
+  </div>
+</div>
+
+<!-- ═══════ TEMPLATE PICKER MODAL ═══════ -->
+<div class="modal-overlay" id="tpl-picker-modal" style="display:none;z-index:3000">
+  <div class="modal-box" style="max-width:560px;width:90%">
+    <div class="modal-title" style="font-size:17px;font-weight:700;margin-bottom:4px">Choose a Template</div>
+    <div class="modal-tagline" style="margin-bottom:20px">Your optimized CV will be auto-populated into the template</div>
+    <div id="tpl-picker-loading" style="display:none;text-align:center;padding:20px 0">
+      <div class="spinner" style="margin:0 auto 10px"></div>
+      <p style="font-size:13px;color:#555">Mapping your CV to template fields…</p>
+    </div>
+    <div id="tpl-picker-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="tpl-pick-card" onclick="populateTemplate('Classic Professional')">
+        <div class="tpl-pick-name">Classic Professional</div>
+        <div class="tpl-pick-meta">ATS Score: 96/100 · Single column</div>
+        <div class="tpl-pick-badge">Best for: All industries</div>
+      </div>
+      <div class="tpl-pick-card" onclick="populateTemplate('Modern Two-Column')">
+        <div class="tpl-pick-name">Modern Two-Column</div>
+        <div class="tpl-pick-meta">ATS Score: 91/100 · Dark sidebar</div>
+        <div class="tpl-pick-badge">Best for: Tech, Creative</div>
+      </div>
+      <div class="tpl-pick-card" onclick="populateTemplate('Indigo Header')">
+        <div class="tpl-pick-name">Indigo Header</div>
+        <div class="tpl-pick-meta">ATS Score: 94/100 · Bold header</div>
+        <div class="tpl-pick-badge">Best for: Finance, All markets</div>
+      </div>
+      <div class="tpl-pick-card" onclick="populateTemplate('Minimal Classic')">
+        <div class="tpl-pick-name">Minimal Classic</div>
+        <div class="tpl-pick-meta">ATS Score: 98/100 · Highest rating</div>
+        <div class="tpl-pick-badge">Best for: Executive, Law, Finance</div>
+      </div>
+      <div class="tpl-pick-card" onclick="populateTemplate('Developer Dark')">
+        <div class="tpl-pick-name">Developer Dark</div>
+        <div class="tpl-pick-meta">ATS Score: 88/100 · Tech-focused</div>
+        <div class="tpl-pick-badge">Best for: Tech, Startups</div>
+      </div>
+      <div class="tpl-pick-card" onclick="populateTemplate('A4 Federal Resume')">
+        <div class="tpl-pick-name">A4 Federal Resume</div>
+        <div class="tpl-pick-meta">ATS Score: 97/100 · US Federal Format</div>
+        <div class="tpl-pick-badge">Best for: US Government, Executive</div>
+      </div>
+    </div>
+    <button class="btn-ghost" style="margin-top:16px;width:100%" onclick="document.getElementById('tpl-picker-modal').style.display='none'">Cancel</button>
   </div>
 </div>
 
@@ -647,11 +704,30 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ LANDING ══ -->
     <div class="screen on" id="sc-landing">
-      <div class="site-nav">
-        <div class="nav-logo">CareerLift AI</div>
+      <div class="site-nav" style="position:relative">
+        <div class="nav-logo" onclick="go('landing',null,'careerliftai.com')" style="cursor:pointer">CareerLift AI</div>
+        <div class="nav-links">
+          <a onclick="go('landing',null,'careerliftai.com')">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze')">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score')">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin')">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter')">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates')">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing')">Pricing</a>
+        </div>
         <div class="nav-right">
+          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
           <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
           <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
+        </div>
+        <div class="nav-mobile-menu" id="landing-mobile-nav">
+          <a onclick="go('landing',null,'careerliftai.com');closeMobileNav()">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze');closeMobileNav()">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score');closeMobileNav()">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter');closeMobileNav()">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates');closeMobileNav()">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing');closeMobileNav()">Pricing</a>
         </div>
       </div>
       <div class="hero">
@@ -865,6 +941,32 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ ANALYZE ══ -->
     <div class="screen" id="sc-analyze">
+      <div class="service-nav">
+        <div class="nav-logo" onclick="go('landing',null,'careerliftai.com')" style="cursor:pointer">CareerLift AI</div>
+        <div class="nav-links">
+          <a onclick="go('landing',null,'careerliftai.com')">Home</a>
+          <a class="active" onclick="go('analyze',null,'careerliftai.com/analyze')">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score')">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin')">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter')">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates')">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing')">Pricing</a>
+        </div>
+        <div class="nav-right">
+          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
+          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
+          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
+        </div>
+        <div class="nav-mobile-menu">
+          <a onclick="go('landing',null,'careerliftai.com');closeMobileNav()">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze');closeMobileNav()">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score');closeMobileNav()">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter');closeMobileNav()">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates');closeMobileNav()">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing');closeMobileNav()">Pricing</a>
+        </div>
+      </div>
       <div class="inner-page">
         <div class="page-h">ATS CV Rewriter</div>
         <div class="page-s">Upload your CV (or paste text below) and get a full ATS-optimized rewrite in under 60 seconds.</div>
@@ -903,7 +1005,97 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
             <h3 style="display:flex;justify-content:space-between;align-items:center">Configuration <span class="credit-pill" id="analyze-credit-pill">3 credits left</span></h3>
             <div class="fg"><label>Target country *</label><select id="analyze-country"></select></div>
             <div class="fg"><label>Target job title *</label><input type="text" id="analyze-jobtitle" placeholder="e.g. Senior Software Engineer"></div>
-            <div class="fg"><label>Industry</label><select id="analyze-industry"><option>Technology</option><option>Finance</option><option>Healthcare</option><option>Marketing</option><option>Engineering</option><option>Oil &amp; Gas</option><option>Education</option><option>Legal</option></select></div>
+            <div class="fg"><label>Industry</label><select id="analyze-industry">
+              <optgroup label="Technology &amp; Engineering">
+                <option>Technology &amp; Software</option>
+                <option>Information Technology (IT)</option>
+                <option>Cybersecurity</option>
+                <option>Artificial Intelligence &amp; Data Science</option>
+                <option>Engineering (General)</option>
+                <option>Mechanical Engineering</option>
+                <option>Civil &amp; Structural Engineering</option>
+                <option>Electrical Engineering</option>
+                <option>Chemical Engineering</option>
+                <option>Aerospace &amp; Defense</option>
+                <option>Telecommunications</option>
+              </optgroup>
+              <optgroup label="Business &amp; Finance">
+                <option>Finance &amp; Banking</option>
+                <option>Accounting &amp; Auditing</option>
+                <option>Investment &amp; Asset Management</option>
+                <option>Insurance</option>
+                <option>Consulting &amp; Strategy</option>
+                <option>Management &amp; Operations</option>
+                <option>Human Resources</option>
+                <option>Supply Chain &amp; Logistics</option>
+                <option>Procurement &amp; Purchasing</option>
+                <option>Real Estate</option>
+              </optgroup>
+              <optgroup label="Healthcare &amp; Sciences">
+                <option>Healthcare &amp; Medicine</option>
+                <option>Nursing &amp; Allied Health</option>
+                <option>Pharmaceuticals &amp; Biotech</option>
+                <option>Medical Devices</option>
+                <option>Public Health</option>
+                <option>Research &amp; Life Sciences</option>
+                <option>Dentistry &amp; Orthodontics</option>
+                <option>Mental Health &amp; Psychology</option>
+              </optgroup>
+              <optgroup label="Creative &amp; Media">
+                <option>Marketing &amp; Advertising</option>
+                <option>Digital Marketing &amp; SEO</option>
+                <option>Media &amp; Journalism</option>
+                <option>Design &amp; Creative Arts</option>
+                <option>Film, TV &amp; Entertainment</option>
+                <option>Photography &amp; Videography</option>
+                <option>Publishing &amp; Content</option>
+                <option>Gaming &amp; Interactive Media</option>
+              </optgroup>
+              <optgroup label="Public Sector &amp; Non-Profit">
+                <option>Government &amp; Public Administration</option>
+                <option>Non-Profit &amp; NGO</option>
+                <option>Military &amp; Defense</option>
+                <option>Law Enforcement &amp; Security</option>
+                <option>Social Services &amp; Community Work</option>
+                <option>International Development</option>
+              </optgroup>
+              <optgroup label="Education &amp; Research">
+                <option>Education &amp; Teaching</option>
+                <option>Higher Education &amp; Academia</option>
+                <option>Training &amp; Development</option>
+                <option>Scientific Research</option>
+              </optgroup>
+              <optgroup label="Legal &amp; Compliance">
+                <option>Legal &amp; Law</option>
+                <option>Compliance &amp; Risk Management</option>
+                <option>Regulatory Affairs</option>
+              </optgroup>
+              <optgroup label="Energy &amp; Environment">
+                <option>Oil &amp; Gas</option>
+                <option>Renewable Energy &amp; Sustainability</option>
+                <option>Environmental Sciences</option>
+                <option>Mining &amp; Natural Resources</option>
+                <option>Utilities &amp; Power</option>
+              </optgroup>
+              <optgroup label="Retail, Hospitality &amp; Services">
+                <option>Retail &amp; E-Commerce</option>
+                <option>Hospitality &amp; Tourism</option>
+                <option>Food &amp; Beverage</option>
+                <option>Customer Service</option>
+                <option>Facilities &amp; Property Management</option>
+                <option>Transportation &amp; Automotive</option>
+                <option>Agriculture &amp; Food Production</option>
+                <option>Fashion &amp; Apparel</option>
+                <option>Sports &amp; Fitness</option>
+              </optgroup>
+              <optgroup label="Construction &amp; Manufacturing">
+                <option>Construction &amp; Architecture</option>
+                <option>Manufacturing &amp; Production</option>
+                <option>Quality Assurance</option>
+                <option>Health &amp; Safety (HSE)</option>
+              </optgroup>
+              <option value="Other">Other</option>
+            </select></div>
             <div class="fg"><label>Job description (optional)</label><textarea id="analyze-jd" placeholder="Paste the job description for better accuracy..."></textarea></div>
             <div class="fg"><label>Include in analysis</label>
               <label class="chk"><input type="checkbox" id="chk-rewrite" checked> Full ATS Rewrite</label>
@@ -948,6 +1140,7 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
             <button class="dl-btn" onclick="downloadAnalysisTXT()">&#8595; Download TXT</button>
             <button class="dl-btn" onclick="copyOptimized()">Copy text</button>
             <button class="dl-btn" id="save-hist-btn" onclick="saveToHistory()" style="background:#10B981;color:#fff;border-color:#10B981">&#10003; Save to History</button>
+            <button class="dl-btn" onclick="showTemplatePicker()" style="background:#6366F1;color:#fff;border-color:#6366F1">Use in Template →</button>
           </div>
         </div>
         <!-- HISTORY PANEL -->
@@ -963,6 +1156,32 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ LINKEDIN ══ -->
     <div class="screen" id="sc-linkedin">
+      <div class="service-nav">
+        <div class="nav-logo" onclick="go('landing',null,'careerliftai.com')" style="cursor:pointer">CareerLift AI</div>
+        <div class="nav-links">
+          <a onclick="go('landing',null,'careerliftai.com')">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze')">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score')">ATS Score Checker</a>
+          <a class="active" onclick="go('linkedin',null,'careerliftai.com/linkedin')">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter')">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates')">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing')">Pricing</a>
+        </div>
+        <div class="nav-right">
+          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
+          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
+          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
+        </div>
+        <div class="nav-mobile-menu">
+          <a onclick="go('landing',null,'careerliftai.com');closeMobileNav()">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze');closeMobileNav()">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score');closeMobileNav()">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter');closeMobileNav()">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates');closeMobileNav()">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing');closeMobileNav()">Pricing</a>
+        </div>
+      </div>
       <div class="inner-page">
         <div class="page-h">LinkedIn Optimizer</div>
         <div class="page-s">Get a recruiter-ready LinkedIn profile optimized for your target job market.</div>
@@ -1016,6 +1235,32 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ COVER LETTER ══ -->
     <div class="screen" id="sc-coverletter">
+      <div class="service-nav">
+        <div class="nav-logo" onclick="go('landing',null,'careerliftai.com')" style="cursor:pointer">CareerLift AI</div>
+        <div class="nav-links">
+          <a onclick="go('landing',null,'careerliftai.com')">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze')">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score')">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin')">LinkedIn Optimizer</a>
+          <a class="active" onclick="go('coverletter',null,'careerliftai.com/cover-letter')">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates')">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing')">Pricing</a>
+        </div>
+        <div class="nav-right">
+          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
+          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
+          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
+        </div>
+        <div class="nav-mobile-menu">
+          <a onclick="go('landing',null,'careerliftai.com');closeMobileNav()">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze');closeMobileNav()">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score');closeMobileNav()">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter');closeMobileNav()">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates');closeMobileNav()">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing');closeMobileNav()">Pricing</a>
+        </div>
+      </div>
       <div class="inner-page">
         <div class="page-h">Cover Letter AI</div>
         <div class="page-s">AI writes a tailored cover letter from your details and job description in under 60 seconds.</div>
@@ -1067,6 +1312,32 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ ATS SCORE ══ -->
     <div class="screen" id="sc-atsscore">
+      <div class="service-nav">
+        <div class="nav-logo" onclick="go('landing',null,'careerliftai.com')" style="cursor:pointer">CareerLift AI</div>
+        <div class="nav-links">
+          <a onclick="go('landing',null,'careerliftai.com')">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze')">Analyze Resume</a>
+          <a class="active" onclick="go('atsscore',null,'careerliftai.com/ats-score')">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin')">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter')">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates')">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing')">Pricing</a>
+        </div>
+        <div class="nav-right">
+          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
+          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
+          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
+        </div>
+        <div class="nav-mobile-menu">
+          <a onclick="go('landing',null,'careerliftai.com');closeMobileNav()">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze');closeMobileNav()">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score');closeMobileNav()">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter');closeMobileNav()">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates');closeMobileNav()">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing');closeMobileNav()">Pricing</a>
+        </div>
+      </div>
       <div class="inner-page">
         <div class="page-h">ATS Score Checker</div>
         <div class="page-s">Upload your CV (or paste text) for an instant ATS compatibility score — free, no credit used.</div>
@@ -1111,6 +1382,14 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
               <div class="score-grade" id="ats-score-grade" style="color:#EF4444">—</div>
               <div class="score-desc" id="ats-score-desc">—</div>
               <div class="gauge-bars" id="ats-gauge-bars"></div>
+              <div id="ats-sections" style="margin-top:16px;display:none">
+                <div style="font-size:11px;font-weight:600;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Section Detection</div>
+                <div id="ats-sections-grid" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+              </div>
+              <div id="ats-missing-kw" style="margin-top:14px;display:none">
+                <div style="font-size:11px;font-weight:600;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Suggested Keywords to Add</div>
+                <div id="ats-missing-kw-list" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+              </div>
               <button class="action-btn" style="margin-top:16px" onclick="go('analyze',null,'careerliftai.com/analyze')">Fix with AI Rewrite →</button>
             </div>
             <div class="ats-tips">
@@ -1124,6 +1403,32 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ TEMPLATES ══ -->
     <div class="screen" id="sc-templates">
+      <div class="service-nav">
+        <div class="nav-logo" onclick="go('landing',null,'careerliftai.com')" style="cursor:pointer">CareerLift AI</div>
+        <div class="nav-links">
+          <a onclick="go('landing',null,'careerliftai.com')">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze')">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score')">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin')">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter')">Cover Letter AI</a>
+          <a class="active" onclick="go('templates',null,'careerliftai.com/templates')">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing')">Pricing</a>
+        </div>
+        <div class="nav-right">
+          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
+          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
+          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
+        </div>
+        <div class="nav-mobile-menu">
+          <a onclick="go('landing',null,'careerliftai.com');closeMobileNav()">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze');closeMobileNav()">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score');closeMobileNav()">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter');closeMobileNav()">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates');closeMobileNav()">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing');closeMobileNav()">Pricing</a>
+        </div>
+      </div>
       <div class="templates-page">
         <div class="page-h">CV Templates</div>
         <div class="page-s" style="margin-bottom:16px">ATS-friendly templates — click "Edit &amp; Use" to fill with your details.</div>
@@ -1164,6 +1469,10 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
           <div class="tpl-card" data-cat="executive">
             <div class="tpl-preview"><div class="tpl-preview-inner"><div style="padding:32px 36px;font-family:-apple-system,sans-serif;font-size:11px;color:#1a1a1a;background:#fff"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:3px solid #1a1a1a;padding-bottom:14px"><div><div style="font-size:22px;font-weight:700;color:#111;margin-bottom:2px">John Davis</div><div style="font-size:13px;color:#6366F1;font-weight:600">Senior Software Engineer</div></div><div style="text-align:right;font-size:10px;color:#666"><div><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ff95909791bf9a929e9693d19c9092">[email&#160;protected]</a></div><div>+1 555 0123</div><div>New York, NY</div></div></div></div></div><div class="premium-badge">PRO</div></div>
             <div class="tpl-info"><div class="tpl-name">Executive Split</div><div class="tpl-meta">ATS Score: 93/100 · Pro only</div><div class="tpl-tags"><span class="tpl-tag">Executive</span><span class="tpl-tag">Management</span><span class="tpl-tag">Pro</span></div><div class="tpl-actions"><button class="tpl-btn tpl-btn-ghost" onclick="openEditor('Executive Split')">Preview</button><button class="tpl-btn tpl-btn-fill" onclick="go('pricing',null,'careerliftai.com/pricing')">Unlock Pro</button></div></div>
+          <!-- Template 7 — A4 Federal Resume -->
+          <div class="tpl-card" data-cat="classic executive">
+            <div class="tpl-preview"><div class="tpl-preview-inner"><div style="font-family:'Times New Roman',Times,serif;font-size:10px;color:#1a1a1a;background:#fff;padding:18px 20px;line-height:1.4"><div style="font-size:17px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#111;margin-bottom:2px">J O H N &nbsp;D A V I S</div><div style="font-size:8.5px;color:#444;margin-bottom:8px;letter-spacing:.5px">Senior Software Engineer</div><div style="height:1.5px;background:#2f3236;margin-bottom:6px"></div><div style="display:flex;flex-wrap:wrap;gap:6px 12px;font-size:7.5px;color:#333;margin-bottom:6px"><span><strong>Phone:</strong> +1 555 0123</span><span><strong>Email:</strong> john@email.com</span><span><strong>Address:</strong> New York, NY</span><span><strong>Availability:</strong> Full Time</span></div><div style="height:1.5px;background:#2f3236;margin-bottom:7px"></div><div style="font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#111;margin-bottom:5px">P R O F E S S I O N A L &nbsp; S T A T E M E N T</div><p style="font-size:7.5px;color:#333;line-height:1.55;margin-bottom:7px">Results-driven engineer with 5+ years building scalable systems serving 2M+ users. Reduced latency 40%, led teams of 6, delivered 3 major product launches.</p><div style="height:1.5px;background:#2f3236;margin-bottom:7px"></div><div style="font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#111;margin-bottom:4px">W O R K &nbsp; E X P E R I E N C E S</div><div style="font-size:8px;font-weight:700">Senior SWE &nbsp;|&nbsp; Jan 2019 – Present</div><div style="font-size:7.5px;color:#555;margin-bottom:4px">Employer: Acme Corp &nbsp;|&nbsp; Hours Per Week: 40</div><div style="height:1.5px;background:#2f3236;margin-bottom:6px"></div><div style="font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#111;margin-bottom:4px">E D U C A T I O N &nbsp;&amp;&nbsp; C E R T I F I C A T I O N</div><div style="font-size:7.5px;color:#333">B.S. Computer Science &nbsp;|&nbsp; 2019</div><div style="font-size:7.5px;color:#555">State University, New York</div></div></div></div>
+            <div class="tpl-info"><div class="tpl-name">A4 Federal Resume</div><div class="tpl-meta">ATS Score: 97/100 · US Federal Format</div><div class="tpl-tags"><span class="tpl-tag">US Federal</span><span class="tpl-tag">Government</span><span class="tpl-tag">Executive</span></div><div class="tpl-actions"><button class="tpl-btn tpl-btn-ghost" onclick="openEditor('A4 Federal Resume')">Preview</button><button class="tpl-btn tpl-btn-fill" onclick="openEditor('A4 Federal Resume')">Edit &amp; Use</button></div></div>
           </div>
         </div>
       </div>
@@ -1171,6 +1480,32 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ PRICING ══ -->
     <div class="screen" id="sc-pricing">
+      <div class="service-nav">
+        <div class="nav-logo" onclick="go('landing',null,'careerliftai.com')" style="cursor:pointer">CareerLift AI</div>
+        <div class="nav-links">
+          <a onclick="go('landing',null,'careerliftai.com')">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze')">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score')">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin')">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter')">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates')">Templates</a>
+          <a class="active" onclick="go('pricing',null,'careerliftai.com/pricing')">Pricing</a>
+        </div>
+        <div class="nav-right">
+          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
+          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
+          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
+        </div>
+        <div class="nav-mobile-menu">
+          <a onclick="go('landing',null,'careerliftai.com');closeMobileNav()">Home</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze');closeMobileNav()">Analyze Resume</a>
+          <a onclick="go('atsscore',null,'careerliftai.com/ats-score');closeMobileNav()">ATS Score Checker</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
+          <a onclick="go('coverletter',null,'careerliftai.com/cover-letter');closeMobileNav()">Cover Letter AI</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates');closeMobileNav()">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing');closeMobileNav()">Pricing</a>
+        </div>
+      </div>
       <div class="pricing-page">
         <div class="pr-hd"><h2>Simple, transparent pricing</h2><p>Start free — upgrade when you need more analyses.</p></div>
         <div class="toggle-row">
@@ -1230,7 +1565,9 @@ populateCountries();
    NAVIGATION
 ════════════════════════════════════ */
 const screens=['landing','dashboard','analyze','linkedin','coverletter','atsscore','templates','pricing'];
-function go(id,tabEl,url){
+const _screenPaths={landing:'/',dashboard:'/dashboard',analyze:'/analyze',linkedin:'/linkedin',coverletter:'/cover-letter',atsscore:'/ats-score',templates:'/templates',pricing:'/pricing'};
+
+function go(id,tabEl,url,skipHistory){
   screens.forEach(s=>{const el=document.getElementById('sc-'+s);if(el)el.classList.toggle('on',s===id);});
   const urlBar=document.getElementById('url-bar');if(url&&urlBar)urlBar.textContent=url;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
@@ -1239,6 +1576,31 @@ function go(id,tabEl,url){
   // sync sidebar links
   document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('on'));
   document.querySelectorAll('.sb-link').forEach(l=>{if((l.getAttribute('onclick')||'').includes("'"+id+"'"))l.classList.add('on');});
+  closeMobileNav();
+  // push browser history so back button works
+  if(!skipHistory){
+    const path=_screenPaths[id]||'/';
+    history.pushState({screen:id},document.title,path);
+  }
+}
+
+// Handle browser back/forward buttons
+window.addEventListener('popstate',function(e){
+  const id=(e.state&&e.state.screen)||'landing';
+  go(id,null,null,true);
+});
+
+// Set initial history state
+history.replaceState({screen:'landing'},document.title,_screenPaths['landing']||'/');
+
+function toggleMobileNav(btn){
+  const nav=btn.closest('.site-nav,.service-nav');
+  if(!nav)return;
+  const menu=nav.querySelector('.nav-mobile-menu');
+  if(menu)menu.classList.toggle('open');
+}
+function closeMobileNav(){
+  document.querySelectorAll('.nav-mobile-menu.open').forEach(m=>m.classList.remove('open'));
 }
 
 /* ════════════════════════════════════
@@ -1367,9 +1729,9 @@ async function doSignup(){
 function openOTPModal(email){
   document.getElementById('otp-email-display').textContent=email;
   document.getElementById('otp-err').textContent='';
-  [0,1,2,3,4,5].forEach(i=>{document.getElementById('otp-'+i).value='';});
+  document.getElementById('otp-code-input').value='';
   document.getElementById('otp-modal').classList.add('open');
-  document.getElementById('otp-0').focus();
+  setTimeout(()=>document.getElementById('otp-code-input').focus(),100);
   startOTPTimer();
 }
 
@@ -1390,17 +1752,9 @@ function startOTPTimer(){
   },1000);
 }
 
-function otpNext(el,idx){
-  el.value=el.value.replace(/[^0-9]/g,'');
-  if(el.value&&idx<5)document.getElementById('otp-'+(idx+1)).focus();
-}
-function otpBack(e,idx){
-  if(e.key==='Backspace'&&!e.target.value&&idx>0)document.getElementById('otp-'+(idx-1)).focus();
-}
-
 async function verifyOTP(){
-  const code=[0,1,2,3,4,5].map(i=>document.getElementById('otp-'+i).value).join('');
-  if(code.length<6){document.getElementById('otp-err').textContent='Please enter the full 6-digit code.';return;}
+  const code=document.getElementById('otp-code-input').value.trim();
+  if(code.length<4){document.getElementById('otp-err').textContent='Please enter the full verification code.';return;}
   document.getElementById('otp-err').textContent='';
   if(_sb){
     try{
@@ -1467,13 +1821,10 @@ function setUser(name){
    AUTH NAV VISIBILITY
 ════════════════════════════════════ */
 function updateNavForAuth(loggedIn){
-  const nr=document.querySelector('.nav-right');
-  if(!nr)return;
-  if(loggedIn){
-    nr.innerHTML='<button class="btn-ghost" onclick="signOut()">Sign out</button>';
-  }else{
-    nr.innerHTML='<button class="btn-ghost" onclick="openModal(\'login-modal\')">Log in</button><button class="btn-indigo" onclick="openModal(\'signup-modal\')">Sign up free</button>';
-  }
+  const authBtns=loggedIn
+    ?'<button class="btn-ghost" onclick="go(\'dashboard\',null,\'careerliftai.com/dashboard\')">Dashboard</button><button class="btn-indigo" onclick="signOut()">Sign out</button>'
+    :'<button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button><button class="btn-ghost" onclick="openModal(\'login-modal\')">Log in</button><button class="btn-indigo" onclick="openModal(\'signup-modal\')">Sign up free</button>';
+  document.querySelectorAll('.nav-right').forEach(nr=>nr.innerHTML=authBtns);
 }
 
 async function signOut(){
@@ -1708,23 +2059,21 @@ async function runATSCheck(){
   document.getElementById('ats-loading').style.display='flex';
 
   try{
-    const systemPrompt=`You are an ATS scoring expert. Analyze the CV and return ONLY valid JSON:
-{
-  "score": <integer 20-95>,
-  "grade": "<Excellent|Good|Needs Improvement|Poor>",
-  "description": "<1-2 sentence description of what this score means>",
-  "keywords": <integer 20-90>,
-  "format": <integer 30-95>,
-  "completeness": <integer 20-90>,
-  "readability": <integer 40-95>,
-  "issues": [
-    {"type": "<err|warn|ok>", "title": "<short title>", "detail": "<concise explanation>"},
-    ... (5-6 items total)
-  ]
-}
-Return ONLY JSON, no markdown, no backticks.`;
+    const systemPrompt=`You are a senior ATS (Applicant Tracking System) analyst with expert knowledge of how enterprise ATS platforms — including Taleo, Workday, Greenhouse, Lever, iCIMS, SmartRecruiters, and BambooHR — parse, score, and rank CVs. Your analysis must be accurate, detailed, and actionable.
 
-    const userMsg=`Role: ${role}\nCountry: ${country}\nATS System: ${atsSystem}\n\nCV:\n${cvText}`;
+Scoring dimensions:
+- keywords (0-100): % match of role-specific hard skills, soft skills, industry terms, action verbs, and certifications found in the CV vs. expected for the target role/country
+- format (0-100): ATS parse compatibility — deduct for: columns/tables/text boxes (severe), headers/footers with text, graphics/logos, fancy fonts, missing standard section headings; award high scores for clean single-column plain text
+- completeness (0-100): presence and quality of: contact info, professional summary, work experience with quantified achievements, education, skills section, and (if relevant) certifications
+- readability (0-100): consistent date formats, clear job titles, proper bullet structure, no excessive abbreviations, correct spelling
+
+Return ONLY this exact JSON (no markdown, no backticks, no extra text):
+{"score":<int 10-97>,"grade":"<Excellent|Good|Needs Improvement|Poor>","description":"<2-3 sentences: overall ATS compatibility verdict, main strength, main weakness>","keywords":<int 0-100>,"format":<int 0-100>,"completeness":<int 0-100>,"readability":<int 0-100>,"sections":{"contact":<true|false>,"summary":<true|false>,"experience":<true|false>,"education":<true|false>,"skills":<true|false>,"certifications":<true|false>},"missingKeywords":["<kw1>","<kw2>","<kw3>","<kw4>","<kw5>","<kw6>"],"issues":[{"type":"<err|warn|ok>","title":"<concise title max 8 words>","detail":"<specific actionable advice, mention exact fix>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"}]}
+
+Score calibration (be realistic, not generous): 88-97=Excellent (near-perfect, rare), 70-87=Good (strong but improvable), 50-69=Needs Improvement (significant gaps), 10-49=Poor (major issues).
+For ATS System "Auto-detect": analyze for broadest ATS compatibility.`;
+
+    const userMsg=`Target Role: ${role}\nCountry: ${country}\nATS System: ${atsSystem}\n\nCV:\n${cvText}`;
     const raw=await callClaude(systemPrompt,userMsg);
     document.getElementById('ats-loading').style.display='none';
 
@@ -1747,7 +2096,30 @@ Return ONLY JSON, no markdown, no backticks.`;
       <div class="bar-row"><span class="bar-name">Completeness</span><div class="bar-track"><div class="b-after" style="width:${p.completeness}%;background:${scoreColor}"></div></div><span class="bar-nums">${p.completeness}%</span></div>
       <div class="bar-row"><span class="bar-name">Readability</span><div class="bar-track"><div class="b-after" style="width:${p.readability}%;background:${scoreColor}"></div></div><span class="bar-nums">${p.readability}%</span></div>`;
 
-    // Tips
+    // Section detection
+    if(p.sections){
+      const secEl=document.getElementById('ats-sections');
+      const secGrid=document.getElementById('ats-sections-grid');
+      const labels={contact:'Contact Info',summary:'Summary',experience:'Experience',education:'Education',skills:'Skills',certifications:'Certifications'};
+      secGrid.innerHTML='';
+      Object.entries(p.sections).forEach(([k,v])=>{
+        secGrid.innerHTML+=`<span style="padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;background:${v?'#D1FAE5':'#FEE2E2'};color:${v?'#065F46':'#991B1B'}">${v?'✓':'✕'} ${labels[k]||k}</span>`;
+      });
+      secEl.style.display='block';
+    }
+
+    // Missing keywords
+    if(p.missingKeywords&&p.missingKeywords.length){
+      const mkEl=document.getElementById('ats-missing-kw');
+      const mkList=document.getElementById('ats-missing-kw-list');
+      mkList.innerHTML='';
+      p.missingKeywords.forEach(kw=>{
+        mkList.innerHTML+=`<span style="padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE">+ ${kw}</span>`;
+      });
+      mkEl.style.display='block';
+    }
+
+    // Tips / issues
     const tipsList=document.getElementById('ats-tips-list');
     tipsList.innerHTML='';
     (p.issues||[]).forEach(issue=>{
@@ -1983,9 +2355,55 @@ function downloadEditorCV(){
 }
 
 /* ════════════════════════════════════
+   TEMPLATE PICKER & AUTO-POPULATION
+════════════════════════════════════ */
+function showTemplatePicker(){
+  if(!window._optimizedCV){showToast('Please run an ATS analysis first.');return;}
+  document.getElementById('tpl-picker-modal').style.display='flex';
+}
+
+async function populateTemplate(templateName){
+  const cvText=window._optimizedCV;
+  if(!cvText){showToast('No optimized CV found. Please run ATS analysis first.');return;}
+  document.getElementById('tpl-picker-grid').style.display='none';
+  document.getElementById('tpl-picker-loading').style.display='block';
+  try{
+    const sp=`You are a CV data extractor. Extract structured data from the provided CV text and return ONLY valid JSON with no markdown:
+{"name":"<full name or empty string>","title":"<job title or empty string>","email":"<email or empty string>","phone":"<phone or empty string>","location":"<city, country or empty string>","url":"<linkedin or portfolio url or empty string>","summary":"<professional summary paragraph>","job1":"<most recent: Job Title — Company Name>","dates1":"<date range e.g. Jan 2020 – Present>","bullets1":"<achievements as newline-separated list, 3-5 items, each on own line>","edu":"<Degree — Institution>","eduYear":"<year range or graduation year>","skills":"<comma-separated list of skills>"}
+Return ONLY JSON, no extra text.`;
+    const raw=await callClaude(sp,cvText);
+    let d;
+    try{d=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){throw new Error('Could not parse CV fields.');}
+    if(d.name)document.getElementById('ed-name').value=d.name;
+    if(d.title)document.getElementById('ed-title').value=d.title;
+    if(d.email)document.getElementById('ed-email').value=d.email;
+    if(d.phone)document.getElementById('ed-phone').value=d.phone;
+    if(d.location)document.getElementById('ed-location').value=d.location;
+    if(d.url)document.getElementById('ed-url').value=d.url;
+    if(d.summary)document.getElementById('ed-summary').value=d.summary;
+    if(d.job1)document.getElementById('ed-job1').value=d.job1;
+    if(d.dates1)document.getElementById('ed-dates1').value=d.dates1;
+    if(d.bullets1)document.getElementById('ed-bullets1').value=d.bullets1;
+    if(d.edu)document.getElementById('ed-edu').value=d.edu;
+    if(d.eduYear)document.getElementById('ed-edu-year').value=d.eduYear;
+    if(d.skills)document.getElementById('ed-skills').value=d.skills;
+    document.getElementById('tpl-picker-modal').style.display='none';
+    document.getElementById('tpl-picker-loading').style.display='none';
+    document.getElementById('tpl-picker-grid').style.display='grid';
+    openEditor(templateName);
+    showToast('Template populated with your optimized CV ✓');
+  }catch(err){
+    document.getElementById('tpl-picker-loading').style.display='none';
+    document.getElementById('tpl-picker-grid').style.display='grid';
+    showToast('Error: '+err.message);
+  }
+}
+
+/* ════════════════════════════════════
    CV EDITOR
 ════════════════════════════════════ */
 function openEditor(name){
+  window._currentTemplate=name||'Classic Professional';
   document.getElementById('editor-title').textContent='Edit Template — '+name;
   document.getElementById('editor-modal').classList.add('open');
   updatePreview();
@@ -2009,10 +2427,51 @@ function updatePreview(){
   const job1=document.getElementById('ed-job1').value||'Job Title — Company';
   const dates1=document.getElementById('ed-dates1').value||'2020 – Present';
   const rawBullets=(document.getElementById('ed-bullets1').value||'').split('\n').filter(b=>b.trim());
-  const bulletsHTML=rawBullets.map(b=>`<div style="font-size:10px;color:#444;padding-left:12px;position:relative;margin-bottom:3px"><span style="position:absolute;left:0;color:#6366F1">▸</span>${b.trim()}</div>`).join('');
   const edu=document.getElementById('ed-edu').value||'Degree — University';
   const eduYear=document.getElementById('ed-edu-year').value||'Year';
   const skillsList=(document.getElementById('ed-skills').value||'').split(',').filter(s=>s.trim());
+
+  const tpl=window._currentTemplate||'Classic Professional';
+
+  if(tpl==='A4 Federal Resume'){
+    const jobParts=job1.split(/\s*[|—–]\s*/);
+    const jobTitle=(jobParts[0]||job1).trim();
+    const company=(jobParts[1]||'').trim();
+    const bulletsHTML=rawBullets.map(b=>`<p style="font-size:10.5px;color:#333;line-height:1.6;margin-bottom:4px;padding-left:14px;position:relative"><span style="position:absolute;left:2px">•</span>${b.trim()}</p>`).join('');
+    const certsHTML=skillsList.map(s=>`<div style="font-size:10.5px;color:#333;margin-bottom:3px">${s.trim()}</div>`).join('');
+    const rule=`<div style="height:1.5px;background:#2f3236;margin:10px 0 12px"></div>`;
+    const secHead=(t)=>`<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#111;margin-bottom:8px">${t}</div>`;
+    document.getElementById('cv-live-preview').innerHTML=`
+<div style="font-family:'Times New Roman',Times,serif;padding:36px 40px;color:#1a1a1a;font-size:11px;line-height:1.5;background:#fff">
+  <div style="font-size:24px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:#111;margin-bottom:3px">${name.split('').join(' ').replace(/  /g,' &nbsp;')}</div>
+  <div style="font-size:12px;color:#444;letter-spacing:1px;margin-bottom:10px">${title}</div>
+  ${rule}
+  <div style="display:flex;flex-wrap:wrap;gap:4px 20px;font-size:10px;color:#333;margin-bottom:4px">
+    <span><strong>Phone:</strong> ${phone}</span>
+    <span><strong>Email:</strong> ${email}</span>
+    <span><strong>Address:</strong> ${location}</span>
+    <span><strong>Availability:</strong> Permanent, Full Time</span>
+    ${url?`<span><strong>Announcement #:</strong> ${url}</span>`:''}
+  </div>
+  ${rule}
+  ${secHead('P R O F E S S I O N A L &nbsp; S T A T E M E N T')}
+  <p style="font-size:10.5px;color:#333;line-height:1.65;margin-bottom:8px">${summary}</p>
+  ${rule}
+  ${secHead('W O R K &nbsp; E X P E R I E N C E S')}
+  <div style="font-size:11px;font-weight:700;color:#111;margin-bottom:2px">${jobTitle}${company?' &nbsp;|&nbsp; '+dates1:' &nbsp;|&nbsp; '+dates1}</div>
+  <div style="font-size:10px;color:#555;margin-bottom:6px">Employer: ${company||'Company Name'} &nbsp;|&nbsp; Hours Per Week: 40</div>
+  ${bulletsHTML}
+  ${rule}
+  ${secHead('E D U C A T I O N &nbsp;&amp;&nbsp; C E R T I F I C A T I O N')}
+  <div style="font-size:11px;font-weight:700;color:#111;margin-bottom:2px">${edu}</div>
+  <div style="font-size:10px;color:#555;margin-bottom:8px">${eduYear}</div>
+  ${certsHTML}
+</div>`;
+    return;
+  }
+
+  // Default preview (Classic style)
+  const bulletsHTML=rawBullets.map(b=>`<div style="font-size:10px;color:#444;padding-left:12px;position:relative;margin-bottom:3px"><span style="position:absolute;left:0;color:#6366F1">▸</span>${b.trim()}</div>`).join('');
   const skillsHTML=skillsList.map(s=>`<span style="padding:3px 9px;background:#EEF2FF;color:#4338CA;border-radius:4px;font-size:10px;font-weight:500;margin:2px;display:inline-block">${s.trim()}</span>`).join('');
 
   document.getElementById('cv-live-preview').innerHTML=`
@@ -2343,54 +2802,6 @@ function setBar(key,data){
   document.getElementById('bar-'+key+'-b').style.width=data.before+'%';
   document.getElementById('bar-'+key+'-a').style.width=data.after+'%';
   document.getElementById('bar-'+key+'-t').textContent=data.before+'% → '+data.after+'%';
-}
-
-/* ════════════════════════════════════
-   ATS SCORE CHECK
-════════════════════════════════════ */
-async function runATSCheck(){
-  const cvText=document.getElementById('ats-cv-text').value.trim();
-  const role=document.getElementById('ats-role').value||'Professional';
-  const country=document.getElementById('ats-country').value||'United States';
-  const atsSystem=document.getElementById('ats-system').value||'Auto-detect';
-  if(!cvText){showToast('Please paste your CV text or upload a PDF.');return;}
-  const btn=document.getElementById('ats-btn');
-  btn.disabled=true;btn.textContent='Scoring…';
-  document.getElementById('ats-results').style.display='none';
-  document.getElementById('ats-loading').style.display='flex';
-  try{
-    const systemPrompt=`You are an ATS scoring expert. Return ONLY valid JSON:
-{"score":<int 20-95>,"grade":"<Excellent|Good|Needs Improvement|Poor>","description":"<1-2 sentences>","keywords":<int>,"format":<int>,"completeness":<int>,"readability":<int>,"issues":[{"type":"<err|warn|ok>","title":"<title>","detail":"<detail>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<detail>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<detail>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<detail>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<detail>"}]}
-Return ONLY JSON, no markdown, no backticks.`;
-    const userMsg=`Role: ${role}\nCountry: ${country}\nATS System: ${atsSystem}\n\nCV:\n${cvText}`;
-    const raw=await callClaude(systemPrompt,userMsg);
-    document.getElementById('ats-loading').style.display='none';
-    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){throw new Error('Parse error. Try again.');}
-    const sc=p.score>=70?'#10B981':p.score>=50?'#F59E0B':'#EF4444';
-    document.getElementById('ats-score-num').textContent=p.score;
-    document.getElementById('ats-score-num').style.color=sc;
-    document.getElementById('ats-score-grade').textContent=p.grade;
-    document.getElementById('ats-score-grade').style.color=sc;
-    document.getElementById('ats-score-desc').textContent=p.description;
-    document.getElementById('ats-gauge-bars').innerHTML=`
-      <div class="bar-row"><span class="bar-name">Keywords match</span><div class="bar-track"><div class="b-after" style="width:${p.keywords}%;background:${sc}"></div></div><span class="bar-nums">${p.keywords}%</span></div>
-      <div class="bar-row"><span class="bar-name">Format compat.</span><div class="bar-track"><div class="b-after" style="width:${p.format}%;background:${sc}"></div></div><span class="bar-nums">${p.format}%</span></div>
-      <div class="bar-row"><span class="bar-name">Completeness</span><div class="bar-track"><div class="b-after" style="width:${p.completeness}%;background:${sc}"></div></div><span class="bar-nums">${p.completeness}%</span></div>
-      <div class="bar-row"><span class="bar-name">Readability</span><div class="bar-track"><div class="b-after" style="width:${p.readability}%;background:${sc}"></div></div><span class="bar-nums">${p.readability}%</span></div>`;
-    const tl=document.getElementById('ats-tips-list');tl.innerHTML='';
-    (p.issues||[]).forEach(issue=>{
-      const ic=issue.type==='err'?'tip-ic-err':issue.type==='warn'?'tip-ic-warn':'tip-ic-ok';
-      const it=issue.type==='err'?'✕':issue.type==='warn'?'!':'✓';
-      tl.innerHTML+=`<div class="tip-item"><div class="tip-icon ${ic}">${it}</div><div class="tip-content"><h4>${issue.title}</h4><p>${issue.detail}</p></div></div>`;
-    });
-    document.getElementById('ats-results').style.display='block';
-    setTimeout(()=>document.getElementById('ats-results').scrollIntoView({behavior:'smooth'}),100);
-    showToast('ATS Score: '+p.score+'/100 ✓');
-  }catch(err){
-    document.getElementById('ats-loading').style.display='none';
-    showToast('Error: '+err.message);
-  }
-  btn.disabled=false;btn.textContent='Check ATS Score — Free';
 }
 
 /* ════════════════════════════════════
