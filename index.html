@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://accounts.google.com">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -1006,7 +1005,6 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
           <div class="cfg-box">
             <h3 style="display:flex;justify-content:space-between;align-items:center">Configuration <span class="credit-pill" id="analyze-credit-pill">3 credits left</span></h3>
             <div class="fg"><label>Target country *</label><select id="analyze-country"></select></div>
-            <div class="fg"><label>Target job title *</label><input type="text" id="analyze-jobtitle" placeholder="e.g. Senior Software Engineer"></div>
             <div class="fg"><label>Industry</label><select id="analyze-industry">
               <optgroup label="Technology &amp; Engineering">
                 <option>Technology &amp; Software</option>
@@ -1563,6 +1561,232 @@ populateCountries();
 window.addEventListener('load', function(){ initGoogleSignIn(); restoreSession(); });
 
 /* ════════════════════════════════════
+   SUPABASE CLIENT
+════════════════════════════════════ */
+const SUPABASE_URL='https://fusxcijaklbrfkszlzsv.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1c3hjaWpha2xicmZrc3psenN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMjg2NDAsImV4cCI6MjA5MDgwNDY0MH0.XezE53OT9jRAQCmah2L-f6JSIs5FwWpa92l660LoAgo';
+const _sb=window.supabase?supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+
+/* ════════════════════════════════════
+   AUTH LOADING HELPERS
+════════════════════════════════════ */
+function showAuthLoading(msg='Signing you in…'){
+  document.getElementById('auth-loading-msg').textContent=msg;
+  document.getElementById('auth-loading').classList.add('show');
+}
+function hideAuthLoading(){
+  document.getElementById('auth-loading').classList.remove('show');
+}
+function finishLogin(name){
+  showAuthLoading('Loading your dashboard…');
+  setTimeout(()=>{
+    hideAuthLoading();
+    setUser(name);
+    go('dashboard',null,'careerliftai.com/dashboard');
+  },1400);
+}
+
+/* ════════════════════════════════════
+   GOOGLE OAUTH
+════════════════════════════════════ */
+async function googleAuth(){
+  closeModal('login-modal');closeModal('signup-modal');
+  if(_sb){
+    try{
+      const {error}=await _sb.auth.signInWithOAuth({
+        provider:'google',
+        options:{queryParams:{prompt:'select_account'},redirectTo:window.location.href}
+      });
+      if(error)throw error;
+    }catch(err){
+      showToast('Google sign-in failed: '+err.message);
+    }
+    return;
+  }
+  if(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com'){
+    if(window.google && google.accounts && google.accounts.id){
+      google.accounts.id.prompt();
+      return;
+    }
+    showToast('Google sign-in is loading. Please try again in a moment.');
+    return;
+  }
+  showAuthLoading('Connecting to Google…');
+  setTimeout(()=>{hideAuthLoading();setUser('Google User');go('dashboard',null,'careerliftai.com/dashboard');showToast('Signed in with Google ✓');},1600);
+}
+
+/* ════════════════════════════════════
+   LOGIN
+════════════════════════════════════ */
+async function doLogin(){
+  const e=document.getElementById('login-email').value.trim().toLowerCase();
+  const p=document.getElementById('login-pass').value;
+  if(!e||!p){showToast('Please enter your email and password.');return;}
+  if(_sb){
+    closeModal('login-modal');
+    showAuthLoading('Signing you in…');
+    try{
+      const {data,error}=await _sb.auth.signInWithPassword({email:e,password:p});
+      if(error)throw error;
+      hideAuthLoading();
+      const name=data.user.user_metadata?.full_name||(e.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
+      finishLogin(name);
+      showToast('Welcome back! ✓');
+      return;
+    }catch(err){
+      hideAuthLoading();
+      openModal('login-modal');
+      showToast('Login failed: '+err.message);
+      return;
+    }
+  }
+  const account=findAccount(e);
+  if(!account){showToast('No account found for this email. Please sign up first.');return;}
+  if(account.password!==p){showToast('Incorrect password. Please try again.');return;}
+  setCurrentAccount(account.email);
+  closeModal('login-modal');
+  go('dashboard',null,'careerliftai.com/dashboard');
+  showToast('Welcome back! ✓');
+}
+
+/* ════════════════════════════════════
+   SIGNUP + OTP
+════════════════════════════════════ */
+let _otpEmail='';
+let _otpName='';
+let _otpPass='';
+let _otpTimer=null;
+
+async function doSignup(){
+  const n=document.getElementById('signup-name').value.trim();
+  const e=document.getElementById('signup-email').value.trim().toLowerCase();
+  const p=document.getElementById('signup-pass').value;
+  if(!n||!e||!p){showToast('Please fill in all fields.');return;}
+  if(p.length<8){showToast('Password must be at least 8 characters.');return;}
+  _otpName=n;_otpEmail=e;_otpPass=p;
+  closeModal('signup-modal');
+  showAuthLoading('Sending verification code…');
+  if(_sb){
+    try{
+      const {error}=await _sb.auth.signInWithOtp({email:e,options:{shouldCreateUser:true,data:{full_name:n}}});
+      if(error)throw error;
+      hideAuthLoading();
+      openOTPModal(e);
+      return;
+    }catch(err){
+      hideAuthLoading();
+      openModal('signup-modal');
+      showToast('Could not send OTP: '+err.message);
+      return;
+    }
+  }
+  if(findAccount(e)){showToast('This email is already in use. Please log in instead.');return;}
+  const accounts=loadAccounts();
+  const newAccount={name:n,email:e,password:p,credits:FREE_CREDITS,history:[]};
+  accounts.push(newAccount);saveAccounts(accounts);
+  setCurrentAccount(e);
+  closeModal('signup-modal');
+  go('dashboard',null,'careerliftai.com/dashboard');
+  showToast('Account created! Welcome to CareerLift AI ✓');
+}
+
+function openOTPModal(email){
+  document.getElementById('otp-email-display').textContent=email;
+  document.getElementById('otp-err').textContent='';
+  document.getElementById('otp-code-input').value='';
+  document.getElementById('otp-modal').classList.add('open');
+  setTimeout(()=>document.getElementById('otp-code-input').focus(),100);
+  startOTPTimer();
+}
+
+function startOTPTimer(){
+  clearInterval(_otpTimer);
+  let t=60;
+  document.getElementById('otp-countdown').textContent=t;
+  document.getElementById('otp-timer-row').style.display='';
+  document.getElementById('otp-resend-row').style.display='none';
+  _otpTimer=setInterval(()=>{
+    t--;
+    document.getElementById('otp-countdown').textContent=t;
+    if(t<=0){
+      clearInterval(_otpTimer);
+      document.getElementById('otp-timer-row').style.display='none';
+      document.getElementById('otp-resend-row').style.display='';
+    }
+  },1000);
+}
+
+async function verifyOTP(){
+  const code=document.getElementById('otp-code-input').value.trim();
+  if(code.length<4){document.getElementById('otp-err').textContent='Please enter the full verification code.';return;}
+  document.getElementById('otp-err').textContent='';
+  if(_sb){
+    try{
+      const {data,error}=await _sb.auth.verifyOtp({email:_otpEmail,token:code,type:'email'});
+      if(error)throw error;
+      try{
+        await _sb.from('profiles').upsert({id:data.user.id,full_name:_otpName,email:_otpEmail,subscription:'free',credits:3,created_at:new Date().toISOString()});
+      }catch(_){ }
+      closeModal('otp-modal');
+      clearInterval(_otpTimer);
+      finishLogin(_otpName);
+      showToast('Account created! Welcome to CareerLift AI ✓');
+    }catch(err){
+      document.getElementById('otp-err').textContent='Invalid code. Please try again.';
+    }
+    return;
+  }
+  if(code==='123456'){
+    closeModal('otp-modal');
+    clearInterval(_otpTimer);
+    finishLogin(_otpName);
+    showToast('Account created! Welcome to CareerLift AI ✓');
+  }else{
+    document.getElementById('otp-err').textContent='Invalid code. Demo code is 123456.';
+  }
+}
+
+async function resendOTP(){
+  if(_sb){
+    try{
+      await _sb.auth.signInWithOtp({email:_otpEmail,options:{shouldCreateUser:true,data:{full_name:_otpName}}});
+      showToast('New code sent to '+_otpEmail);
+    }catch(err){showToast('Could not resend: '+err.message);}
+  }else{
+    showToast('Demo: use code 123456');
+  }
+  startOTPTimer();
+}
+
+function forgotPassword(){
+  const e=document.getElementById('login-email').value.trim();
+  if(!e){showToast('Enter your email address first.');return;}
+  if(_sb){
+    _sb.auth.resetPasswordForEmail(e,{redirectTo:window.location.href}).then(({error})=>{
+      if(error)showToast('Error: '+error.message);
+      else showToast('Password reset link sent to '+e);
+    });
+    return;
+  }
+  showToast('Password reset link sent to '+e);
+}
+
+let currentAccount=null;
+const ACCOUNT_STORAGE_KEY='cl_accounts';
+const ACTIVE_USER_KEY='cl_active_user';
+const GOOGLE_CLIENT_ID='YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+
+function loadAccounts(){try{return JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY)||'[]');}catch(e){return[];}}
+function saveAccounts(accounts){localStorage.setItem(ACCOUNT_STORAGE_KEY,JSON.stringify(accounts));}
+function findAccount(email){return loadAccounts().find(a=>a.email===String(email).toLowerCase());}
+function setCurrentAccount(email){const account=findAccount(email);if(!account)return;localStorage.setItem(ACTIVE_USER_KEY,account.email);currentAccount=account;setUser(account.name);_credits=typeof account.credits==='number'?account.credits:FREE_CREDITS;localStorage.setItem('cl_credits',_credits);if(Array.isArray(account.history)&&account.history.length){saveHistoryStore(account.history);}refreshCreditUI();}
+function syncCurrentAccount(){if(!currentAccount)return;currentAccount.credits=_credits;currentAccount.history=loadHistory();const accounts=loadAccounts().map(a=>a.email===currentAccount.email?currentAccount:a);saveAccounts(accounts);}
+function restoreSession(){const email=localStorage.getItem(ACTIVE_USER_KEY);if(!email)return;const account=findAccount(email);if(!account)return;currentAccount=account;_credits=typeof account.credits==='number'?account.credits:FREE_CREDITS;localStorage.setItem('cl_credits',_credits);if(Array.isArray(account.history)&&account.history.length){saveHistoryStore(account.history);}setUser(account.name);refreshCreditUI();go('dashboard',null,'careerliftai.com/dashboard');}
+function initGoogleSignIn(){if(window.google && google.accounts && google.accounts.id && GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com'){google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID, callback:handleGoogleCredentialResponse, ux_mode:'popup'});} }
+function decodeJwt(token){try{return JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));}catch(e){return null;}}
+function handleGoogleCredentialResponse(response){const payload=decodeJwt(response.credential);if(!payload||!payload.email){showToast('Google sign in failed.');return;}const email=payload.email.toLowerCase();const name=payload.name||email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase());let account=findAccount(email);if(!account){const accounts=loadAccounts();account={name,email,password:'',credits:FREE_CREDITS,history:[]};accounts.push(account);saveAccounts(accounts);}setCurrentAccount(email);closeModal('login-modal');closeModal('signup-modal');go('dashboard',null,'careerliftai.com/dashboard');showToast('Signed in with Google ✓');}
+
+/* ════════════════════════════════════
    NAVIGATION
 ════════════════════════════════════ */
 const screens=['landing','dashboard','analyze','linkedin','coverletter','atsscore','templates','pricing'];
@@ -1612,51 +1836,6 @@ function closeModal(id){document.getElementById(id).classList.remove('open');}
 function switchModal(from,to){closeModal(from);openModal(to);}
 
 
-ift AI ✓');
-  }else{
-    document.getElementById('otp-err').textContent='Invalid code. Demo code is 123456.';
-  }
-}
-
-async function resendOTP(){
-  if(_sb){
-    try{
-      await _sb.auth.signInWithOtp({email:_otpEmail,options:{shouldCreateUser:true,data:{full_name:_otpName}}});
-      showToast('New code sent to '+_otpEmail);
-    }catch(err){showToast('Could not resend: '+err.message);}
-  }else{
-    showToast('Demo: use code 123456');
-  }
-  startOTPTimer();
-}
-
-function forgotPassword(){
-  const e=document.getElementById('login-email').value.trim();
-  if(!e){showToast('Enter your email address first.');return;}
-  if(_sb){
-    _sb.auth.resetPasswordForEmail(e,{redirectTo:window.location.href}).then(({error})=>{
-      if(error)showToast('Error: '+error.message);
-      else showToast('Password reset link sent to '+e);
-    });
-    return;
-  }
-  showToast('Password reset link sent to '+e);
-}
-
-let currentAccount=null;
-const ACCOUNT_STORAGE_KEY='cl_accounts';
-const ACTIVE_USER_KEY='cl_active_user';
-const GOOGLE_CLIENT_ID='YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
-
-function loadAccounts(){try{return JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY)||'[]');}catch(e){return[];}}
-function saveAccounts(accounts){localStorage.setItem(ACCOUNT_STORAGE_KEY,JSON.stringify(accounts));}
-function findAccount(email){return loadAccounts().find(a=>a.email===String(email).toLowerCase());}
-function setCurrentAccount(email){const account=findAccount(email);if(!account)return;localStorage.setItem(ACTIVE_USER_KEY,account.email);currentAccount=account;setUser(account.name);_credits=typeof account.credits==='number'?account.credits:FREE_CREDITS;localStorage.setItem('cl_credits',_credits);if(Array.isArray(account.history)&&account.history.length){saveHistoryStore(account.history);}refreshCreditUI();}
-function syncCurrentAccount(){if(!currentAccount)return;currentAccount.credits=_credits;currentAccount.history=loadHistory();const accounts=loadAccounts().map(a=>a.email===currentAccount.email?currentAccount:a);saveAccounts(accounts);}
-function restoreSession(){const email=localStorage.getItem(ACTIVE_USER_KEY);if(!email)return;const account=findAccount(email);if(!account)return;currentAccount=account;_credits=typeof account.credits==='number'?account.credits:FREE_CREDITS;localStorage.setItem('cl_credits',_credits);if(Array.isArray(account.history)&&account.history.length){saveHistoryStore(account.history);}setUser(account.name);refreshCreditUI();go('dashboard',null,'careerliftai.com/dashboard');}
-function initGoogleSignIn(){if(window.google && google.accounts && google.accounts.id && GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com'){google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID, callback:handleGoogleCredentialResponse, ux_mode:'popup'});} }
-function decodeJwt(token){try{return JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));}catch(e){return null;}}
-function handleGoogleCredentialResponse(response){const payload=decodeJwt(response.credential);if(!payload||!payload.email){showToast('Google sign in failed.');return;}const email=payload.email.toLowerCase();const name=payload.name||email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase());let account=findAccount(email);if(!account){const accounts=loadAccounts();account={name,email,password:'',credits:FREE_CREDITS,history:[]};accounts.push(account);saveAccounts(accounts);}setCurrentAccount(email);closeModal('login-modal');closeModal('signup-modal');go('dashboard',null,'careerliftai.com/dashboard');showToast('Signed in with Google ✓');}
 function setUser(name){
   const initials=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
   const el=document.getElementById('dash-av');if(el)el.textContent=initials;
