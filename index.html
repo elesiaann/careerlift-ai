@@ -1005,7 +1005,97 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
             <h3 style="display:flex;justify-content:space-between;align-items:center">Configuration <span class="credit-pill" id="analyze-credit-pill">3 credits left</span></h3>
             <div class="fg"><label>Target country *</label><select id="analyze-country"></select></div>
             <div class="fg"><label>Target job title *</label><input type="text" id="analyze-jobtitle" placeholder="e.g. Senior Software Engineer"></div>
-            <div class="fg"><label>Industry</label><select id="analyze-industry"><option>Technology</option><option>Finance</option><option>Healthcare</option><option>Marketing</option><option>Engineering</option><option>Oil &amp; Gas</option><option>Education</option><option>Legal</option></select></div>
+            <div class="fg"><label>Industry</label><select id="analyze-industry">
+              <optgroup label="Technology &amp; Engineering">
+                <option>Technology &amp; Software</option>
+                <option>Information Technology (IT)</option>
+                <option>Cybersecurity</option>
+                <option>Artificial Intelligence &amp; Data Science</option>
+                <option>Engineering (General)</option>
+                <option>Mechanical Engineering</option>
+                <option>Civil &amp; Structural Engineering</option>
+                <option>Electrical Engineering</option>
+                <option>Chemical Engineering</option>
+                <option>Aerospace &amp; Defense</option>
+                <option>Telecommunications</option>
+              </optgroup>
+              <optgroup label="Business &amp; Finance">
+                <option>Finance &amp; Banking</option>
+                <option>Accounting &amp; Auditing</option>
+                <option>Investment &amp; Asset Management</option>
+                <option>Insurance</option>
+                <option>Consulting &amp; Strategy</option>
+                <option>Management &amp; Operations</option>
+                <option>Human Resources</option>
+                <option>Supply Chain &amp; Logistics</option>
+                <option>Procurement &amp; Purchasing</option>
+                <option>Real Estate</option>
+              </optgroup>
+              <optgroup label="Healthcare &amp; Sciences">
+                <option>Healthcare &amp; Medicine</option>
+                <option>Nursing &amp; Allied Health</option>
+                <option>Pharmaceuticals &amp; Biotech</option>
+                <option>Medical Devices</option>
+                <option>Public Health</option>
+                <option>Research &amp; Life Sciences</option>
+                <option>Dentistry &amp; Orthodontics</option>
+                <option>Mental Health &amp; Psychology</option>
+              </optgroup>
+              <optgroup label="Creative &amp; Media">
+                <option>Marketing &amp; Advertising</option>
+                <option>Digital Marketing &amp; SEO</option>
+                <option>Media &amp; Journalism</option>
+                <option>Design &amp; Creative Arts</option>
+                <option>Film, TV &amp; Entertainment</option>
+                <option>Photography &amp; Videography</option>
+                <option>Publishing &amp; Content</option>
+                <option>Gaming &amp; Interactive Media</option>
+              </optgroup>
+              <optgroup label="Public Sector &amp; Non-Profit">
+                <option>Government &amp; Public Administration</option>
+                <option>Non-Profit &amp; NGO</option>
+                <option>Military &amp; Defense</option>
+                <option>Law Enforcement &amp; Security</option>
+                <option>Social Services &amp; Community Work</option>
+                <option>International Development</option>
+              </optgroup>
+              <optgroup label="Education &amp; Research">
+                <option>Education &amp; Teaching</option>
+                <option>Higher Education &amp; Academia</option>
+                <option>Training &amp; Development</option>
+                <option>Scientific Research</option>
+              </optgroup>
+              <optgroup label="Legal &amp; Compliance">
+                <option>Legal &amp; Law</option>
+                <option>Compliance &amp; Risk Management</option>
+                <option>Regulatory Affairs</option>
+              </optgroup>
+              <optgroup label="Energy &amp; Environment">
+                <option>Oil &amp; Gas</option>
+                <option>Renewable Energy &amp; Sustainability</option>
+                <option>Environmental Sciences</option>
+                <option>Mining &amp; Natural Resources</option>
+                <option>Utilities &amp; Power</option>
+              </optgroup>
+              <optgroup label="Retail, Hospitality &amp; Services">
+                <option>Retail &amp; E-Commerce</option>
+                <option>Hospitality &amp; Tourism</option>
+                <option>Food &amp; Beverage</option>
+                <option>Customer Service</option>
+                <option>Facilities &amp; Property Management</option>
+                <option>Transportation &amp; Automotive</option>
+                <option>Agriculture &amp; Food Production</option>
+                <option>Fashion &amp; Apparel</option>
+                <option>Sports &amp; Fitness</option>
+              </optgroup>
+              <optgroup label="Construction &amp; Manufacturing">
+                <option>Construction &amp; Architecture</option>
+                <option>Manufacturing &amp; Production</option>
+                <option>Quality Assurance</option>
+                <option>Health &amp; Safety (HSE)</option>
+              </optgroup>
+              <option value="Other">Other</option>
+            </select></div>
             <div class="fg"><label>Job description (optional)</label><textarea id="analyze-jd" placeholder="Paste the job description for better accuracy..."></textarea></div>
             <div class="fg"><label>Include in analysis</label>
               <label class="chk"><input type="checkbox" id="chk-rewrite" checked> Full ATS Rewrite</label>
@@ -1475,7 +1565,9 @@ populateCountries();
    NAVIGATION
 ════════════════════════════════════ */
 const screens=['landing','dashboard','analyze','linkedin','coverletter','atsscore','templates','pricing'];
-function go(id,tabEl,url){
+const _screenPaths={landing:'/',dashboard:'/dashboard',analyze:'/analyze',linkedin:'/linkedin',coverletter:'/cover-letter',atsscore:'/ats-score',templates:'/templates',pricing:'/pricing'};
+
+function go(id,tabEl,url,skipHistory){
   screens.forEach(s=>{const el=document.getElementById('sc-'+s);if(el)el.classList.toggle('on',s===id);});
   const urlBar=document.getElementById('url-bar');if(url&&urlBar)urlBar.textContent=url;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
@@ -1485,7 +1577,21 @@ function go(id,tabEl,url){
   document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('on'));
   document.querySelectorAll('.sb-link').forEach(l=>{if((l.getAttribute('onclick')||'').includes("'"+id+"'"))l.classList.add('on');});
   closeMobileNav();
+  // push browser history so back button works
+  if(!skipHistory){
+    const path=_screenPaths[id]||'/';
+    history.pushState({screen:id},document.title,path);
+  }
 }
+
+// Handle browser back/forward buttons
+window.addEventListener('popstate',function(e){
+  const id=(e.state&&e.state.screen)||'landing';
+  go(id,null,null,true);
+});
+
+// Set initial history state
+history.replaceState({screen:'landing'},document.title,_screenPaths['landing']||'/');
 
 function toggleMobileNav(btn){
   const nav=btn.closest('.site-nav,.service-nav');
