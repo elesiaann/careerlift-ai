@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CareerLift AI</title>
 <link rel="preconnect" href="https://accounts.google.com">
+<script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -480,7 +481,7 @@ tr:last-child td{border-bottom:none}
 
 /* ═══ OTP MODAL ═══ */
 .otp-inputs{display:flex;gap:10px;justify-content:center;margin:20px 0}
-.otp-single-input{width:200px;height:54px;border:2px solid #d8d8d8;border-radius:10px;font-size:26px;font-weight:700;text-align:center;color:#111;outline:none;transition:border-color .15s;background:#fafafa;letter-spacing:6px}
+.otp-single-input{width:240px;height:54px;border:2px solid #d8d8d8;border-radius:10px;font-size:22px;font-weight:700;text-align:center;color:#111;outline:none;transition:border-color .15s;background:#fafafa;letter-spacing:4px}
 .otp-single-input:focus{border-color:#6366F1;background:#fff}
 .otp-email-hint{font-size:12px;color:#888;text-align:center;margin-bottom:4px}
 .otp-email-hint strong{color:#6366F1}
@@ -602,10 +603,10 @@ tr:last-child td{border-bottom:none}
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('otp-modal')">✕</button>
     <div class="modal-logo">CareerLift AI</div>
-    <div class="modal-tagline" id="otp-tagline">We sent a verification code to your email</div>
+    <div class="modal-tagline" id="otp-tagline">Enter the 8-digit code sent to your email</div>
     <div class="otp-email-hint">Code sent to <strong id="otp-email-display">your email</strong></div>
     <div class="otp-inputs" style="justify-content:center">
-      <input class="otp-single-input" type="text" inputmode="numeric" id="otp-code-input" maxlength="8" placeholder="Enter code" autocomplete="one-time-code" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+      <input class="otp-single-input" type="text" inputmode="numeric" id="otp-code-input" maxlength="8" placeholder="00000000" autocomplete="one-time-code" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
     </div>
     <div class="otp-err" id="otp-err"></div>
     <button class="modal-btn" onclick="verifyOTP()">Verify &amp; Continue</button>
