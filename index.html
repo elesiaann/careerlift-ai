@@ -519,20 +519,20 @@ tr:last-child td{border-bottom:none}
 .faq-item.open .faq-a{display:block}
 
 /* ═══ FOOTER ═══ */
-.site-footer{background:#111;color:#fff;padding:52px 48px 24px}
+.site-footer{background:#6366F1;color:#fff;padding:52px 48px 24px}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:40px}
 .footer-brand-name{font-size:17px;font-weight:700;color:#fff;margin-bottom:10px}
-.footer-brand p{font-size:12px;color:#777;line-height:1.75;max-width:220px;margin-top:4px}
-.footer-col h4{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px}
-.footer-col a{display:block;font-size:12px;color:#777;margin-bottom:9px;cursor:pointer;transition:color .15s;text-decoration:none}
+.footer-brand p{font-size:12px;color:rgba(255,255,255,.7);line-height:1.75;max-width:220px;margin-top:4px}
+.footer-col h4{font-size:11px;font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px}
+.footer-col a{display:block;font-size:12px;color:rgba(255,255,255,.75);margin-bottom:9px;cursor:pointer;transition:color .15s;text-decoration:none}
 .footer-col a:hover{color:#fff}
 .footer-social{display:flex;gap:10px;margin-top:18px}
-.footer-social a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:#1e1e1e;color:#999;transition:background .15s,color .15s;cursor:pointer;text-decoration:none}
-.footer-social a:hover{background:#6366F1;color:#fff}
+.footer-social a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.15);color:#fff;transition:background .15s,color .15s;cursor:pointer;text-decoration:none}
+.footer-social a:hover{background:rgba(255,255,255,.3);color:#fff}
 .footer-social svg{width:17px;height:17px}
-.footer-divider{height:1px;background:#1e1e1e;margin-bottom:18px}
+.footer-divider{height:1px;background:rgba(255,255,255,.2);margin-bottom:18px}
 .footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.footer-bottom span{font-size:11px;color:#555}
+.footer-bottom span{font-size:11px;color:rgba(255,255,255,.55)}
 /* Static pages */
 .static-page{max-width:780px;margin:0 auto;padding:60px 32px 80px}
 .static-page h1{font-size:30px;font-weight:700;color:#111;margin-bottom:12px}
@@ -1060,6 +1060,7 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
           </div>
           <div class="cfg-box">
             <h3 style="display:flex;justify-content:space-between;align-items:center">Configuration <span class="credit-pill" id="analyze-credit-pill">3 credits left</span></h3>
+            <div class="fg"><label>Target Role *</label><input type="text" id="analyze-jobtitle" placeholder="e.g. Software Engineer, Marketing Manager…"></div>
             <div class="fg"><label>Target country *</label><select id="analyze-country"></select></div>
             <div class="fg"><label>Industry</label><select id="analyze-industry">
               <optgroup label="Technology &amp; Engineering">
@@ -1152,10 +1153,12 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
               </optgroup>
               <option value="Other">Other</option>
             </select></div>
-            <div class="fg"><label>Job description (optional)</label><textarea id="analyze-jd" placeholder="Paste the job description for better accuracy..."></textarea></div>
+            <div class="fg"><label>Job Link (optional)</label><input type="url" id="analyze-job-link" placeholder="https://company.com/jobs/..."></div>
+            <div class="fg"><label>Job Description (optional)</label><textarea id="analyze-jd" placeholder="Paste the job description for better keyword matching and tailoring..."></textarea></div>
             <div class="fg"><label>Include in analysis</label>
               <label class="chk"><input type="checkbox" id="chk-rewrite" checked> Full ATS Rewrite</label>
               <label class="chk"><input type="checkbox" id="chk-score" checked> ATS Score Analysis</label>
+              <label class="chk"><input type="checkbox" id="chk-coverletter"> Cover Letter</label>
             </div>
             <button class="action-btn" id="analyze-btn" onclick="runAnalysis()">Analyze Now — uses 1 credit</button>
           </div>
@@ -1195,6 +1198,19 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
             <button class="dl-btn" onclick="copyOptimized()">Copy text</button>
             <button class="dl-btn" id="save-hist-btn" onclick="saveToHistory()" style="background:#10B981;color:#fff;border-color:#10B981">&#10003; Save to History</button>
             <button class="dl-btn" onclick="showTemplatePicker()" style="background:#6366F1;color:#fff;border-color:#6366F1">Use in Template →</button>
+          </div>
+        </div>
+        <!-- COVER LETTER RESULT (from ATS Rewriter) -->
+        <div id="analyze-cl-result" style="display:none;margin-top:24px">
+          <div class="kw-card" style="padding:24px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+              <h3 style="margin:0">ATS Cover Letter</h3>
+              <div style="display:flex;gap:8px">
+                <button class="dl-btn" onclick="copyAnalyzeCL()">Copy</button>
+                <button class="dl-btn p" onclick="downloadAnalyzeCLPDF()">&#8595; PDF</button>
+              </div>
+            </div>
+            <div id="analyze-cl-body" style="white-space:pre-wrap;font-size:13px;line-height:1.75;color:#333;background:#fafafa;border:1px solid #eee;border-radius:8px;padding:20px;min-height:200px">—</div>
           </div>
         </div>
         <!-- HISTORY PANEL -->
@@ -2254,16 +2270,21 @@ async function callClaude(systemPrompt, userMessage){
 ════════════════════════════════════ */
 async function runAnalysis(){
   const cvText=document.getElementById('analyze-cv-text').value.trim();
-  const jobTitle=document.getElementById('analyze-jobtitle').value||'this role';
+  const jobTitle=document.getElementById('analyze-jobtitle').value.trim()||'this role';
   const country=document.getElementById('analyze-country').value||'United States';
   const industry=document.getElementById('analyze-industry').value||'Technology';
-  const jd=document.getElementById('analyze-jd').value||'';
+  const jd=document.getElementById('analyze-jd').value.trim()||'';
+  const jobLink=document.getElementById('analyze-job-link').value.trim()||'';
+  const doRewrite=document.getElementById('chk-rewrite').checked;
+  const doScore=document.getElementById('chk-score').checked;
+  const doCoverLetter=document.getElementById('chk-coverletter').checked;
 
   if(!cvText){showToast('Please paste your CV text in the text area below the upload zone.');return;}
 
   const btn=document.getElementById('analyze-btn');
   btn.disabled=true;btn.textContent='Analyzing…';
   document.getElementById('analyze-results').style.display='none';
+  document.getElementById('analyze-cl-result').style.display='none';
   document.getElementById('analyze-loading').style.display='flex';
 
   const steps=['Reading your CV content','Scoring against ATS criteria','Identifying keyword gaps','Rewriting for maximum impact','Finalizing optimized version'];
@@ -2274,6 +2295,7 @@ async function runAnalysis(){
   },1800);
 
   try{
+    const jdBlock=`Job Description: ${jd||'Not provided'}${jobLink?'\nJob Link: '+jobLink:''}`;
     const systemPrompt=`You are an expert ATS CV optimizer. Analyze the user's CV and return ONLY valid JSON with this exact structure:
 {
   "scoreBefore": <integer 20-60>,
@@ -2286,9 +2308,9 @@ async function runAnalysis(){
   "optimizedCV": "<full rewritten CV text optimized for ATS, with strong action verbs, quantified achievements, proper sections>",
   "notes": "<3-4 bullet points starting with · explaining key changes made>"
 }
-All percentage values are integers 0-100. The optimizedCV must be a complete, professional CV rewrite targeting ${jobTitle} in ${country} in the ${industry} industry. Return ONLY the JSON, no markdown, no backticks.`;
+All percentage values are integers 0-100. The optimizedCV must be a complete, professional CV rewrite targeting ${jobTitle} in ${country} in the ${industry} industry${jd?' tailored to the provided job description':''}. Return ONLY the JSON, no markdown, no backticks.`;
 
-    const userMsg=`Target Role: ${jobTitle}\nTarget Country: ${country}\nIndustry: ${industry}\nJob Description: ${jd||'Not provided'}\n\nCV Content:\n${cvText}`;
+    const userMsg=`Target Role: ${jobTitle}\nTarget Country: ${country}\nIndustry: ${industry}\n${jdBlock}\n\nCV Content:\n${cvText}`;
 
     const raw=await callClaude(systemPrompt,userMsg);
     clearInterval(stepInterval);
@@ -2329,12 +2351,59 @@ All percentage values are integers 0-100. The optimizedCV must be a complete, pr
     setTimeout(()=>document.getElementById('analyze-results').scrollIntoView({behavior:'smooth'}),100);
     showToast('Analysis complete! CV optimized ✓');
 
+    // Generate cover letter if requested
+    if(doCoverLetter){
+      try{
+        document.getElementById('analyze-cl-body').textContent='Generating cover letter…';
+        document.getElementById('analyze-cl-result').style.display='block';
+        const clPrompt=`You are an expert career writer specializing in ATS-optimized cover letters. Write a professional, tailored cover letter based on the applicant's CV and the provided job details. The cover letter must:
+- Open with a strong, specific hook (no generic "I am writing to apply" openers)
+- Mirror keywords and phrases from the job description for ATS compatibility
+- Highlight 2-3 specific achievements from the CV that directly match the role requirements
+- Show genuine knowledge of the role and industry
+- Close with a confident call to action
+- Be 3-4 paragraphs, 250-350 words total
+- Use a professional but engaging tone
+- Include standard letter formatting: Date, Hiring Manager, Company, Body, Sign-off
+Return ONLY the cover letter text, no extra commentary.`;
+        const clMsg=`Applicant CV:\n${parsed.optimizedCV||cvText}\n\nTarget Role: ${jobTitle}\nIndustry: ${industry}\nCountry: ${country}\n${jdBlock}`;
+        const clRaw=await callClaude(clPrompt,clMsg);
+        window._analyzeCL=clRaw.trim();
+        document.getElementById('analyze-cl-body').textContent=window._analyzeCL;
+        showToast('Cover letter generated ✓');
+      }catch(clErr){
+        document.getElementById('analyze-cl-body').textContent='Could not generate cover letter: '+clErr.message;
+      }
+    }
+
   }catch(err){
     clearInterval(stepInterval);
     document.getElementById('analyze-loading').style.display='none';
     showToast('Error: '+err.message);
   }
   btn.disabled=false;btn.textContent='Analyze Now — uses 1 credit';
+}
+
+function copyAnalyzeCL(){
+  const txt=window._analyzeCL||document.getElementById('analyze-cl-body').textContent;
+  navigator.clipboard.writeText(txt).then(()=>showToast('Cover letter copied ✓')).catch(()=>showToast('Copy failed'));
+}
+
+function downloadAnalyzeCLPDF(){
+  const txt=window._analyzeCL||document.getElementById('analyze-cl-body').textContent;
+  if(!txt||txt==='—'){showToast('No cover letter to download.');return;}
+  if(typeof window.jspdf==='undefined'&&typeof jspdf==='undefined'){showToast('PDF library not ready, try again in a moment.');return;}
+  const {jsPDF}=window.jspdf||jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const margin=20,pageW=210,usableW=pageW-margin*2;
+  doc.setFont('helvetica','normal');doc.setFontSize(11);
+  const lines=doc.splitTextToSize(txt,usableW);
+  let y=margin;
+  lines.forEach(line=>{
+    if(y>280){doc.addPage();y=margin;}
+    doc.text(line,margin,y);y+=6;
+  });
+  doc.save('cover-letter.pdf');
 }
 
 function setBar(key,data){
