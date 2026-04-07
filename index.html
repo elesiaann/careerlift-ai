@@ -2110,8 +2110,16 @@ window.addEventListener('popstate',function(e){
   go(id,null,null,true);
 });
 
-// Set initial history state
-history.replaceState({screen:'landing'},document.title,_screenPaths['landing']||'/');
+// Set initial screen based on current URL path
+(function(){
+  const path=window.location.pathname.replace(/\/$/,'');
+  const screenId=Object.keys(_screenPaths).find(k=>_screenPaths[k]===path||(path===''&&k==='landing'))||'landing';
+  if(screenId!=='landing'){
+    go(screenId,null,null,true);
+  } else {
+    history.replaceState({screen:'landing'},document.title,_screenPaths['landing']||'/');
+  }
+})();
 
 function toggleMobileNav(btn){
   const nav=btn.closest('.site-nav,.service-nav');
