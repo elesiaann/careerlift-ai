@@ -2192,7 +2192,13 @@ async function initAuth(){
       }
       showToast('Welcome, '+name.split(' ')[0]+'! ✓');
     }
-    if(event==='SIGNED_OUT'){updateNavForAuth(false);go('landing',null,'/');}
+    if(event==='SIGNED_OUT'){
+      updateNavForAuth(false);
+      // Only redirect to landing if on a protected/auth-required screen
+      const protectedScreens=['dashboard'];
+      const onProtected=protectedScreens.some(s=>{const el=document.getElementById('sc-'+s);return el&&el.classList.contains('on');});
+      if(onProtected)go('landing',null,'/');
+    }
   });
   const {data:{session}}=await sb.auth.getSession();
   if(session){
