@@ -1871,7 +1871,14 @@ populateCountries();
 ════════════════════════════════════ */
 const SUPABASE_URL='https://fusxcijaklbrfkszlzsv.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1c3hjaWpha2xicmZrc3psenN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMjg2NDAsImV4cCI6MjA5MDgwNDY0MH0.XezE53OT9jRAQCmah2L-f6JSIs5FwWpa92l660LoAgo';
-const _sb=window.supabase?supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+// Lazy init — Supabase CDN may not be parsed yet at script start
+let _sb=null;
+function getSB(){
+  if(!_sb&&window.supabase){
+    try{_sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}catch(e){}
+  }
+  return _sb;
+}
 
 /* ════════════════════════════════════
    AUTH LOADING HELPERS
@@ -1897,19 +1904,16 @@ function finishLogin(name){
 ════════════════════════════════════ */
 async function googleAuth(){
   closeModal('login-modal');closeModal('signup-modal');
-  if(!_sb){showToast('Auth service unavailable. Please refresh.');return;}
+  const sb=getSB();
+  if(!sb){showToast('Loading…please try again in a moment.');return;}
   showAuthLoading('Redirecting to Google…');
   try{
     const redirectTo=window.location.origin+'/';
-    const {error}=await _sb.auth.signInWithOAuth({
+    const {error}=await sb.auth.signInWithOAuth({
       provider:'google',
-      options:{
-        queryParams:{access_type:'offline',prompt:'select_account'},
-        redirectTo
-      }
+      options:{queryParams:{access_type:'offline',prompt:'select_account'},redirectTo}
     });
     if(error){hideAuthLoading();throw error;}
-    // Page will redirect to Google — loading overlay stays until redirect
   }catch(err){
     hideAuthLoading();
     showToast('Google sign-in failed: '+err.message);
@@ -1923,25 +1927,22 @@ async function doLogin(){
   const e=document.getElementById('login-email').value.trim().toLowerCase();
   const p=document.getElementById('login-pass').value;
   if(!e||!p){showToast('Please enter your email and password.');return;}
-  if(_sb){
-    closeModal('login-modal');
-    showAuthLoading('Signing you in…');
-    try{
-      const {data,error}=await _sb.auth.signInWithPassword({email:e,password:p});
-      if(error)throw error;
-      hideAuthLoading();
-      const name=data.user.user_metadata?.full_name||(e.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
-      finishLogin(name);
-      showToast('Welcome back! ✓');
-      return;
-    }catch(err){
-      hideAuthLoading();
-      openModal('login-modal');
-      showToast('Login failed: '+err.message);
-      return;
-    }
+  const sb=getSB();
+  if(!sb){showToast('Still loading — please try again in a moment.');return;}
+  closeModal('login-modal');
+  showAuthLoading('Signing you in…');
+  try{
+    const {data,error}=await sb.auth.signInWithPassword({email:e,password:p});
+    if(error)throw error;
+    hideAuthLoading();
+    const name=data.user.user_metadata?.full_name||(e.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
+    finishLogin(name);
+    showToast('Welcome back! ✓');
+  }catch(err){
+    hideAuthLoading();
+    openModal('login-modal');
+    showToast('Login failed: '+err.message);
   }
-  showToast('Please try again. Auth service unavailable.');
 }
 
 /* ════════════════════════════════════
@@ -1959,23 +1960,20 @@ async function doSignup(){
   if(!n||!e||!p){showToast('Please fill in all fields.');return;}
   if(p.length<8){showToast('Password must be at least 8 characters.');return;}
   _otpName=n;_otpEmail=e;_otpPass=p;
+  const sb=getSB();
+  if(!sb){showToast('Still loading — please try again in a moment.');return;}
   closeModal('signup-modal');
   showAuthLoading('Sending verification code…');
-  if(_sb){
-    try{
-      const {error}=await _sb.auth.signInWithOtp({email:e,options:{shouldCreateUser:true,data:{full_name:n}}});
-      if(error)throw error;
-      hideAuthLoading();
-      openOTPModal(e);
-      return;
-    }catch(err){
-      hideAuthLoading();
-      openModal('signup-modal');
-      showToast('Could not send OTP: '+err.message);
-      return;
-    }
+  try{
+    const {error}=await sb.auth.signInWithOtp({email:e,options:{shouldCreateUser:true,data:{full_name:n}}});
+    if(error)throw error;
+    hideAuthLoading();
+    openOTPModal(e);
+  }catch(err){
+    hideAuthLoading();
+    openModal('signup-modal');
+    showToast('Could not send code: '+err.message);
   }
-  showToast('Auth service unavailable. Please refresh and try again.');
 }
 
 function openOTPModal(email){
@@ -2008,55 +2006,45 @@ async function verifyOTP(){
   const code=document.getElementById('otp-code-input').value.trim();
   if(code.length<4){document.getElementById('otp-err').textContent='Please enter the full verification code.';return;}
   document.getElementById('otp-err').textContent='';
-  if(_sb){
+  const sb=getSB();
+  if(sb){
     try{
-      const {data,error}=await _sb.auth.verifyOtp({email:_otpEmail,token:code,type:'email'});
+      const {data,error}=await sb.auth.verifyOtp({email:_otpEmail,token:code,type:'email'});
       if(error)throw error;
-      try{
-        await _sb.from('profiles').upsert({id:data.user.id,full_name:_otpName,email:_otpEmail,subscription:'free',credits:3,created_at:new Date().toISOString()});
-      }catch(_){ }
-      closeModal('otp-modal');
-      clearInterval(_otpTimer);
-      finishLogin(_otpName);
+      try{await sb.from('profiles').upsert({id:data.user.id,full_name:_otpName,email:_otpEmail,subscription:'free',credits:3,created_at:new Date().toISOString()});}catch(_){}
+      closeModal('otp-modal');clearInterval(_otpTimer);finishLogin(_otpName);
       showToast('Account created! Welcome to CareerLift AI ✓');
     }catch(err){
       document.getElementById('otp-err').textContent='Invalid code. Please try again.';
     }
-    return;
-  }
-  if(code==='123456'){
-    closeModal('otp-modal');
-    clearInterval(_otpTimer);
-    finishLogin(_otpName);
-    showToast('Account created! Welcome to CareerLift AI ✓');
   }else{
-    document.getElementById('otp-err').textContent='Invalid code. Demo code is 123456.';
+    document.getElementById('otp-err').textContent='Service loading — please try again.';
   }
 }
 
 async function resendOTP(){
-  if(_sb){
+  const sb=getSB();
+  if(sb){
     try{
-      await _sb.auth.signInWithOtp({email:_otpEmail,options:{shouldCreateUser:true,data:{full_name:_otpName}}});
+      await sb.auth.signInWithOtp({email:_otpEmail,options:{shouldCreateUser:true,data:{full_name:_otpName}}});
       showToast('New code sent to '+_otpEmail);
     }catch(err){showToast('Could not resend: '+err.message);}
-  }else{
-    showToast('Demo: use code 123456');
-  }
+  }else{showToast('Still loading — please wait a moment.');}
   startOTPTimer();
 }
 
 function forgotPassword(){
   const e=document.getElementById('login-email').value.trim();
   if(!e){showToast('Enter your email address first.');return;}
-  if(_sb){
-    _sb.auth.resetPasswordForEmail(e,{redirectTo:window.location.href}).then(({error})=>{
+  const sb=getSB();
+  if(sb){
+    sb.auth.resetPasswordForEmail(e,{redirectTo:window.location.origin+'/'}).then(({error})=>{
       if(error)showToast('Error: '+error.message);
       else showToast('Password reset link sent to '+e);
     });
     return;
   }
-  showToast('Password reset link sent to '+e);
+  showToast('Please wait for the page to finish loading.');
 }
 
 
@@ -2129,7 +2117,7 @@ function updateNavForAuth(loggedIn){
 }
 
 async function signOut(){
-  if(_sb)await _sb.auth.signOut();
+  const sb=getSB();if(sb)await sb.auth.signOut();
   updateNavForAuth(false);
   go('landing',null,'/');
   showToast('Signed out successfully');
@@ -2140,9 +2128,9 @@ async function signOut(){
    callback and session restore
 ════════════════════════════════════ */
 async function initAuth(){
-  if(!_sb)return;
-  // Listen for all auth state changes (OAuth callback, session restore, sign out)
-  _sb.auth.onAuthStateChange((event,session)=>{
+  const sb=getSB();
+  if(!sb)return;
+  sb.auth.onAuthStateChange((event,session)=>{
     if((event==='SIGNED_IN'||event==='TOKEN_REFRESHED')&&session){
       const u=session.user;
       const name=u.user_metadata?.full_name||u.user_metadata?.name||(u.email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
@@ -2150,19 +2138,14 @@ async function initAuth(){
       closeModal('login-modal');closeModal('signup-modal');closeModal('otp-modal');
       setUser(name);
       go('dashboard',null,'/dashboard');
-      // Clean the token hash from URL
       if(window.location.hash&&window.location.hash.includes('access_token')){
         history.replaceState(null,'',window.location.pathname);
       }
       showToast('Welcome, '+name.split(' ')[0]+'! ✓');
     }
-    if(event==='SIGNED_OUT'){
-      updateNavForAuth(false);
-      go('landing',null,'/');
-    }
+    if(event==='SIGNED_OUT'){updateNavForAuth(false);go('landing',null,'/');}
   });
-  // Check for existing session on page load
-  const {data:{session}}=await _sb.auth.getSession();
+  const {data:{session}}=await sb.auth.getSession();
   if(session){
     const u=session.user;
     const name=u.user_metadata?.full_name||u.user_metadata?.name||(u.email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
@@ -2173,7 +2156,8 @@ async function initAuth(){
     }
   }
 }
-initAuth();
+// Run initAuth after window load so Supabase CDN is guaranteed to be available
+window.addEventListener('load',function(){getSB();initAuth();});
 
 /* ════════════════════════════════════
    FAQ TOGGLE
@@ -3263,8 +3247,9 @@ async function submitContact(){
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showToast('Please enter a valid email.');return;}
   status.style.display='block';status.style.color='#888';status.textContent='Sending…';
   try{
-    if(_sb){
-      await _sb.from('contact_messages').insert([{name,email,subject,message,created_at:new Date().toISOString()}]);
+    const sb=getSB();
+    if(sb){
+      await sb.from('contact_messages').insert([{name,email,subject,message,created_at:new Date().toISOString()}]);
     }
     status.style.color='#10B981';status.textContent='Message sent! We\'ll reply within 24 hours.';
     document.getElementById('cf-name').value='';
