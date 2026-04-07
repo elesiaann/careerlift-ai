@@ -5,10 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CareerLift AI</title>
 <link rel="preconnect" href="https://accounts.google.com">
-<script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+// Early routing: show correct screen immediately based on URL (runs before body renders)
+(function(){
+  var map={'/dashboard':'dashboard','/analyze':'analyze','/linkedin':'linkedin','/cover-letter':'coverletter','/ats-score':'atsscore','/templates':'templates','/pricing':'pricing','/about':'about','/contact':'contact','/privacy':'privacy','/terms':'terms'};
+  var p=window.location.pathname.replace(/\/+$/,'')||'/';
+  var id=map[p];
+  if(id){
+    document.addEventListener('DOMContentLoaded',function(){
+      var screens=document.querySelectorAll('.screen');
+      screens.forEach(function(s){s.classList.remove('on');});
+      var target=document.getElementById('sc-'+id);
+      if(target)target.classList.add('on');
+    });
+  }
+})();
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111;font-size:13px;background:#fff;min-height:100vh}
@@ -2110,16 +2126,8 @@ window.addEventListener('popstate',function(e){
   go(id,null,null,true);
 });
 
-// Set initial screen based on current URL path
-(function(){
-  const path=window.location.pathname.replace(/\/$/,'');
-  const screenId=Object.keys(_screenPaths).find(k=>_screenPaths[k]===path||(path===''&&k==='landing'))||'landing';
-  if(screenId!=='landing'){
-    go(screenId,null,null,true);
-  } else {
-    history.replaceState({screen:'landing'},document.title,_screenPaths['landing']||'/');
-  }
-})();
+// Set initial history state for landing (non-landing paths already handled by early head script)
+history.replaceState({screen:'landing'},document.title,window.location.pathname||'/');
 
 function toggleMobileNav(btn){
   const nav=btn.closest('.site-nav,.service-nav');
