@@ -410,6 +410,66 @@ tr:last-child td{border-bottom:none}
 .trust-note{font-size:11px;color:#888;display:flex;align-items:center;gap:6px}
 .trust-note::before{content:"✓";color:#10B981;font-weight:700;font-size:12px}
 
+/* ═══ HOME PAGE ENHANCEMENTS ═══ */
+.before-after-section{background:linear-gradient(135deg,#f0f4ff 0%,#f9f5ff 100%);padding:48px 32px;text-align:center;margin:40px 0}
+.before-after-title{font-size:28px;font-weight:700;color:#111;margin-bottom:12px}
+.before-after-subtitle{font-size:14px;color:#888;margin-bottom:36px;max-width:600px;margin-left:auto;margin-right:auto}
+.before-after-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1100px;margin:0 auto}
+.ba-card{background:#fff;border-radius:12px;padding:24px;border:1px solid #eee;position:relative}
+.ba-label{position:absolute;top:-12px;left:20px;background:#fff;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;color:#6366F1;border:1px solid #c7d2fe}
+.ba-label.before{color:#ef4444;border-color:#fecaca}
+.ba-card h4{font-size:14px;font-weight:600;color:#111;margin-top:12px;margin-bottom:8px}
+.ba-score{font-size:32px;font-weight:700;color:#6366F1;margin-bottom:16px}
+.ba-score.before{color:#ef4444}
+.ba-highlights{text-align:left;margin-bottom:16px}
+.ba-highlight{padding:8px 12px;background:#f5f5f5;border-radius:6px;margin-bottom:8px;font-size:12px;color:#555;border-left:3px solid #6366F1}
+.ba-highlight.miss{border-left-color:#ef4444;color:#dc2626}span.miss-txt{font-weight:600;color:#ef4444}
+span.ok-txt{font-weight:600;color:#10B981}
+.ba-highlight.ok{border-left-color:#10B981;color:#047857}
+
+.why-section{padding:48px 32px;background:#fff;text-align:center}
+.why-title{font-size:24px;font-weight:700;color:#111;margin-bottom:32px}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1200px;margin:0 auto}
+.why-card{padding:24px;background:#f9f9f9;border-radius:10px}
+.why-icon{font-size:32px;margin-bottom:12px}
+.why-label{font-size:13px;font-weight:600;color:#111;margin-bottom:8px}
+.why-text{font-size:12px;color:#888;line-height:1.5}
+
+.templates-preview{padding:48px 32px;background:linear-gradient(135deg,#f0f4ff 0%,#faf9ff 100%)}
+.templates-title{font-size:24px;font-weight:700;color:#111;margin-bottom:32px;text-align:center}
+.templates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1200px;margin:0 auto}
+.template-card{background:#fff;border-radius:10px;overflow:hidden;border:1px solid #eee;transition:transform .2s,box-shadow .2s}
+.template-card:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.08)}
+.template-preview{height:140px;background:#f9f9f9;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa}
+.template-name{padding:14px;border-bottom:1px solid #eee;font-size:12px;font-weight:600;color:#111}
+.template-features{padding:12px 14px;font-size:11px;color:#555;text-align:left}
+.template-feature{padding:4px 0;color:#666}
+
+.trust-section{padding:48px 32px;background:#fff;border-top:1px solid #f0f0f0;border-bottom:1px solid #f0f0f0}
+.trust-title{text-align:center;font-size:14px;font-weight:600;color:#888;margin-bottom:32px;text-transform:uppercase;letter-spacing:.8px}
+.trust-logos{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:24px;max-width:1200px;margin:0 auto}
+.trust-logo{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;border-radius:8px;background:#fafafa;transition:background .2s}
+.trust-logo:hover{background:#f0f0f0}
+.trust-logo-icon{font-size:40px;margin-bottom:12px}
+.trust-logo-name{font-size:12px;font-weight:600;color:#111;text-align:center}
+
+.pricing-preview{padding:48px 32px;background:linear-gradient(135deg,#f0f4ff 0%,#f9f5ff 100%)}
+.pp-title{font-size:24px;font-weight:700;color:#111;margin-bottom:12px;text-align:center}
+.pp-subtitle{text-align:center;color:#888;font-size:13px;margin-bottom:32px}
+.pp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1200px;margin:0 auto}
+.pp-card{background:#fff;border-radius:10px;padding:20px;border:1px solid #eee;text-align:center;position:relative}
+.pp-card.featured{border:2px solid #6366F1;transform:scale(1.05)}
+.pp-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#6366F1;color:#fff;padding:3px 12px;border-radius:8px;font-size:10px;font-weight:600}
+.pp-name{font-size:12px;color:#aaa;margin-bottom:8px}
+.pp-price{font-size:28px;font-weight:700;color:#111;margin-bottom:4px}
+.pp-period{font-size:11px;color:#888;margin-bottom:16px}
+.pp-feature{font-size:11px;color:#666;padding:6px 0;border-bottom:1px solid #f0f0f0}
+.pp-feature:last-child{border-bottom:none}
+.pp-btn{margin-top:14px;padding:8px 14px;border-radius:6px;border:1px solid #d8d8d8;background:#fff;color:#111;font-size:11px;font-weight:600;cursor:pointer}
+.pp-btn:hover{background:#f5f5f5}
+.pp-btn.primary{background:#6366F1;color:#fff;border-color:#6366F1}
+.pp-btn.primary:hover{background:#4F46E5}
+
 /* Toast notification */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#111;color:#fff;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:500;z-index:9999;transition:transform .3s cubic-bezier(.175,.885,.32,1.275);pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0)}
@@ -581,6 +641,189 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
           <div class="feat-card" onclick="go('pricing',null,'careerliftai.com/pricing')">
             <div class="feat-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
             <h3>Works for Any Market</h3><p>USA, UK, Germany, Canada, UAE — our AI adapts to local hiring norms automatically.</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ══ BEFORE-AFTER RESUME SECTION ══ -->
+      <div class="before-after-section">
+        <div class="before-after-title">Proven Results</div>
+        <div class="before-after-subtitle">See how CareerLift AI transforms your CV for ATS success</div>
+        <div class="before-after-grid">
+          <div class="ba-card">
+            <div class="ba-label before">BEFORE</div>
+            <h4>CV ATS Score</h4>
+            <div class="ba-score before">32</div>
+            <div class="ba-highlights">
+              <div class="ba-highlight miss"><span class="miss-txt">✗ Formatting</span> — Too many visuals</div>
+              <div class="ba-highlight miss"><span class="miss-txt">✗ Keywords</span> — Missing key skills</div>
+              <div class="ba-highlight miss"><span class="miss-txt">✗ Dates</span> — Inconsistent format</div>
+              <div class="ba-highlight miss"><span class="miss-txt">✗ Risk</span> — Likely filtered out</div>
+            </div>
+          </div>
+          <div class="ba-card">
+            <div class="ba-label">AFTER</div>
+            <h4>CV ATS Score</h4>
+            <div class="ba-score">76</div>
+            <div class="ba-highlights">
+              <div class="ba-highlight ok"><span class="ok-txt">✓ Optimized</span> — ATS-friendly format</div>
+              <div class="ba-highlight ok"><span class="ok-txt">✓ Keywords</span> — 12+ new keywords added</div>
+              <div class="ba-highlight ok"><span class="ok-txt">✓ Clarity</span> — Improved readability</div>
+              <div class="ba-highlight ok"><span class="ok-txt">✓ Ready</span> — Passes ATS filtering</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ══ WHY CHOOSE US SECTION ══ -->
+      <div class="why-section">
+        <div class="why-title">Why Choose CareerLift AI?</div>
+        <div class="why-grid">
+          <div class="why-card">
+            <div class="why-icon">🤖</div>
+            <div class="why-label">AI-Powered</div>
+            <div class="why-text">GPT-4 powered analysis targets top 200 employers in your market.</div>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">⚡</div>
+            <div class="why-label">Lightning Fast</div>
+            <div class="why-text">Complete CV analysis and rewrite in under 60 seconds.</div>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">📊</div>
+            <div class="why-label">Data-Driven</div>
+            <div class="why-text">Real ATS keywords extracted from actual job descriptions.</div>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">🌍</div>
+            <div class="why-label">Global Markets</div>
+            <div class="why-text">Supports USA, UK, EU, Canada, UAE — any market worldwide.</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ══ TEMPLATES PREVIEW SECTION ══ -->
+      <div class="templates-preview">
+        <div class="templates-title">Get Started with Professional Templates</div>
+        <div class="templates-grid">
+          <div class="template-card">
+            <div class="template-preview">📄 Classic Professional</div>
+            <div class="template-name">Classic Professional</div>
+            <div class="template-features">
+              <div class="template-feature">✓ ATS-optimized</div>
+              <div class="template-feature">✓ Clean layout</div>
+              <div class="template-feature">✓ Fully editable</div>
+            </div>
+          </div>
+          <div class="template-card">
+            <div class="template-preview">📊 Modern Executive</div>
+            <div class="template-name">Modern Executive</div>
+            <div class="template-features">
+              <div class="template-feature">✓ Sidebar design</div>
+              <div class="template-feature">✓ Skills bar chart</div>
+              <div class="template-feature">✓ Professional</div>
+            </div>
+          </div>
+          <div class="template-card">
+            <div class="template-preview">🎨 Creative Designer</div>
+            <div class="template-name">Creative Designer</div>
+            <div class="template-features">
+              <div class="template-feature">✓ Visual focus</div>
+              <div class="template-feature">✓ Color accent</div>
+              <div class="template-feature">✓ Modern style</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ══ TRUST LOGOS SECTION ══ -->
+      <div class="trust-section">
+        <div class="trust-title">Powered by industry leaders</div>
+        <div class="trust-logos">
+          <div class="trust-logo">
+            <div class="trust-logo-icon">🤖</div>
+            <div class="trust-logo-name">OpenAI</div>
+          </div>
+          <div class="trust-logo">
+            <div class="trust-logo-icon">📱</div>
+            <div class="trust-logo-name">Microsoft</div>
+          </div>
+          <div class="trust-logo">
+            <div class="trust-logo-icon">🔍</div>
+            <div class="trust-logo-name">Google</div>
+          </div>
+          <div class="trust-logo">
+            <div class="trust-logo-icon">🏢</div>
+            <div class="trust-logo-name">IBM</div>
+          </div>
+          <div class="trust-logo">
+            <div class="trust-logo-icon">💼</div>
+            <div class="trust-logo-name">LinkedIn</div>
+          </div>
+          <div class="trust-logo">
+            <div class="trust-logo-icon">💻</div>
+            <div class="trust-logo-name">Indeed</div>
+          </div>
+          <div class="trust-logo">
+            <div class="trust-logo-icon">⭐</div>
+            <div class="trust-logo-name">Glassdoor</div>
+          </div>
+          <div class="trust-logo">
+            <div class="trust-logo-icon">🎯</div>
+            <div class="trust-logo-name">Monster</div>
+          </div>
+          <div class="trust-logo">
+            <div class="trust-logo-icon">📚</div>
+            <div class="trust-logo-name">Udemy</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ══ PRICING PREVIEW SECTION ══ -->
+      <div class="pricing-preview">
+        <div class="pp-title">Simple, Transparent Pricing</div>
+        <div class="pp-subtitle">Choose the plan that fits your job search</div>
+        <div class="pp-grid">
+          <div class="pp-card">
+            <div class="pp-name">Free</div>
+            <div class="pp-price">$0</div>
+            <div class="pp-period">forever</div>
+            <div class="pp-feature">3 AI analyses</div>
+            <div class="pp-feature">ATS score check</div>
+            <div class="pp-feature">1 cover letter</div>
+            <div class="pp-feature">Basic templates</div>
+            <button class="pp-btn" onclick="openModal('signup-modal')">Start free</button>
+          </div>
+          <div class="pp-card">
+            <div class="pp-name">Basic</div>
+            <div class="pp-price">$19</div>
+            <div class="pp-period">/month</div>
+            <div class="pp-feature">10 analyses/month</div>
+            <div class="pp-feature">Full ATS rewrite</div>
+            <div class="pp-feature">10 cover letters</div>
+            <div class="pp-feature">All templates</div>
+            <button class="pp-btn" onclick="openModal('signup-modal')">Choose plan</button>
+          </div>
+          <div class="pp-card featured">
+            <div class="pp-badge">Most Popular</div>
+            <div class="pp-name">Pro</div>
+            <div class="pp-price">$49</div>
+            <div class="pp-period">/month</div>
+            <div class="pp-feature">Unlimited analyses</div>
+            <div class="pp-feature">Unlimited letters</div>
+            <div class="pp-feature">All features</div>
+            <div class="pp-feature">Priority support</div>
+            <button class="pp-btn primary" onclick="openModal('signup-modal')">Start trial</button>
+          </div>
+          <div class="pp-card">
+            <div class="pp-name">One-Time</div>
+            <div class="pp-price">$49</div>
+            <div class="pp-period">no expiry</div>
+            <div class="pp-feature">5 analyses</div>
+            <div class="pp-feature">5 cover letters</div>
+            <div class="pp-feature">2 optimizations</div>
+            <div class="pp-feature">No subscription</div>
+            <button class="pp-btn" onclick="openModal('signup-modal')">Buy now</button>
           </div>
         </div>
       </div>
@@ -1079,13 +1322,19 @@ function googleAuth(){
     google.accounts.id.initialize({
       client_id: GOOGLE_CLIENT_ID,
       callback: handleGoogleCredentialResponse,
-      ux_mode: 'popup'
+      ux_mode: 'popup',
+      auto_select: false
     });
-    google.accounts.id.prompt((notification) => {
-      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-        google.accounts.id.renderButton(document.body, { theme: 'outline', size: 'large' });
+    // Show the account picker / One Tap UI
+    google.accounts.id.renderButton(
+      document.querySelector('.google-btn'),
+      {
+        theme: 'outline',
+        size: 'large',
+        text: 'continue_with',
+        width: '100%'
       }
-    });
+    );
   }catch(e){
     console.error('Google Auth error:', e);
     showToast('Google sign-in error. Try email signup.');
@@ -1159,7 +1408,33 @@ function initGoogleSignIn(){
   const tryInit=()=>{
     if(!window.google||!google.accounts||!google.accounts.id){setTimeout(tryInit,300);return;}
     if(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com'){
-      try{google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID, callback:handleGoogleCredentialResponse, ux_mode:'popup'});}catch(e){console.warn('Google init:',e);}
+      try{
+        google.accounts.id.initialize({
+          client_id:GOOGLE_CLIENT_ID,
+          callback:handleGoogleCredentialResponse,
+          ux_mode:'popup',
+          auto_select:false
+        });
+        // Render Google button on login and signup modals
+        const loginBtn=document.querySelector('#login-modal .google-btn');
+        const signupBtn=document.querySelector('#signup-modal .google-btn');
+        if(loginBtn){
+          google.accounts.id.renderButton(loginBtn,{
+            theme:'outline',
+            size:'large',
+            text:'continue_with',
+            width:'100%'
+          });
+        }
+        if(signupBtn){
+          google.accounts.id.renderButton(signupBtn,{
+            theme:'outline',
+            size:'large',
+            text:'continue_with',
+            width:'100%'
+          });
+        }
+      }catch(e){console.warn('Google init:',e);}
     }
   };
   tryInit();
