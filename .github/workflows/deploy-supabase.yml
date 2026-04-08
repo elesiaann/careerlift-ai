@@ -16,13 +16,22 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
       
       - name: Install Supabase CLI
-        run: npm install -g supabase
+        run: npm install -g supabase@latest
       
       - name: Deploy Edge Functions
-        run: supabase functions deploy send-otp
+        run: |
+          cd supabase/functions/send-otp
+          ls -la
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_PROJECT_ID: fusxcijaklbrfkszlzsv
+      
+      - name: Login and Deploy
+        run: |
+          npx supabase@latest link --project-ref fusxcijaklbrfkszlzsv --api-url https://fusxcijaklbrfkszlzsv.supabase.co
+          npx supabase@latest functions deploy send-otp --project-ref fusxcijaklbrfkszlzsv
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
