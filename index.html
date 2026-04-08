@@ -406,6 +406,9 @@ tr:last-child td{border-bottom:none}
 .plan-btn.p:hover{background:#4F46E5}
 .trust-row{display:flex;gap:22px;justify-content:center}
 .trust-row span{font-size:12px;color:#aaa}
+.trust-notes{display:flex;flex-direction:column;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid #f5f5f5}
+.trust-note{font-size:11px;color:#888;display:flex;align-items:center;gap:6px}
+.trust-note::before{content:"✓";color:#10B981;font-weight:700;font-size:12px}
 
 /* Toast notification */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#111;color:#fff;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:500;z-index:9999;transition:transform .3s cubic-bezier(.175,.885,.32,1.275);pointer-events:none}
@@ -938,28 +941,60 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
           <span style="font-weight:500;color:#111" id="bill-monthly-lbl">Monthly</span>
           <div class="sw" onclick="toggleBill()"><div class="sw-k off" id="swk"></div></div>
           <span id="bill-annual-lbl">Annual</span>
-          <span class="save-badge" id="save-t" style="display:none">Save up to $189/yr</span>
+          <span class="save-badge" id="save-t" style="display:none">Save 20%</span>
         </div>
         <div class="plans-grid">
           <div class="plan">
-            <div class="plan-nm">Free</div><div class="plan-pr">$0</div><div class="plan-pd">forever</div><div class="plan-div"></div>
-            <div class="plan-f">3 AI analyses (one-time)</div><div class="plan-f">ATS score check</div><div class="plan-f">1 cover letter</div><div class="plan-f">3 basic templates</div><div class="plan-f">Watermark on downloads</div>
+            <div class="plan-nm">Free Plan</div><div class="plan-pr">$0</div><div class="plan-pd">forever</div><div class="plan-div"></div>
+            <div class="plan-f">3 AI analyses (one-time)</div>
+            <div class="plan-f">ATS score check</div>
+            <div class="plan-f">1 cover letter</div>
+            <div class="plan-f">3 basic templates</div>
+            <div class="plan-f">Watermark on downloads</div>
             <button class="plan-btn" onclick="openModal('signup-modal')">Get started free</button>
+            <div class="trust-notes">
+              <div class="trust-note">✓ No card required</div>
+              <div class="trust-note">✓ Cancel anytime</div>
+              <div class="trust-note">✓ Secured by Stripe</div>
+            </div>
           </div>
           <div class="plan">
-            <div class="plan-nm">Basic</div><div class="plan-pr" id="bp">$19</div><div class="plan-pd" id="bpd">/month</div><div class="plan-div"></div>
-            <div class="plan-f">10 CV analyses / month</div><div class="plan-f">Full ATS rewrite</div><div class="plan-f">10 cover letters / month</div><div class="plan-f">LinkedIn optimizer (5/mo)</div><div class="plan-f">All 6 templates (editable)</div><div class="plan-f">PDF &amp; DOCX downloads</div>
+            <div class="plan-nm">Basic Plan</div>
+            <div class="plan-pr" id="bp">$19</div>
+            <div class="plan-pd" id="bpd">/month</div>
+            <div class="plan-div"></div>
+            <div class="plan-f">10 CV analyses per month</div>
+            <div class="plan-f">Full ATS rewrite</div>
+            <div class="plan-f">10 cover letters per month</div>
+            <div class="plan-f">LinkedIn optimizer (5/month)</div>
+            <div class="plan-f">All 6 templates (editable)</div>
+            <div class="plan-f">PDF &amp; DOCX downloads</div>
             <button class="plan-btn" onclick="openModal('signup-modal')">Start Basic</button>
           </div>
           <div class="plan featured">
             <div class="pop-tag">Most Popular</div>
-            <div class="plan-nm">Pro</div><div class="plan-pr" id="pp">$49</div><div class="plan-pd" id="ppd">/month · 7-day free trial</div><div class="plan-div"></div>
-            <div class="plan-f">Unlimited CV analyses</div><div class="plan-f">Unlimited cover letters</div><div class="plan-f">Unlimited LinkedIn opt.</div><div class="plan-f">All markets supported</div><div class="plan-f">All premium templates</div><div class="plan-f">Priority AI + 24hr support</div>
+            <div class="plan-nm">Pro Plan</div>
+            <div class="plan-pr" id="pp">$49</div>
+            <div class="plan-pd" id="ppd">/month · 7-day free trial</div>
+            <div class="plan-div"></div>
+            <div class="plan-f">Unlimited CV analyses</div>
+            <div class="plan-f">Unlimited cover letters</div>
+            <div class="plan-f">Unlimited LinkedIn optimizations</div>
+            <div class="plan-f">All markets supported</div>
+            <div class="plan-f">All premium templates</div>
+            <div class="plan-f">Priority AI + 24hr support</div>
             <button class="plan-btn p" onclick="openModal('signup-modal')">Start free trial</button>
           </div>
           <div class="plan">
-            <div class="plan-nm">One-time</div><div class="plan-pr">$49</div><div class="plan-pd">no expiry</div><div class="plan-div"></div>
-            <div class="plan-f">5 CV analyses</div><div class="plan-f">5 cover letters</div><div class="plan-f">2 LinkedIn optimizations</div><div class="plan-f">ATS Score Checker</div><div class="plan-f">No subscription needed</div>
+            <div class="plan-nm">One-Time Plan</div>
+            <div class="plan-pr">$49</div>
+            <div class="plan-pd">no expiry</div>
+            <div class="plan-div"></div>
+            <div class="plan-f">5 CV analyses</div>
+            <div class="plan-f">5 cover letters</div>
+            <div class="plan-f">2 LinkedIn optimizations</div>
+            <div class="plan-f">ATS Score Checker</div>
+            <div class="plan-f">No subscription needed</div>
             <button class="plan-btn" onclick="openModal('signup-modal')">Buy now</button>
           </div>
         </div>
@@ -1615,14 +1650,16 @@ function toggleBill(){
     swk.classList.remove('off');saveT.style.display='inline-block';
     monthlyLbl.style.fontWeight='400';monthlyLbl.style.color='#888';
     annualLbl.style.fontWeight='600';annualLbl.style.color='#111';
-    document.getElementById('bp').textContent='$15';document.getElementById('bpd').textContent='/month · billed annually';
-    document.getElementById('pp').textContent='$39';document.getElementById('ppd').textContent='/month · billed annually · 7-day free trial';
+    document.getElementById('bp').textContent='$16';document.getElementById('bpd').textContent='/month (billed $190/yr)';
+    document.getElementById('pp').textContent='$33';document.getElementById('ppd').textContent='/month (billed $399/yr) · 7-day free trial';
   } else {
     swk.classList.add('off');saveT.style.display='none';
     monthlyLbl.style.fontWeight='600';monthlyLbl.style.color='#111';
     annualLbl.style.fontWeight='400';annualLbl.style.color='#888';
     document.getElementById('bp').textContent='$19';document.getElementById('bpd').textContent='/month';
     document.getElementById('pp').textContent='$49';document.getElementById('ppd').textContent='/month · 7-day free trial';
+  }
+}
   }
 }
 
