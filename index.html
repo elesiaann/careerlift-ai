@@ -1116,7 +1116,7 @@ function forgotPassword(){
 let currentAccount=null;
 const ACCOUNT_STORAGE_KEY='cl_accounts';
 const ACTIVE_USER_KEY='cl_active_user';
-const GOOGLE_CLIENT_ID='YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID='119140138936-3g0d47584ih5qghfo05dg4ngcuphapqh.apps.googleusercontent.com';
 
 function loadAccounts(){try{return JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY)||'[]');}catch(e){return[];}}
 function saveAccounts(accounts){localStorage.setItem(ACCOUNT_STORAGE_KEY,JSON.stringify(accounts));}
@@ -1870,24 +1870,6 @@ function addActivityRow(docName,score,country){
   tr.innerHTML=`<td>${docName}</td><td><span class="pill ${pc}">${score}</span></td><td>${country}</td><td><span class="done">&#10003; Done</span></td><td><button class="row-btn" onclick="go('analyze',null,'careerliftai.com/analyze')">View</button></td>`;
   tbody.insertBefore(tr,tbody.firstChild);
   while(tbody.rows.length>5)tbody.deleteRow(tbody.rows.length-1);
-}
-
-/* ════════════════════════════════════
-   CLAUDE API CALL
-════════════════════════════════════ */
-async function callClaude(systemPrompt,userMessage){
-  const resp=await fetch('https://fusxcijaklbrfkszlzsv.supabase.co/functions/v1/ai-proxy',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'Authorization':'Bearer sb_publishable_jwwBwa_k4Rdzz8WTP6B97A_Zo3qBq3n'
-    },
-    body:JSON.stringify({systemPrompt,userMessage})
-  });
-  if(!resp.ok)throw new Error('API error '+resp.status);
-  const data=await resp.json();
-  if(data.error)throw new Error(data.error);
-  return data.text;
 }
 
 /* ════════════════════════════════════
