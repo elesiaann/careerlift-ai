@@ -3,12 +3,16 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Authorization, Content-Type",
+  "Access-Control-Allow-Headers": "Authorization, Content-Type, apikey",
+  "Access-Control-Max-Age": "86400",
 };
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
+    return new Response(null, {
+      status: 200,
+      headers: corsHeaders,
+    });
   }
 
   try {
@@ -17,7 +21,7 @@ serve(async (req) => {
     if (!email || !otp) {
       return new Response(
         JSON.stringify({ error: "Email and OTP required" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
@@ -25,7 +29,7 @@ serve(async (req) => {
     if (!resendApiKey) {
       return new Response(
         JSON.stringify({ error: "Resend API key not configured" }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
+        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
@@ -71,7 +75,7 @@ serve(async (req) => {
       console.error("Resend error:", error);
       return new Response(
         JSON.stringify({ error: "Failed to send email" }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
+        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
 
@@ -84,7 +88,7 @@ serve(async (req) => {
     console.error("Error:", error);
     return new Response(
       JSON.stringify({ error: "Internal server error" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
     );
   }
 });
