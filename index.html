@@ -1289,7 +1289,15 @@ All percentage values are integers 0-100. The optimizedCV must be a complete, pr
     try{
       const clean=raw.replace(/```json|```/g,'').trim();
       parsed=JSON.parse(clean);
-    }catch(e){throw new Error('Could not parse AI response. Try again.');}
+      if(!parsed.scoreBefore || !parsed.scoreAfter) throw new Error('Missing required fields in response');
+    }catch(e){
+      clearInterval(stepInterval);
+      document.getElementById('analyze-loading').style.display='none';
+      document.getElementById('analyze-btn').disabled=false;
+      document.getElementById('analyze-btn').textContent='Analyze CV — 1 credit';
+      showToast('Error parsing AI response: '+e.message);
+      return;
+    }
 
     // Fill scores
     document.getElementById('score-before').textContent=parsed.scoreBefore;
@@ -1313,7 +1321,12 @@ All percentage values are integers 0-100. The optimizedCV must be a complete, pr
     (parsed.keywordsAdded||[]).forEach(kw=>{
       const s=document.createElement('span');s.className='kw-chip';s.textContent=kw;chipRow.appendChild(s);
     });
-    document.getElementById('analysis-notes').innerHTML=(parsed.notes||'').replace(/·/g,'<br>·');
+    
+    // Handle notes - convert to string if needed
+    let notesText = parsed.notes || '';
+    if(typeof notesText === 'object') notesText = JSON.stringify(notesText);
+    notesText = String(notesText);
+    document.getElementById('analysis-notes').innerHTML=notesText.replace(/·/g,'<br>·');
 
     document.getElementById('analyze-results').style.display='block';
     window._optimizedCV=parsed.optimizedCV;
