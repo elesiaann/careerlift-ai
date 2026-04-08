@@ -36,7 +36,8 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "CareerLift AI <noreply@resend.dev>",
+        from: \"CareerLift AI <no-reply@pkdigistore.shop>\","}}]
+
         to: email,
         subject: "Verify Your Email - CareerLift AI",
         html: `
