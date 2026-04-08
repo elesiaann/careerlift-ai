@@ -1226,14 +1226,14 @@ async function callClaude(systemPrompt, userMessage){
     method:'POST',
     headers:{
       'Content-Type':'application/json',
-      'Authorization':'Bearer sb_publishable_jwwBwa_k4Rdzz8WTP6B97A_Zo3qBq3n'
+      'apikey':'sb_publishable_jwwBwa_k4Rdzz8WTP6B97A_Zo3qBq3n'
     },
     body:JSON.stringify({systemPrompt,userMessage})
   });
   if(!resp.ok){
     const errText=await resp.text().catch(()=>'Unknown error');
     console.error('API Error:',resp.status,errText);
-    throw new Error('API Error '+resp.status+': Check console & verify OPENAI_API_KEY in Supabase Secrets');
+    throw new Error('API Error '+resp.status+': Set ai-proxy to public (disable JWT verification) in Supabase Edge Functions settings');
   }
   const data=await resp.json();
   if(data.error)throw new Error(data.error);
