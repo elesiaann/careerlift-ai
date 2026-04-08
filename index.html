@@ -1021,7 +1021,20 @@ function populateCountries(){
   });
 }
 populateCountries();
-window.addEventListener('load', function(){ initGoogleSignIn(); restoreSession(); });
+
+/* ════════════════════════════════════
+   ROUTE INITIALIZATION
+════════════════════════════════════ */
+function initRoutes(){
+  const path=window.location.pathname;
+  if(path.includes('/pricing')){
+    setTimeout(()=>go('pricing',null,'careerliftai.com/pricing'),100);
+    return 'pricing';
+  }
+  return 'landing';
+}
+
+window.addEventListener('load', function(){ initGoogleSignIn(); restoreSession(); initRoutes(); });
 
 /* ════════════════════════════════════
    NAVIGATION
