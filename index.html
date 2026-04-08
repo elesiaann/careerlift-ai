@@ -1027,14 +1027,21 @@ populateCountries();
 ════════════════════════════════════ */
 function initRoutes(){
   const path=window.location.pathname;
-  if(path.includes('/pricing')){
-    setTimeout(()=>go('pricing',null,'careerliftai.com/pricing'),100);
+  console.log('Page path:', path);
+  if(path.includes('/pricing')||path==='/pricing'){
+    console.log('Routing to pricing page');
+    setTimeout(()=>{go('pricing',null,'careerliftai.com/pricing');},150);
     return 'pricing';
   }
   return 'landing';
 }
 
-window.addEventListener('load', function(){ initGoogleSignIn(); restoreSession(); initRoutes(); });
+// Initialize routes on page load
+window.addEventListener('DOMContentLoaded', function(){ 
+  initRoutes();
+  initGoogleSignIn(); 
+  restoreSession(); 
+});
 
 /* ════════════════════════════════════
    NAVIGATION

@@ -2,16 +2,7 @@
   command = "echo 'Build complete'"
   publish = "."
 
-[[redirects]]
-  from = "/pricing"
-  to = "/pricing.html"
-  status = 200
-
-[[redirects]]
-  from = "/pricing/"
-  to = "/pricing.html"
-  status = 200
-
+# All routes go to index.html for SPA routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
