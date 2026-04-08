@@ -1154,8 +1154,7 @@ async function sendOTPEmail(email,otp){
     const response=await fetch('https://fusxcijaklbrfkszlzsv.supabase.co/functions/v1/bright-endpoint',{
       method:'POST',
       headers:{
-        'Content-Type':'application/json',
-        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1c3hjaWpha2xicmZrc3pseHN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDM2MzA3MTIsImV4cCI6MTczNTI0Njk3Mn0.Wh7yE_X3g9EWZjOOa50zQzCf9Ky9d3PNnYGUZwQz_5U'
+        'Content-Type':'application/json'
       },
       body:JSON.stringify({email:email,otp:otp})
     });
