@@ -12,12 +12,12 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111;font-size:13px;background:#fff;display:block;padding:0;margin:0;min-height:100vh;width:100%}
 .frame-wrap{width:100%;max-width:none;border:none;border-radius:0;overflow:hidden;background:#fff;box-shadow:none}
-.topbar{display:flex;align-items:center;gap:8px;padding:9px clamp(10px,3vw,14px);background:#f2f2f2;border-bottom:1px solid #e0e0e0;width:100%}
-.dots{display:flex;gap:6px}
+.topbar{display:flex;align-items:center;justify-content:center;gap:8px;padding:16px clamp(10px,3vw,14px);background:#f2f2f2;border-bottom:1px solid #e0e0e0;width:100%}
+.dots{display:none}
 .dot{width:11px;height:11px;border-radius:50%}
 .dot-r{background:#FF5F57}.dot-y{background:#FFBD2E}.dot-g{background:#28C840}
-.url-bar{flex:1;background:#e4e4e4;border:1px solid #cecece;border-radius:6px;padding:4px 12px;font-size:11px;color:#888;margin:0 10px;text-align:center}
-.tabs{display:flex;gap:2px;flex-wrap:wrap}
+.url-bar{display:none}
+.tabs{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;align-items:center}
 .tab{padding:5px 10px;font-size:11px;border-radius:5px;cursor:pointer;color:#777;border:1px solid transparent;background:transparent;white-space:nowrap}
 .tab:hover{background:#fff;color:#111}
 .tab.on{background:#fff;border-color:#d0d0d0;color:#111;font-weight:500}
@@ -522,8 +522,6 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 <!-- ═══════ MAIN FRAME ═══════ -->
 <div class="frame-wrap">
   <div class="topbar">
-    <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
-    <div class="url-bar" id="url-bar">careerliftai.com</div>
     <div class="tabs">
       <div class="tab on" onclick="go('landing',this,'careerliftai.com')">Home</div>
       <div class="tab" onclick="go('dashboard',this,'careerliftai.com/dashboard')">Dashboard</div>
