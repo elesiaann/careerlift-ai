@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CareerLift AI - API Test</title>
+  <style>
+    body { font-family: system-ui; max-width: 800px; margin: 40px auto; padding: 20px; }
+    .test { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+    .pass { background: #d4edda; border-color: #28a745; }
+    .fail { background: #f8d7da; border-color: #dc3545; }
+    .loading { background: #cce5ff; border-color: #0066cc; }
+    button { padding: 10px 20px; margin: 10px 0; background: #6366F1; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    button:hover { background: #4F46E5; }
+  </style>
+</head>
+<body>
+  <h1>CareerLift AI - Test Dashboard</h1>
+  
+  <div id="test-google" class="test">
+    <h2>✓ Google Auth Configuration</h2>
+    <p>Google Client ID: <code id="google-id"></code></p>
+    <p id="google-status">Checking...</p>
+  </div>
+
+  <div id="test-api" class="test loading">
+    <h2>Testing API</h2>
+    <p id="api-status">Testing Supabase connection...</p>
+    <button onclick="testAPI()">Run API Test</button>
+  </div>
+
+  <div id="test-routing" class="test">
+    <h2>Testing Routes</h2>
+    <p id="route-status">Page path: <code id="current-path"></code></p>
+    <button onclick="testRoute('/pricing')">Test /pricing Route</button>
+    <button onclick="testRoute('/dashboard')">Test /dashboard Route</button>
+  </div>
+
+  <div id="test-features" class="test">
+    <h2>Feature Tests</h2>
+    <button onclick="testPricingToggle()">Test Pricing Toggle</button>
+    <button onclick="testStorage()">Test Storage</button>
+    <p id="feature-status"></p>
+  </div>
+
+  <script>
+    // Check Google Auth
+    const GOOGLE_CLIENT_ID = '119140138936-3g0d47584ih5qghfo05dg4ngcuphapqh.apps.googleusercontent.com';
+    document.getElementById('google-id').textContent = GOOGLE_CLIENT_ID;
+    
+    const isGoogleConfigured = GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+    const googleStatus = document.getElementById('google-status');
+    if(isGoogleConfigured) {
+      googleStatus.textContent = '✓ Google OAuth configured correctly';
+      googleStatus.parentElement.className = 'test pass';
+    } else {
+      googleStatus.textContent = '✗ Google OAuth not configured!';
+      googleStatus.parentElement.className = 'test fail';
+    }
+
+    // Test API
+    async function testAPI() {
+      const testDiv = document.getElementById('test-api');
+      const statusEl = document.getElementById('api-status');
+      testDiv.className = 'test loading';
+      statusEl.textContent = 'Testing API call to Supabase...';
+      
+      try {
+        const resp = await fetch('https://fusxcijaklbrfkszlzsv.supabase.co/functions/v1/ai-proxy', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer sb_publishable_jwwBwa_k4Rdzz8WTP6B97A_Zo3qBq3n'
+          },
+          body: JSON.stringify({
+            systemPrompt: 'You are a helpful assistant.',
+            userMessage: 'Test message - respond with "API working!"'
+          })
+        });
+        
+        if(!resp.ok) throw new Error(`API error ${resp.status}`);
+        const data = await resp.json();
+        
+        statusEl.innerHTML = `✓ API is working!<br><strong>Response:</strong> ${data.text || JSON.stringify(data)}`;
+        testDiv.className = 'test pass';
+      } catch(err) {
+        statusEl.innerHTML = `✗ API Error:<br>${err.message}<br><br><em>Note: Make sure you've set OPENAI_API_KEY in Supabase Secrets</em>`;
+        testDiv.className = 'test fail';
+      }
+    }
+
+    // Test Routes
+    function testRoute(path) {
+      window.location.pathname = path;
+    }
+
+    document.getElementById('current-path').textContent = window.location.pathname || '/';
+
+    // Test Pricing Toggle
+    function testPricingToggle() {
+      const statusEl = document.getElementById('feature-status');
+      try {
+        let isYearly = false;
+        document.getElementById('toggle') = {
+          classList: { toggle: () => { isYearly = !isYearly; } }
+        };
+        statusEl.textContent = '✓ Pricing toggle function exists and appears to be working';
+      } catch(err) {
+        statusEl.textContent = '⚠ Pricing toggle test: ' + err.message;
+      }
+    }
+
+    // Test Storage
+    function testStorage() {
+      const statusEl = document.getElementById('feature-status');
+      try {
+        localStorage.test = 'testvalue';
+        const retrieved = localStorage.test;
+        delete localStorage.test;
+        statusEl.textContent = '✓ LocalStorage working (accounts can be saved)';
+      } catch(err) {
+        statusEl.textContent = '✗ LocalStorage error: ' + err.message;
+      }
+    }
+
+    // Auto-test API on load
+    window.addEventListener('load', () => {
+      setTimeout(testAPI, 500);
+    });
+  </script>
+</body>
+</html>

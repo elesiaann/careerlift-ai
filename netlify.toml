@@ -1,3 +1,8 @@
+[build]
+  command = "echo 'Build complete'"
+  publish = "."
+
+# All routes go to index.html for SPA routing
 [[redirects]]
   from = "/*"
   to = "/index.html"

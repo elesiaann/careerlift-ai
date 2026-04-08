@@ -5,37 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CareerLift AI</title>
 <link rel="preconnect" href="https://accounts.google.com">
-<script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" async></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<script>
-// Early routing: show correct screen immediately based on URL (runs before body renders)
-(function(){
-  var map={'/dashboard':'dashboard','/analyze':'analyze','/linkedin':'linkedin','/cover-letter':'coverletter','/ats-score':'atsscore','/templates':'templates','/pricing':'pricing','/about':'about','/contact':'contact','/privacy':'privacy','/terms':'terms'};
-  var p=window.location.pathname.replace(/\/+$/,'')||'/';
-  var id=map[p];
-  if(id){
-    document.addEventListener('DOMContentLoaded',function(){
-      var screens=document.querySelectorAll('.screen');
-      screens.forEach(function(s){s.classList.remove('on');});
-      var target=document.getElementById('sc-'+id);
-      if(target)target.classList.add('on');
-    });
-  }
-})();
-</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111;font-size:13px;background:#fff;min-height:100vh}
-.frame-wrap{width:100%;background:#fff}
-.topbar{display:none}
-.dots{display:none}
-.dot{display:none}
-.tabs{display:none}
-.tab{display:none}
-.frame-body{min-height:100vh;overflow:visible}
-.screen{display:none;min-height:100vh;background:#fff}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111;font-size:13px;background:#e8e8e8;display:flex;align-items:flex-start;justify-content:center;padding:24px;min-height:100vh}
+.frame-wrap{width:100%;max-width:1200px;border:1px solid #c8c8c8;border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 4px 28px rgba(0,0,0,.12)}
+.topbar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:#f2f2f2;border-bottom:1px solid #e0e0e0}
+.dots{display:flex;gap:6px}
+.dot{width:11px;height:11px;border-radius:50%}
+.dot-r{background:#FF5F57}.dot-y{background:#FFBD2E}.dot-g{background:#28C840}
+.url-bar{flex:1;background:#e4e4e4;border:1px solid #cecece;border-radius:6px;padding:4px 12px;font-size:11px;color:#888;margin:0 10px;text-align:center}
+.tabs{display:flex;gap:2px;flex-wrap:wrap}
+.tab{padding:5px 10px;font-size:11px;border-radius:5px;cursor:pointer;color:#777;border:1px solid transparent;background:transparent;white-space:nowrap}
+.tab:hover{background:#fff;color:#111}
+.tab.on{background:#fff;border-color:#d0d0d0;color:#111;font-weight:500}
+.frame-body{height:660px;overflow:hidden}
+.screen{display:none;height:100%;overflow-y:auto;background:#fff}
 .screen.on{display:block}
 
 /* ═══ MODALS ═══ */
@@ -67,7 +54,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1
 /* ═══ LANDING ═══ */
 .site-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 48px;border-bottom:1px solid #eee}
 .nav-logo{font-size:15px;font-weight:700;color:#6366F1}
-.nav-right{display:flex;gap:8px;align-items:center}
+.nav-links{display:flex;gap:24px}
+.nav-links a{font-size:12px;color:#777;cursor:pointer;text-decoration:none}
+.nav-links a:hover{color:#111}
+.nav-right{display:flex;gap:8px}
 .btn-ghost{padding:6px 16px;border-radius:7px;border:1px solid #d8d8d8;background:#fff;font-size:12px;cursor:pointer;color:#111}
 .btn-ghost:hover{background:#f5f5f5}
 .btn-indigo{padding:6px 16px;border-radius:7px;background:#6366F1;color:#fff;border:none;font-size:12px;cursor:pointer;font-weight:500}
@@ -101,8 +91,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1
 .feat-card p{font-size:12px;color:#888;line-height:1.55}
 
 /* ═══ DASHBOARD ═══ */
-.dash-layout{display:grid;grid-template-columns:205px 1fr;min-height:100vh}
-.sidebar{background:#fafafa;border-right:1px solid #eee;display:flex;flex-direction:column;padding:12px 0;min-height:100vh}
+.dash-layout{display:grid;grid-template-columns:205px 1fr;height:100%}
+.sidebar{background:#fafafa;border-right:1px solid #eee;display:flex;flex-direction:column;padding:12px 0;height:100%}
 .sb-logo{padding:6px 15px 12px;font-size:14px;font-weight:700;color:#6366F1;border-bottom:1px solid #eee;margin-bottom:8px}
 .sb-user{display:flex;align-items:center;gap:9px;padding:7px 11px 11px;border-bottom:1px solid #eee;margin-bottom:6px}
 .sb-av{width:30px;height:30px;border-radius:50%;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#6366F1;flex-shrink:0}
@@ -152,7 +142,7 @@ tr:last-child td{border-bottom:none}
 .row-btn:hover{background:#f5f5f5}
 
 /* ═══ INNER PAGES ═══ */
-.inner-page{background:#f4f4f4;padding:22px;min-height:100vh}
+.inner-page{background:#f4f4f4;padding:22px;overflow-y:auto;height:100%}
 .page-h{font-size:19px;font-weight:700;color:#111;margin-bottom:3px}
 .page-s{font-size:12px;color:#888;margin-bottom:20px}
 .two-col{display:grid;grid-template-columns:1fr 270px;gap:14px}
@@ -390,7 +380,7 @@ tr:last-child td{border-bottom:none}
 .cv-tpl-2 .bullet-r::before{content:"•";position:absolute;left:0;color:#6366F1}
 
 /* PRICING */
-.pricing-page{background:#fff;padding:32px 36px}
+.pricing-page{background:#fff;padding:32px 36px;overflow-y:auto;height:100%}
 .pr-hd{text-align:center;margin-bottom:26px}
 .pr-hd h2{font-size:26px;font-weight:700;color:#111;margin-bottom:8px;letter-spacing:-.4px}
 .pr-hd p{font-size:14px;color:#888}
@@ -416,6 +406,9 @@ tr:last-child td{border-bottom:none}
 .plan-btn.p:hover{background:#4F46E5}
 .trust-row{display:flex;gap:22px;justify-content:center}
 .trust-row span{font-size:12px;color:#aaa}
+.trust-notes{display:flex;flex-direction:column;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid #f5f5f5}
+.trust-note{font-size:11px;color:#888;display:flex;align-items:center;gap:6px}
+.trust-note::before{content:"✓";color:#10B981;font-weight:700;font-size:12px}
 
 /* Toast notification */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#111;color:#fff;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:500;z-index:9999;transition:transform .3s cubic-bezier(.175,.885,.32,1.275);pointer-events:none}
@@ -424,212 +417,12 @@ tr:last-child td{border-bottom:none}
 /* Forgot password link */
 .forgot-link{font-size:12px;color:#6366F1;cursor:pointer;text-align:center;display:block;margin-top:10px}
 .forgot-link:hover{text-decoration:underline}
-
-/* ═══ MOBILE RESPONSIVE ═══ */
-@media(max-width:768px){
-  /* Nav */
-  .site-nav{padding:12px 16px}
-  .nav-logo{font-size:14px}
-  .btn-ghost,.btn-indigo{padding:5px 12px;font-size:11px}
-  /* Hero */
-  .hero{padding:36px 20px 32px}
-  .hero h1{font-size:26px;letter-spacing:-.3px}
-  .hero p{font-size:13px}
-  .hero-btns{flex-direction:column;align-items:center;gap:10px}
-  .btn-primary,.btn-secondary{width:100%;max-width:300px;text-align:center}
-  /* Stats */
-  .stats-strip{grid-template-columns:1fr}
-  .stat{border-right:none;border-bottom:1px solid #eee}
-  .stat:last-child{border-bottom:none}
-  /* Features */
-  .feat-section{padding:28px 16px 32px}
-  .feat-grid{grid-template-columns:1fr 1fr}
-  /* Reviews */
-  .reviews-section{padding:36px 16px}
-  .reviews-grid{grid-template-columns:1fr}
-  /* FAQ */
-  .faq-section{padding:36px 16px}
-  /* Footer */
-  .site-footer{padding:32px 16px 16px}
-  .footer-grid{grid-template-columns:1fr 1fr;gap:20px}
-  .contact-grid{grid-template-columns:1fr}
-  .about-values{grid-template-columns:1fr 1fr}
-  .about-stats{grid-template-columns:1fr 1fr}
-  /* Dashboard */
-  .dash-layout{grid-template-columns:1fr;grid-template-rows:auto 1fr}
-  .sidebar{height:auto;flex-direction:row;flex-wrap:wrap;padding:8px;gap:4px;border-right:none;border-bottom:1px solid #eee}
-  .sb-logo{display:none}
-  .sb-user{border-bottom:none;padding:4px 8px}
-  .sb-link{padding:6px 10px;margin:1px;font-size:11px}
-  .sb-foot{display:none}
-  .dash-content{padding:12px}
-  .metrics{grid-template-columns:1fr 1fr}
-  .qa-grid{grid-template-columns:1fr}
-  /* Inner pages */
-  .inner-page{padding:12px}
-  .two-col{grid-template-columns:1fr}
-  .li-grid{grid-template-columns:1fr}
-  .cl-layout{grid-template-columns:1fr;height:auto}
-  .ats-layout{grid-template-columns:1fr}
-  /* Pricing */
-  .plans-grid{grid-template-columns:1fr 1fr}
-  /* Modals */
-  .modal-box{padding:20px;width:95vw}
-}
-@media(max-width:480px){
-  .feat-grid{grid-template-columns:1fr}
-  .plans-grid{grid-template-columns:1fr}
-  .footer-grid{grid-template-columns:1fr}
-  .about-values{grid-template-columns:1fr}
-  .about-stats{grid-template-columns:1fr 1fr}
-  .static-page{padding:32px 16px 60px}
-  .hero h1{font-size:22px}
-  .cmp-grid{grid-template-columns:1fr}
-  .cv-panel.right{border-left:none;border-top:1px solid #eee}
-}
-
-/* ═══ AUTH LOADING OVERLAY ═══ */
-.auth-loading-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,.97);z-index:9998;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.auth-loading-overlay.show{display:flex}
-.auth-load-logo{font-size:22px;font-weight:700;color:#6366F1;letter-spacing:-.3px;margin-bottom:4px}
-.auth-load-spinner{width:48px;height:48px;border:4px solid #EEF2FF;border-top-color:#6366F1;border-radius:50%;animation:spin .8s linear infinite}
-.auth-load-msg{font-size:14px;color:#555;font-weight:500}
-
-/* ═══ OTP MODAL ═══ */
-.otp-inputs{display:flex;gap:10px;justify-content:center;margin:20px 0}
-.otp-single-input{width:240px;height:54px;border:2px solid #d8d8d8;border-radius:10px;font-size:22px;font-weight:700;text-align:center;color:#111;outline:none;transition:border-color .15s;background:#fafafa;letter-spacing:4px}
-.otp-single-input:focus{border-color:#6366F1;background:#fff}
-.otp-email-hint{font-size:12px;color:#888;text-align:center;margin-bottom:4px}
-.otp-email-hint strong{color:#6366F1}
-.otp-timer{text-align:center;font-size:12px;color:#888;margin-top:10px}
-.otp-resend-link{color:#6366F1;cursor:pointer;font-weight:500}
-.otp-resend-link:hover{text-decoration:underline}
-.otp-err{color:#EF4444;font-size:12px;text-align:center;margin-top:8px;min-height:18px}
-
-/* ═══ REVIEWS ═══ */
-.reviews-section{padding:56px 36px 48px;background:#fff;border-top:1px solid #eee}
-.reviews-header{text-align:center;margin-bottom:32px}
-.reviews-header h2{font-size:24px;font-weight:700;color:#111;margin-bottom:8px;letter-spacing:-.3px}
-.reviews-header p{font-size:13px;color:#888}
-.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:860px;margin:0 auto}
-.review-card{background:#fff;border:1px solid #eee;border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.review-stars{color:#F59E0B;font-size:13px;margin-bottom:9px}
-.review-text{font-size:12px;color:#555;line-height:1.7;margin-bottom:13px;font-style:italic}
-.review-author{display:flex;align-items:center;gap:10px}
-.review-av{width:32px;height:32px;border-radius:50%;background:#EEF2FF;color:#6366F1;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.review-nm{font-size:12px;font-weight:600;color:#111}
-.review-role{font-size:11px;color:#aaa;margin-top:1px}
-
-/* ═══ FAQ ═══ */
-.faq-section{padding:56px 36px 48px;background:#fafafa;border-top:1px solid #eee}
-.faq-header{text-align:center;margin-bottom:32px}
-.faq-header h2{font-size:24px;font-weight:700;color:#111;margin-bottom:8px;letter-spacing:-.3px}
-.faq-header p{font-size:13px;color:#888}
-.faq-list{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
-.faq-item{background:#fff;border:1px solid #eee;border-radius:10px;overflow:hidden}
-.faq-q{padding:14px 18px;font-size:13px;font-weight:600;color:#111;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;gap:12px}
-.faq-q:hover{background:#f9f9f9}
-.faq-chevron{font-size:12px;color:#6366F1;transition:transform .2s;flex-shrink:0}
-.faq-item.open .faq-chevron{transform:rotate(180deg)}
-.faq-a{display:none;padding:0 18px 14px;font-size:12px;color:#555;line-height:1.7}
-.faq-item.open .faq-a{display:block}
-
-/* ═══ FOOTER ═══ */
-.site-footer{background:#6366F1;color:#fff;padding:52px 48px 24px}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:40px}
-.footer-brand-name{font-size:17px;font-weight:700;color:#fff;margin-bottom:10px}
-.footer-brand p{font-size:12px;color:rgba(255,255,255,.7);line-height:1.75;max-width:220px;margin-top:4px}
-.footer-col h4{font-size:11px;font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px}
-.footer-col a{display:block;font-size:12px;color:rgba(255,255,255,.75);margin-bottom:9px;cursor:pointer;transition:color .15s;text-decoration:none}
-.footer-col a:hover{color:#fff}
-.footer-social{display:flex;gap:10px;margin-top:18px}
-.footer-social a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,.15);color:#fff;transition:background .15s,color .15s;cursor:pointer;text-decoration:none}
-.footer-social a:hover{background:rgba(255,255,255,.3);color:#fff}
-.footer-social svg{width:17px;height:17px}
-.footer-divider{height:1px;background:rgba(255,255,255,.2);margin-bottom:18px}
-.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.footer-bottom span{font-size:11px;color:rgba(255,255,255,.55)}
-/* Static pages */
-.static-page{max-width:780px;margin:0 auto;padding:60px 32px 80px}
-.static-page h1{font-size:30px;font-weight:700;color:#111;margin-bottom:12px}
-.static-page .sp-meta{font-size:12px;color:#aaa;margin-bottom:36px}
-.static-page h2{font-size:16px;font-weight:700;color:#111;margin:28px 0 10px}
-.static-page p{font-size:13px;color:#555;line-height:1.8;margin-bottom:12px}
-.static-page ul{padding-left:20px;margin-bottom:12px}
-.static-page ul li{font-size:13px;color:#555;line-height:1.8;margin-bottom:4px}
-.static-page a{color:#6366F1;text-decoration:none;cursor:pointer}
-.static-page a:hover{text-decoration:underline}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:32px}
-.contact-info-block{background:#fafafa;border:1px solid #eee;border-radius:12px;padding:24px}
-.contact-info-block h3{font-size:13px;font-weight:600;margin-bottom:14px;color:#111}
-.contact-info-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:12px;color:#555}
-.contact-info-item svg{width:16px;height:16px;stroke:#6366F1;fill:none;stroke-width:1.8;flex-shrink:0;margin-top:1px}
-.contact-form-block{background:#fff;border:1px solid #eee;border-radius:12px;padding:24px}
-.contact-form-block h3{font-size:13px;font-weight:600;margin-bottom:14px;color:#111}
-.cf-field{margin-bottom:12px}
-.cf-field label{display:block;font-size:11px;color:#777;margin-bottom:4px;font-weight:500}
-.cf-field input,.cf-field select,.cf-field textarea{width:100%;padding:9px 11px;border-radius:7px;border:1px solid #d8d8d8;font-size:13px;font-family:inherit;outline:none;transition:border-color .15s;background:#fff}
-.cf-field input:focus,.cf-field select:focus,.cf-field textarea:focus{border-color:#6366F1}
-.cf-field textarea{resize:vertical;min-height:100px}
-.about-values{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}
-.about-val-card{background:#fafafa;border:1px solid #eee;border-radius:10px;padding:18px}
-.about-val-card h3{font-size:13px;font-weight:600;color:#111;margin-bottom:6px}
-.about-val-card p{font-size:12px;color:#777;line-height:1.6;margin:0}
-.about-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:28px 0}
-.about-stat{text-align:center;background:#EEF2FF;border-radius:10px;padding:18px 10px}
-.about-stat-n{font-size:26px;font-weight:700;color:#6366F1}
-.about-stat-l{font-size:11px;color:#666;margin-top:4px}
-/* Template Picker Modal */
-.tpl-pick-card{border:2px solid #e5e7eb;border-radius:10px;padding:14px 16px;cursor:pointer;transition:all .18s}
-.tpl-pick-card:hover{border-color:#6366F1;background:#FAFAFE;box-shadow:0 2px 12px rgba(99,102,241,.12)}
-.tpl-pick-name{font-size:13px;font-weight:700;color:#111;margin-bottom:3px}
-.tpl-pick-meta{font-size:11px;color:#6366F1;font-weight:500;margin-bottom:4px}
-.tpl-pick-badge{font-size:10.5px;color:#555;background:#f4f4f5;border-radius:4px;padding:2px 7px;display:inline-block}
-
-/* ═══ NAV LINKS ═══ */
-.nav-links{display:flex;gap:20px;flex-wrap:nowrap}
-.nav-links a{font-size:12px;color:#555;cursor:pointer;text-decoration:none;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
-.nav-links a:hover,.nav-links a.active{color:#6366F1;border-bottom-color:#6366F1}
-.nav-hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px}
-.nav-hamburger span{display:block;width:22px;height:2px;background:#555;margin:4px 0;transition:.2s}
-.nav-mobile-menu{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border-top:1px solid #eee;border-bottom:1px solid #eee;padding:10px 16px;z-index:200;flex-direction:column;gap:0}
-.nav-mobile-menu.open{display:flex}
-.nav-mobile-menu a{font-size:13px;color:#555;cursor:pointer;padding:10px 0;border-bottom:1px solid #f0f0f0;text-decoration:none}
-.nav-mobile-menu a:last-child{border-bottom:none}
-.nav-mobile-menu a:hover{color:#6366F1}
-.service-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 36px;border-bottom:1px solid #eee;background:#fff;position:relative;flex-shrink:0}
-@media(max-width:900px){.nav-links{gap:14px}.nav-links a{font-size:11px}}
-@media(max-width:768px){.nav-links{display:none}.nav-hamburger{display:block}.service-nav{padding:10px 16px}}
 </style>
 </head>
 <body>
 
 <!-- ═══════ TOAST ═══════ -->
 <div class="toast" id="toast"></div>
-
-<!-- ═══════ AUTH LOADING OVERLAY ═══════ -->
-<div class="auth-loading-overlay" id="auth-loading">
-  <div class="auth-load-logo">CareerLift AI</div>
-  <div class="auth-load-spinner"></div>
-  <p class="auth-load-msg" id="auth-loading-msg">Signing you in…</p>
-</div>
-
-<!-- ═══════ OTP MODAL ═══════ -->
-<div class="modal-overlay" id="otp-modal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeModal('otp-modal')">✕</button>
-    <div class="modal-logo">CareerLift AI</div>
-    <div class="modal-tagline" id="otp-tagline">Enter the 8-digit code sent to your email</div>
-    <div class="otp-email-hint">Code sent to <strong id="otp-email-display">your email</strong></div>
-    <div class="otp-inputs" style="justify-content:center">
-      <input class="otp-single-input" type="text" inputmode="numeric" id="otp-code-input" maxlength="8" placeholder="00000000" autocomplete="one-time-code" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-    </div>
-    <div class="otp-err" id="otp-err"></div>
-    <button class="modal-btn" onclick="verifyOTP()">Verify &amp; Continue</button>
-    <div class="otp-timer" id="otp-timer-row">Resend code in <span id="otp-countdown">60</span>s</div>
-    <div class="otp-timer" id="otp-resend-row" style="display:none">Didn't receive it? <span class="otp-resend-link" onclick="resendOTP()">Resend code</span></div>
-  </div>
-</div>
 
 <!-- ═══════ LOGIN MODAL ═══════ -->
 <div class="modal-overlay" id="login-modal">
@@ -667,51 +460,6 @@ tr:last-child td{border-bottom:none}
     <button class="modal-btn" onclick="doSignup()">Create free account</button>
     <div class="terms-txt">By signing up you agree to our <a>Terms of Service</a> and <a>Privacy Policy</a></div>
     <div class="modal-switch" style="margin-top:10px">Already have an account? <a onclick="switchModal('signup-modal','login-modal')">Sign in</a></div>
-  </div>
-</div>
-
-<!-- ═══════ TEMPLATE PICKER MODAL ═══════ -->
-<div class="modal-overlay" id="tpl-picker-modal" style="display:none;z-index:3000">
-  <div class="modal-box" style="max-width:560px;width:90%">
-    <div class="modal-title" style="font-size:17px;font-weight:700;margin-bottom:4px">Choose a Template</div>
-    <div class="modal-tagline" style="margin-bottom:20px">Your optimized CV will be auto-populated into the template</div>
-    <div id="tpl-picker-loading" style="display:none;text-align:center;padding:20px 0">
-      <div class="spinner" style="margin:0 auto 10px"></div>
-      <p style="font-size:13px;color:#555">Mapping your CV to template fields…</p>
-    </div>
-    <div id="tpl-picker-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div class="tpl-pick-card" onclick="populateTemplate('Classic Professional')">
-        <div class="tpl-pick-name">Classic Professional</div>
-        <div class="tpl-pick-meta">ATS Score: 96/100 · Single column</div>
-        <div class="tpl-pick-badge">Best for: All industries</div>
-      </div>
-      <div class="tpl-pick-card" onclick="populateTemplate('Modern Two-Column')">
-        <div class="tpl-pick-name">Modern Two-Column</div>
-        <div class="tpl-pick-meta">ATS Score: 91/100 · Dark sidebar</div>
-        <div class="tpl-pick-badge">Best for: Tech, Creative</div>
-      </div>
-      <div class="tpl-pick-card" onclick="populateTemplate('Indigo Header')">
-        <div class="tpl-pick-name">Indigo Header</div>
-        <div class="tpl-pick-meta">ATS Score: 94/100 · Bold header</div>
-        <div class="tpl-pick-badge">Best for: Finance, All markets</div>
-      </div>
-      <div class="tpl-pick-card" onclick="populateTemplate('Minimal Classic')">
-        <div class="tpl-pick-name">Minimal Classic</div>
-        <div class="tpl-pick-meta">ATS Score: 98/100 · Highest rating</div>
-        <div class="tpl-pick-badge">Best for: Executive, Law, Finance</div>
-      </div>
-      <div class="tpl-pick-card" onclick="populateTemplate('Developer Dark')">
-        <div class="tpl-pick-name">Developer Dark</div>
-        <div class="tpl-pick-meta">ATS Score: 88/100 · Tech-focused</div>
-        <div class="tpl-pick-badge">Best for: Tech, Startups</div>
-      </div>
-      <div class="tpl-pick-card" onclick="populateTemplate('A4 Federal Resume')">
-        <div class="tpl-pick-name">A4 Federal Resume</div>
-        <div class="tpl-pick-meta">ATS Score: 97/100 · US Federal Format</div>
-        <div class="tpl-pick-badge">Best for: US Government, Executive</div>
-      </div>
-    </div>
-    <button class="btn-ghost" style="margin-top:16px;width:100%" onclick="document.getElementById('tpl-picker-modal').style.display='none'">Cancel</button>
   </div>
 </div>
 
@@ -758,34 +506,36 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
 <!-- ═══════ MAIN FRAME ═══════ -->
 <div class="frame-wrap">
+  <div class="topbar">
+    <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+    <div class="url-bar" id="url-bar">careerliftai.com</div>
+    <div class="tabs">
+      <div class="tab on" onclick="go('landing',this,'careerliftai.com')">Home</div>
+      <div class="tab" onclick="go('dashboard',this,'careerliftai.com/dashboard')">Dashboard</div>
+      <div class="tab" onclick="go('analyze',this,'careerliftai.com/analyze')">Analyze</div>
+      <div class="tab" onclick="go('linkedin',this,'careerliftai.com/linkedin')">LinkedIn</div>
+      <div class="tab" onclick="go('coverletter',this,'careerliftai.com/cover-letter')">Cover Letter</div>
+      <div class="tab" onclick="go('atsscore',this,'careerliftai.com/ats-score')">ATS Score</div>
+      <div class="tab" onclick="go('templates',this,'careerliftai.com/templates')">Templates</div>
+      <div class="tab" onclick="go('pricing',this,'careerliftai.com/pricing')">Pricing</div>
+    </div>
+  </div>
+
   <div class="frame-body">
 
     <!-- ══ LANDING ══ -->
     <div class="screen on" id="sc-landing">
-      <div class="site-nav" style="position:relative">
-        <div class="nav-logo" onclick="go('landing',null,'/')" style="cursor:pointer">CareerLift AI</div>
+      <div class="site-nav">
+        <div class="nav-logo">CareerLift AI</div>
         <div class="nav-links">
-          <a onclick="go('landing',null,'/')">Home</a>
-          <a onclick="go('analyze',null,'/analyze')">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates')">Templates</a>
-          <a onclick="go('pricing',null,'/pricing')">Pricing</a>
+          <a onclick="go('analyze',null,'careerliftai.com/analyze')">Analyze CV</a>
+          <a onclick="go('linkedin',null,'careerliftai.com/linkedin')">LinkedIn</a>
+          <a onclick="go('templates',null,'careerliftai.com/templates')">Templates</a>
+          <a onclick="go('pricing',null,'careerliftai.com/pricing')">Pricing</a>
         </div>
         <div class="nav-right">
-          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
           <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
           <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
-        </div>
-        <div class="nav-mobile-menu" id="landing-mobile-nav">
-          <a onclick="go('landing',null,'/');closeMobileNav()">Home</a>
-          <a onclick="go('analyze',null,'/analyze');closeMobileNav()">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score');closeMobileNav()">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter');closeMobileNav()">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates');closeMobileNav()">Templates</a>
-          <a onclick="go('pricing',null,'/pricing');closeMobileNav()">Pricing</a>
         </div>
       </div>
       <div class="hero">
@@ -793,8 +543,8 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
         <h1>Get Hired Faster with an <em>ATS-Optimized CV</em></h1>
         <p>CareerLift AI analyzes your CV and rewrites it for the job market you are targeting — boosting your ATS score by an average of +44 points.</p>
         <div class="hero-btns">
-          <button class="btn-primary" onclick="go('analyze',null,'/analyze')">Analyze My CV Free</button>
-          <button class="btn-secondary" onclick="go('pricing',null,'/pricing')">See Pricing</button>
+          <button class="btn-primary" onclick="go('analyze',null,'careerliftai.com/analyze')">Analyze My CV Free</button>
+          <button class="btn-secondary" onclick="go('pricing',null,'careerliftai.com/pricing')">See Pricing</button>
         </div>
         <div class="country-chips">
           <span class="c-chip">🇺🇸 USA</span><span class="c-chip">🇬🇧 UK</span><span class="c-chip">🇩🇪 Germany</span><span class="c-chip">🇨🇦 Canada</span><span class="c-chip">🇦🇺 Australia</span><span class="c-chip">🇦🇪 UAE</span><span class="c-chip">🇳🇱 Netherlands</span><span class="c-chip">🌍 + More</span>
@@ -808,163 +558,30 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
       <div class="feat-section">
         <div class="feat-eyebrow">Everything you need to get hired</div>
         <div class="feat-grid">
-          <div class="feat-card" onclick="go('analyze',null,'/analyze')">
+          <div class="feat-card" onclick="go('analyze',null,'careerliftai.com/analyze')">
             <div class="feat-ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
             <h3>ATS CV Rewriter</h3><p>Full AI rewrite targeting the ATS systems used by top employers in your market.</p>
           </div>
-          <div class="feat-card" onclick="go('linkedin',null,'/linkedin')">
+          <div class="feat-card" onclick="go('linkedin',null,'careerliftai.com/linkedin')">
             <div class="feat-ic"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
             <h3>LinkedIn Optimizer</h3><p>Recruiter-ready headline, summary and experience — optimized for LinkedIn search.</p>
           </div>
-          <div class="feat-card" onclick="go('coverletter',null,'/cover-letter')">
+          <div class="feat-card" onclick="go('coverletter',null,'careerliftai.com/cover-letter')">
             <div class="feat-ic"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
             <h3>Cover Letter AI</h3><p>Tailored cover letters matched to the job description in under 60 seconds.</p>
           </div>
-          <div class="feat-card" onclick="go('atsscore',null,'/ats-score')">
+          <div class="feat-card" onclick="go('atsscore',null,'careerliftai.com/ats-score')">
             <div class="feat-ic"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
             <h3>ATS Score Checker</h3><p>Instant before and after score — keywords, format, completeness.</p>
           </div>
-          <div class="feat-card" onclick="go('templates',null,'/templates')">
+          <div class="feat-card" onclick="go('templates',null,'careerliftai.com/templates')">
             <div class="feat-ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
             <h3>CV Templates</h3><p>Professional ATS-friendly templates for every market and industry.</p>
           </div>
-          <div class="feat-card" onclick="go('pricing',null,'/pricing')">
+          <div class="feat-card" onclick="go('pricing',null,'careerliftai.com/pricing')">
             <div class="feat-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
             <h3>Works for Any Market</h3><p>USA, UK, Germany, Canada, UAE — our AI adapts to local hiring norms automatically.</p>
           </div>
-        </div>
-      </div>
-
-      <!-- ══ REVIEWS ══ -->
-      <div class="reviews-section">
-        <div class="reviews-header">
-          <h2>Loved by job seekers worldwide</h2>
-          <p>Real people, real results — see what our users say about CareerLift AI.</p>
-        </div>
-        <div class="reviews-grid">
-          <div class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <p class="review-text">"I uploaded my CV on a Sunday night and had three interview callbacks by Wednesday. The ATS rewrite completely transformed how recruiters saw my profile."</p>
-            <div class="review-author"><div class="review-av">SM</div><div><div class="review-nm">Sarah M.</div><div class="review-role">Marketing Manager · London, UK</div></div></div>
-          </div>
-          <div class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <p class="review-text">"My ATS score jumped from 31 to 79 after one rewrite. I'd been applying for months with no response — within two weeks of using CareerLift AI I landed my dream job in tech."</p>
-            <div class="review-author"><div class="review-av">JA</div><div><div class="review-nm">James A.</div><div class="review-role">Software Engineer · Toronto, Canada</div></div></div>
-          </div>
-          <div class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <p class="review-text">"The LinkedIn Optimizer is brilliant. My profile views went up by 3x in the first week. Recruiters started reaching out to me instead of the other way round."</p>
-            <div class="review-author"><div class="review-av">FO</div><div><div class="review-nm">Fatima O.</div><div class="review-role">Finance Analyst · Dubai, UAE</div></div></div>
-          </div>
-          <div class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <p class="review-text">"I used the Cover Letter AI for every application and the quality blew me away. Each letter felt personal and targeted. Saved me hours every week."</p>
-            <div class="review-author"><div class="review-av">LK</div><div><div class="review-nm">Lena K.</div><div class="review-role">Product Designer · Berlin, Germany</div></div></div>
-          </div>
-          <div class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <p class="review-text">"As a fresh graduate competing with experienced candidates, CareerLift AI gave me the edge I needed. The ATS Score Checker showed me exactly what to fix."</p>
-            <div class="review-author"><div class="review-av">RP</div><div><div class="review-nm">Rahul P.</div><div class="review-role">Data Analyst · Bangalore, India</div></div></div>
-          </div>
-          <div class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <p class="review-text">"Switching careers from nursing to healthcare IT felt impossible until I used CareerLift AI. It rewrote my CV to highlight transferable skills I didn't even know I had."</p>
-            <div class="review-author"><div class="review-av">MW</div><div><div class="review-nm">Michelle W.</div><div class="review-role">Healthcare IT Specialist · Sydney, AU</div></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ FAQ ══ -->
-      <div class="faq-section">
-        <div class="faq-header">
-          <h2>Frequently asked questions</h2>
-          <p>Everything you need to know about CareerLift AI.</p>
-        </div>
-        <div class="faq-list">
-          <div class="faq-item">
-            <div class="faq-q" onclick="toggleFaq(this)">What is an ATS and why does it matter? <span class="faq-chevron">▼</span></div>
-            <div class="faq-a">An Applicant Tracking System (ATS) is software used by 99% of Fortune 500 companies to automatically scan, filter, and rank CVs before a human ever sees them. If your CV isn't formatted correctly or lacks the right keywords, it gets rejected automatically — even if you're perfectly qualified for the role.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q" onclick="toggleFaq(this)">How does the ATS CV Rewriter work? <span class="faq-chevron">▼</span></div>
-            <div class="faq-a">You upload your existing CV and enter the target job title, country, and optionally the job description. Our AI analyzes your CV against ATS requirements for your specific market, rewrites it with the right keywords and formatting, and gives you a before/after ATS score so you can see the improvement.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q" onclick="toggleFaq(this)">Is my data private and secure? <span class="faq-chevron">▼</span></div>
-            <div class="faq-a">Yes. Your CV data is used solely to generate your optimized output and is never shared with third parties, sold, or stored long-term. All data is encrypted in transit and at rest. We comply with GDPR and international data privacy standards.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q" onclick="toggleFaq(this)">Which countries and job markets does CareerLift AI support? <span class="faq-chevron">▼</span></div>
-            <div class="faq-a">CareerLift AI supports 100+ countries including the USA, UK, Canada, Germany, Australia, UAE, Netherlands, Singapore, India, and many more. The AI adapts its rewriting to match local CV conventions, ATS systems, and recruiter expectations specific to each market.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q" onclick="toggleFaq(this)">Can I use CareerLift AI for free? <span class="faq-chevron">▼</span></div>
-            <div class="faq-a">Yes! You get 3 free AI analyses when you create an account — no credit card required. This includes CV rewrites, LinkedIn optimization, and cover letter generation. The ATS Score Checker is always free with no credit limit.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q" onclick="toggleFaq(this)">What file formats can I upload? <span class="faq-chevron">▼</span></div>
-            <div class="faq-a">You can upload PDF, DOCX, DOC, or TXT files (up to 5 MB). You can also paste your CV text directly into the text area. Our AI extracts the text automatically from uploaded files.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q" onclick="toggleFaq(this)">How is the LinkedIn Optimizer different from editing my profile manually? <span class="faq-chevron">▼</span></div>
-            <div class="faq-a">The LinkedIn Optimizer uses AI trained on recruiter behavior and LinkedIn's search algorithm to craft headlines and summaries with the exact keywords recruiters search for. It gives you 3 headline options and a fully rewritten About section optimized for your target role and country.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q" onclick="toggleFaq(this)">What happens after my free credits run out? <span class="faq-chevron">▼</span></div>
-            <div class="faq-a">You can upgrade to one of our paid plans — Basic ($19/mo), Pro ($49/mo), or a one-time credit pack. Paid plans include unlimited or expanded analyses, priority processing, and access to all premium templates. The ATS Score Checker remains free forever on all plans.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ══ FOOTER ══ -->
-      <div class="site-footer">
-        <div class="footer-grid">
-          <div class="footer-brand">
-            <div class="footer-brand-name">CareerLift AI</div>
-            <p>AI-powered career tools helping professionals worldwide get hired faster with ATS-optimized CVs and profiles.</p>
-            <div class="footer-social">
-              <a href="https://facebook.com" target="_blank" rel="noopener" title="Facebook">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener" title="Instagram">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener" title="LinkedIn">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-              </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener" title="Twitter / X">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.733-8.835L1.254 2.25H8.08l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              </a>
-            </div>
-          </div>
-          <div class="footer-col">
-            <h4>Services</h4>
-            <a onclick="go('analyze',null,'/analyze')">ATS CV Rewriter</a>
-            <a onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-            <a onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-            <a onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-            <a onclick="go('templates',null,'/templates')">CV Templates</a>
-            <a onclick="go('pricing',null,'/pricing')">Pricing</a>
-          </div>
-          <div class="footer-col">
-            <h4>Company</h4>
-            <a onclick="go('landing',null,'/')">Home</a>
-            <a onclick="go('about',null,'/about')">About Us</a>
-            <a onclick="go('contact',null,'/contact')">Contact Us</a>
-            <a onclick="openModal('signup-modal')">Sign up free</a>
-          </div>
-          <div class="footer-col">
-            <h4>Legal &amp; Support</h4>
-            <a onclick="go('privacy',null,'/privacy')">Privacy Policy</a>
-            <a onclick="go('terms',null,'/terms')">Terms of Service</a>
-            <a onclick="go('contact',null,'/contact')">Help Center</a>
-          </div>
-        </div>
-        <div class="footer-divider"></div>
-        <div class="footer-bottom">
-          <span>© 2025 CareerLift AI. All rights reserved.</span>
-          <span>Trusted by 12,000+ professionals worldwide</span>
         </div>
       </div>
     </div>
@@ -975,17 +592,17 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
         <div class="sidebar">
           <div class="sb-logo">CareerLift AI</div>
           <div class="sb-user"><div class="sb-av" id="dash-av">JD</div><div><div class="sb-nm" id="dash-nm">John Davis</div><div class="sb-pl">Free plan</div></div></div>
-          <div class="sb-link on" onclick="go('dashboard',null,'/dashboard')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
-          <div class="sb-link" onclick="go('analyze',null,'/analyze')"><svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Analyze CV</div>
-          <div class="sb-link" onclick="go('linkedin',null,'/linkedin')"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</div>
-          <div class="sb-link" onclick="go('coverletter',null,'/cover-letter')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Cover Letters</div>
-          <div class="sb-link" onclick="go('atsscore',null,'/ats-score')"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>ATS Score</div>
-          <div class="sb-link" onclick="go('templates',null,'/templates')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Templates</div>
-          <div class="sb-link" onclick="go('pricing',null,'/pricing')"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Billing</div>
+          <div class="sb-link on" onclick="go('dashboard',null,'careerliftai.com/dashboard')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</div>
+          <div class="sb-link" onclick="go('analyze',null,'careerliftai.com/analyze')"><svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Analyze CV</div>
+          <div class="sb-link" onclick="go('linkedin',null,'careerliftai.com/linkedin')"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</div>
+          <div class="sb-link" onclick="go('coverletter',null,'careerliftai.com/cover-letter')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Cover Letters</div>
+          <div class="sb-link" onclick="go('atsscore',null,'careerliftai.com/ats-score')"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>ATS Score</div>
+          <div class="sb-link" onclick="go('templates',null,'careerliftai.com/templates')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Templates</div>
+          <div class="sb-link" onclick="go('pricing',null,'careerliftai.com/pricing')"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Billing</div>
           <div class="sb-foot">
             <div class="cr-lbl" id="sb-cr-lbl">3 of 3 credits remaining</div>
             <div class="cr-track"><div class="cr-bar" id="sb-cr-bar" style="width:100%"></div></div>
-            <div class="up-btn" onclick="go('pricing',null,'/pricing')">Upgrade to Pro →</div>
+            <div class="up-btn" onclick="go('pricing',null,'careerliftai.com/pricing')">Upgrade to Pro →</div>
           </div>
         </div>
         <div class="dash-content">
@@ -997,9 +614,9 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
             <div class="metric"><div class="m-lbl">Cover Letters</div><div class="m-val">3</div><div class="m-sub">Generated</div></div>
           </div>
           <div class="qa-grid">
-            <div class="qa-card" onclick="go('analyze',null,'/analyze')"><span class="qa-tag">Most Popular</span><div class="qa-ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h3>Analyze My CV</h3><p>ATS score + full rewrite for your target market</p><button class="qa-go">Start →</button></div>
-            <div class="qa-card" onclick="go('linkedin',null,'/linkedin')"><div class="qa-ic"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div><h3>Optimize LinkedIn</h3><p>Recruiter-ready profile for your target market</p><button class="qa-go">Optimize →</button></div>
-            <div class="qa-card" onclick="go('coverletter',null,'/cover-letter')"><div class="qa-ic"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><h3>Write Cover Letter</h3><p>AI-written letter matched to the job description</p><button class="qa-go">Generate →</button></div>
+            <div class="qa-card" onclick="go('analyze',null,'careerliftai.com/analyze')"><span class="qa-tag">Most Popular</span><div class="qa-ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h3>Analyze My CV</h3><p>ATS score + full rewrite for your target market</p><button class="qa-go">Start →</button></div>
+            <div class="qa-card" onclick="go('linkedin',null,'careerliftai.com/linkedin')"><div class="qa-ic"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div><h3>Optimize LinkedIn</h3><p>Recruiter-ready profile for your target market</p><button class="qa-go">Optimize →</button></div>
+            <div class="qa-card" onclick="go('coverletter',null,'careerliftai.com/cover-letter')"><div class="qa-ic"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><h3>Write Cover Letter</h3><p>AI-written letter matched to the job description</p><button class="qa-go">Generate →</button></div>
           </div>
           <div class="rec-card">
             <div class="rec-head">Recent activity</div>
@@ -1014,32 +631,6 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ ANALYZE ══ -->
     <div class="screen" id="sc-analyze">
-      <div class="service-nav">
-        <div class="nav-logo" onclick="go('landing',null,'/')" style="cursor:pointer">CareerLift AI</div>
-        <div class="nav-links">
-          <a onclick="go('landing',null,'/')">Home</a>
-          <a class="active" onclick="go('analyze',null,'/analyze')">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates')">Templates</a>
-          <a onclick="go('pricing',null,'/pricing')">Pricing</a>
-        </div>
-        <div class="nav-right">
-          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
-          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
-          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
-        </div>
-        <div class="nav-mobile-menu">
-          <a onclick="go('landing',null,'/');closeMobileNav()">Home</a>
-          <a onclick="go('analyze',null,'/analyze');closeMobileNav()">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score');closeMobileNav()">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter');closeMobileNav()">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates');closeMobileNav()">Templates</a>
-          <a onclick="go('pricing',null,'/pricing');closeMobileNav()">Pricing</a>
-        </div>
-      </div>
       <div class="inner-page">
         <div class="page-h">ATS CV Rewriter</div>
         <div class="page-s">Upload your CV (or paste text below) and get a full ATS-optimized rewrite in under 60 seconds.</div>
@@ -1048,7 +639,7 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
           <h3>&#128683; Out of credits</h3>
           <p>You have used all your free credits. Upgrade to continue analyzing CVs and getting ATS rewrites.</p>
           <div class="credit-gate-btns">
-            <button class="cg-btn cg-btn-buy" onclick="go('pricing',null,'/pricing')">Buy Credits &#8594;</button>
+            <button class="cg-btn cg-btn-buy" onclick="go('pricing',null,'careerliftai.com/pricing')">Buy Credits &#8594;</button>
             <button class="cg-btn cg-btn-free" onclick="closeGate('analyze')">View last result</button>
           </div>
         </div>
@@ -1076,105 +667,13 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
           </div>
           <div class="cfg-box">
             <h3 style="display:flex;justify-content:space-between;align-items:center">Configuration <span class="credit-pill" id="analyze-credit-pill">3 credits left</span></h3>
-            <div class="fg"><label>Target Role *</label><input type="text" id="analyze-jobtitle" placeholder="e.g. Software Engineer, Marketing Manager…"></div>
             <div class="fg"><label>Target country *</label><select id="analyze-country"></select></div>
-            <div class="fg"><label>Industry</label><select id="analyze-industry">
-              <optgroup label="Technology &amp; Engineering">
-                <option>Technology &amp; Software</option>
-                <option>Information Technology (IT)</option>
-                <option>Cybersecurity</option>
-                <option>Artificial Intelligence &amp; Data Science</option>
-                <option>Engineering (General)</option>
-                <option>Mechanical Engineering</option>
-                <option>Civil &amp; Structural Engineering</option>
-                <option>Electrical Engineering</option>
-                <option>Chemical Engineering</option>
-                <option>Aerospace &amp; Defense</option>
-                <option>Telecommunications</option>
-              </optgroup>
-              <optgroup label="Business &amp; Finance">
-                <option>Finance &amp; Banking</option>
-                <option>Accounting &amp; Auditing</option>
-                <option>Investment &amp; Asset Management</option>
-                <option>Insurance</option>
-                <option>Consulting &amp; Strategy</option>
-                <option>Management &amp; Operations</option>
-                <option>Human Resources</option>
-                <option>Supply Chain &amp; Logistics</option>
-                <option>Procurement &amp; Purchasing</option>
-                <option>Real Estate</option>
-              </optgroup>
-              <optgroup label="Healthcare &amp; Sciences">
-                <option>Healthcare &amp; Medicine</option>
-                <option>Nursing &amp; Allied Health</option>
-                <option>Pharmaceuticals &amp; Biotech</option>
-                <option>Medical Devices</option>
-                <option>Public Health</option>
-                <option>Research &amp; Life Sciences</option>
-                <option>Dentistry &amp; Orthodontics</option>
-                <option>Mental Health &amp; Psychology</option>
-              </optgroup>
-              <optgroup label="Creative &amp; Media">
-                <option>Marketing &amp; Advertising</option>
-                <option>Digital Marketing &amp; SEO</option>
-                <option>Media &amp; Journalism</option>
-                <option>Design &amp; Creative Arts</option>
-                <option>Film, TV &amp; Entertainment</option>
-                <option>Photography &amp; Videography</option>
-                <option>Publishing &amp; Content</option>
-                <option>Gaming &amp; Interactive Media</option>
-              </optgroup>
-              <optgroup label="Public Sector &amp; Non-Profit">
-                <option>Government &amp; Public Administration</option>
-                <option>Non-Profit &amp; NGO</option>
-                <option>Military &amp; Defense</option>
-                <option>Law Enforcement &amp; Security</option>
-                <option>Social Services &amp; Community Work</option>
-                <option>International Development</option>
-              </optgroup>
-              <optgroup label="Education &amp; Research">
-                <option>Education &amp; Teaching</option>
-                <option>Higher Education &amp; Academia</option>
-                <option>Training &amp; Development</option>
-                <option>Scientific Research</option>
-              </optgroup>
-              <optgroup label="Legal &amp; Compliance">
-                <option>Legal &amp; Law</option>
-                <option>Compliance &amp; Risk Management</option>
-                <option>Regulatory Affairs</option>
-              </optgroup>
-              <optgroup label="Energy &amp; Environment">
-                <option>Oil &amp; Gas</option>
-                <option>Renewable Energy &amp; Sustainability</option>
-                <option>Environmental Sciences</option>
-                <option>Mining &amp; Natural Resources</option>
-                <option>Utilities &amp; Power</option>
-              </optgroup>
-              <optgroup label="Retail, Hospitality &amp; Services">
-                <option>Retail &amp; E-Commerce</option>
-                <option>Hospitality &amp; Tourism</option>
-                <option>Food &amp; Beverage</option>
-                <option>Customer Service</option>
-                <option>Facilities &amp; Property Management</option>
-                <option>Transportation &amp; Automotive</option>
-                <option>Agriculture &amp; Food Production</option>
-                <option>Fashion &amp; Apparel</option>
-                <option>Sports &amp; Fitness</option>
-              </optgroup>
-              <optgroup label="Construction &amp; Manufacturing">
-                <option>Construction &amp; Architecture</option>
-                <option>Manufacturing &amp; Production</option>
-                <option>Quality Assurance</option>
-                <option>Health &amp; Safety (HSE)</option>
-              </optgroup>
-              <option value="Other">Other</option>
-            </select></div>
-            <div class="fg"><label>Job Link (optional)</label><input type="url" id="analyze-job-link" placeholder="https://company.com/jobs/..."></div>
-            <div class="fg"><label>Job Description (optional)</label><textarea id="analyze-jd" placeholder="Paste the job description for better keyword matching and tailoring..."></textarea></div>
+            <div class="fg"><label>Target job title *</label><input type="text" id="analyze-jobtitle" value="Senior Software Engineer"></div>
+            <div class="fg"><label>Industry</label><select id="analyze-industry"><option>Technology</option><option>Finance</option><option>Healthcare</option><option>Marketing</option><option>Engineering</option><option>Oil &amp; Gas</option><option>Energy</option><option>Telecommunications</option><option>Pharmaceuticals</option><option>Biotechnology</option><option>Automotive</option><option>Manufacturing</option><option>Retail</option><option>Hospitality</option><option>Consumer Goods</option><option>Real Estate</option><option>Civil Construction</option><option>Transportation &amp; Logistics</option><option>Consulting</option><option>Government</option><option>Nonprofit</option><option>Education</option><option>Legal</option><option>Media &amp; Entertainment</option><option>Cybersecurity</option><option>Environmental Services</option><option>Human Resources</option><option>Insurance</option><option>Other</option></select></div>
+            <div class="fg"><label>Job description (optional)</label><textarea id="analyze-jd" placeholder="Paste the job description for better accuracy..."></textarea></div>
             <div class="fg"><label>Include in analysis</label>
               <label class="chk"><input type="checkbox" id="chk-rewrite" checked> Full ATS Rewrite</label>
               <label class="chk"><input type="checkbox" id="chk-score" checked> ATS Score Analysis</label>
-              <label class="chk"><input type="checkbox" id="chk-coverletter"> Cover Letter</label>
             </div>
             <button class="action-btn" id="analyze-btn" onclick="runAnalysis()">Analyze Now — uses 1 credit</button>
           </div>
@@ -1213,20 +712,6 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
             <button class="dl-btn" onclick="downloadAnalysisTXT()">&#8595; Download TXT</button>
             <button class="dl-btn" onclick="copyOptimized()">Copy text</button>
             <button class="dl-btn" id="save-hist-btn" onclick="saveToHistory()" style="background:#10B981;color:#fff;border-color:#10B981">&#10003; Save to History</button>
-            <button class="dl-btn" onclick="showTemplatePicker()" style="background:#6366F1;color:#fff;border-color:#6366F1">Use in Template →</button>
-          </div>
-        </div>
-        <!-- COVER LETTER RESULT (from ATS Rewriter) -->
-        <div id="analyze-cl-result" style="display:none;margin-top:24px">
-          <div class="kw-card" style="padding:24px">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-              <h3 style="margin:0">ATS Cover Letter</h3>
-              <div style="display:flex;gap:8px">
-                <button class="dl-btn" onclick="copyAnalyzeCL()">Copy</button>
-                <button class="dl-btn p" onclick="downloadAnalyzeCLPDF()">&#8595; PDF</button>
-              </div>
-            </div>
-            <div id="analyze-cl-body" style="white-space:pre-wrap;font-size:13px;line-height:1.75;color:#333;background:#fafafa;border:1px solid #eee;border-radius:8px;padding:20px;min-height:200px">—</div>
           </div>
         </div>
         <!-- HISTORY PANEL -->
@@ -1242,44 +727,18 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ LINKEDIN ══ -->
     <div class="screen" id="sc-linkedin">
-      <div class="service-nav">
-        <div class="nav-logo" onclick="go('landing',null,'/')" style="cursor:pointer">CareerLift AI</div>
-        <div class="nav-links">
-          <a onclick="go('landing',null,'/')">Home</a>
-          <a onclick="go('analyze',null,'/analyze')">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-          <a class="active" onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates')">Templates</a>
-          <a onclick="go('pricing',null,'/pricing')">Pricing</a>
-        </div>
-        <div class="nav-right">
-          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
-          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
-          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
-        </div>
-        <div class="nav-mobile-menu">
-          <a onclick="go('landing',null,'/');closeMobileNav()">Home</a>
-          <a onclick="go('analyze',null,'/analyze');closeMobileNav()">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score');closeMobileNav()">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter');closeMobileNav()">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates');closeMobileNav()">Templates</a>
-          <a onclick="go('pricing',null,'/pricing');closeMobileNav()">Pricing</a>
-        </div>
-      </div>
       <div class="inner-page">
         <div class="page-h">LinkedIn Optimizer</div>
         <div class="page-s">Get a recruiter-ready LinkedIn profile optimized for your target job market.</div>
         <div class="li-grid">
           <div class="panel-box">
             <h3>Your LinkedIn sections</h3>
-            <div class="fg"><label>Current headline (120 chars)</label><textarea id="li-headline" style="min-height:46px" placeholder="e.g. Software Developer at Acme Corp | 5 Years Experience | Open to Work"></textarea></div>
-            <div class="fg"><label>Current about / summary</label><textarea id="li-about" style="min-height:80px" placeholder="Paste your current LinkedIn About / summary section here…"></textarea></div>
-            <div class="fg"><label>Most recent job title</label><input type="text" id="li-jobtitle" placeholder="e.g. Senior Software Engineer"></div>
-            <div class="fg"><label>Key skills (comma separated)</label><input type="text" id="li-skills" placeholder="e.g. React, Node.js, TypeScript, AWS"></div>
+            <div class="fg"><label>Current headline (120 chars)</label><textarea id="li-headline" style="min-height:46px">Software Developer at Acme Corp | 5 Years Experience | Open to Work</textarea></div>
+            <div class="fg"><label>Current about / summary</label><textarea id="li-about" style="min-height:80px">I am a software developer with 5 years of experience. I enjoy coding and problem solving. I am looking for new opportunities in tech.</textarea></div>
+            <div class="fg"><label>Most recent job title</label><input type="text" id="li-jobtitle" value="Senior Software Engineer"></div>
+            <div class="fg"><label>Key skills (comma separated)</label><input type="text" id="li-skills" value="React, Node.js, TypeScript, AWS, PostgreSQL"></div>
             <div class="fg"><label>Target country</label><select id="li-country"></select></div>
-            <div class="fg"><label>Target role</label><input type="text" id="li-role" placeholder="e.g. Senior Software Engineer"></div>
+            <div class="fg"><label>Target role</label><input type="text" id="li-role" value="Senior Software Engineer"></div>
             <div class="fg"><label>Tone preference</label><select id="li-tone"><option>Professional</option><option>Approachable</option><option>Technical</option></select></div>
             <button class="action-btn" id="li-btn" onclick="optimizeLinkedIn()">Optimize LinkedIn — 1 credit</button>
           </div>
@@ -1321,32 +780,6 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ COVER LETTER ══ -->
     <div class="screen" id="sc-coverletter">
-      <div class="service-nav">
-        <div class="nav-logo" onclick="go('landing',null,'/')" style="cursor:pointer">CareerLift AI</div>
-        <div class="nav-links">
-          <a onclick="go('landing',null,'/')">Home</a>
-          <a onclick="go('analyze',null,'/analyze')">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-          <a class="active" onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates')">Templates</a>
-          <a onclick="go('pricing',null,'/pricing')">Pricing</a>
-        </div>
-        <div class="nav-right">
-          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
-          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
-          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
-        </div>
-        <div class="nav-mobile-menu">
-          <a onclick="go('landing',null,'/');closeMobileNav()">Home</a>
-          <a onclick="go('analyze',null,'/analyze');closeMobileNav()">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score');closeMobileNav()">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter');closeMobileNav()">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates');closeMobileNav()">Templates</a>
-          <a onclick="go('pricing',null,'/pricing');closeMobileNav()">Pricing</a>
-        </div>
-      </div>
       <div class="inner-page">
         <div class="page-h">Cover Letter AI</div>
         <div class="page-s">AI writes a tailored cover letter from your details and job description in under 60 seconds.</div>
@@ -1398,32 +831,6 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ ATS SCORE ══ -->
     <div class="screen" id="sc-atsscore">
-      <div class="service-nav">
-        <div class="nav-logo" onclick="go('landing',null,'/')" style="cursor:pointer">CareerLift AI</div>
-        <div class="nav-links">
-          <a onclick="go('landing',null,'/')">Home</a>
-          <a onclick="go('analyze',null,'/analyze')">Analyze Resume</a>
-          <a class="active" onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates')">Templates</a>
-          <a onclick="go('pricing',null,'/pricing')">Pricing</a>
-        </div>
-        <div class="nav-right">
-          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
-          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
-          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
-        </div>
-        <div class="nav-mobile-menu">
-          <a onclick="go('landing',null,'/');closeMobileNav()">Home</a>
-          <a onclick="go('analyze',null,'/analyze');closeMobileNav()">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score');closeMobileNav()">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter');closeMobileNav()">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates');closeMobileNav()">Templates</a>
-          <a onclick="go('pricing',null,'/pricing');closeMobileNav()">Pricing</a>
-        </div>
-      </div>
       <div class="inner-page">
         <div class="page-h">ATS Score Checker</div>
         <div class="page-s">Upload your CV (or paste text) for an instant ATS compatibility score — free, no credit used.</div>
@@ -1468,15 +875,7 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
               <div class="score-grade" id="ats-score-grade" style="color:#EF4444">—</div>
               <div class="score-desc" id="ats-score-desc">—</div>
               <div class="gauge-bars" id="ats-gauge-bars"></div>
-              <div id="ats-sections" style="margin-top:16px;display:none">
-                <div style="font-size:11px;font-weight:600;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Section Detection</div>
-                <div id="ats-sections-grid" style="display:flex;flex-wrap:wrap;gap:6px"></div>
-              </div>
-              <div id="ats-missing-kw" style="margin-top:14px;display:none">
-                <div style="font-size:11px;font-weight:600;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Suggested Keywords to Add</div>
-                <div id="ats-missing-kw-list" style="display:flex;flex-wrap:wrap;gap:6px"></div>
-              </div>
-              <button class="action-btn" style="margin-top:16px" onclick="go('analyze',null,'/analyze')">Fix with AI Rewrite →</button>
+              <button class="action-btn" style="margin-top:16px" onclick="go('analyze',null,'careerliftai.com/analyze')">Fix with AI Rewrite →</button>
             </div>
             <div class="ats-tips">
               <h3>What needs fixing</h3>
@@ -1489,32 +888,6 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ TEMPLATES ══ -->
     <div class="screen" id="sc-templates">
-      <div class="service-nav">
-        <div class="nav-logo" onclick="go('landing',null,'/')" style="cursor:pointer">CareerLift AI</div>
-        <div class="nav-links">
-          <a onclick="go('landing',null,'/')">Home</a>
-          <a onclick="go('analyze',null,'/analyze')">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-          <a class="active" onclick="go('templates',null,'/templates')">Templates</a>
-          <a onclick="go('pricing',null,'/pricing')">Pricing</a>
-        </div>
-        <div class="nav-right">
-          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
-          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
-          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
-        </div>
-        <div class="nav-mobile-menu">
-          <a onclick="go('landing',null,'/');closeMobileNav()">Home</a>
-          <a onclick="go('analyze',null,'/analyze');closeMobileNav()">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score');closeMobileNav()">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter');closeMobileNav()">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates');closeMobileNav()">Templates</a>
-          <a onclick="go('pricing',null,'/pricing');closeMobileNav()">Pricing</a>
-        </div>
-      </div>
       <div class="templates-page">
         <div class="page-h">CV Templates</div>
         <div class="page-s" style="margin-bottom:16px">ATS-friendly templates — click "Edit &amp; Use" to fill with your details.</div>
@@ -1554,11 +927,7 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
           <!-- Template 6 PRO -->
           <div class="tpl-card" data-cat="executive">
             <div class="tpl-preview"><div class="tpl-preview-inner"><div style="padding:32px 36px;font-family:-apple-system,sans-serif;font-size:11px;color:#1a1a1a;background:#fff"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:3px solid #1a1a1a;padding-bottom:14px"><div><div style="font-size:22px;font-weight:700;color:#111;margin-bottom:2px">John Davis</div><div style="font-size:13px;color:#6366F1;font-weight:600">Senior Software Engineer</div></div><div style="text-align:right;font-size:10px;color:#666"><div><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ff95909791bf9a929e9693d19c9092">[email&#160;protected]</a></div><div>+1 555 0123</div><div>New York, NY</div></div></div></div></div><div class="premium-badge">PRO</div></div>
-            <div class="tpl-info"><div class="tpl-name">Executive Split</div><div class="tpl-meta">ATS Score: 93/100 · Pro only</div><div class="tpl-tags"><span class="tpl-tag">Executive</span><span class="tpl-tag">Management</span><span class="tpl-tag">Pro</span></div><div class="tpl-actions"><button class="tpl-btn tpl-btn-ghost" onclick="openEditor('Executive Split')">Preview</button><button class="tpl-btn tpl-btn-fill" onclick="go('pricing',null,'/pricing')">Unlock Pro</button></div></div>
-          <!-- Template 7 — A4 Federal Resume -->
-          <div class="tpl-card" data-cat="classic executive">
-            <div class="tpl-preview"><div class="tpl-preview-inner"><div style="font-family:'Times New Roman',Times,serif;font-size:10px;color:#1a1a1a;background:#fff;padding:18px 20px;line-height:1.4"><div style="font-size:17px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#111;margin-bottom:2px">J O H N &nbsp;D A V I S</div><div style="font-size:8.5px;color:#444;margin-bottom:8px;letter-spacing:.5px">Senior Software Engineer</div><div style="height:1.5px;background:#2f3236;margin-bottom:6px"></div><div style="display:flex;flex-wrap:wrap;gap:6px 12px;font-size:7.5px;color:#333;margin-bottom:6px"><span><strong>Phone:</strong> +1 555 0123</span><span><strong>Email:</strong> john@email.com</span><span><strong>Address:</strong> New York, NY</span><span><strong>Availability:</strong> Full Time</span></div><div style="height:1.5px;background:#2f3236;margin-bottom:7px"></div><div style="font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#111;margin-bottom:5px">P R O F E S S I O N A L &nbsp; S T A T E M E N T</div><p style="font-size:7.5px;color:#333;line-height:1.55;margin-bottom:7px">Results-driven engineer with 5+ years building scalable systems serving 2M+ users. Reduced latency 40%, led teams of 6, delivered 3 major product launches.</p><div style="height:1.5px;background:#2f3236;margin-bottom:7px"></div><div style="font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#111;margin-bottom:4px">W O R K &nbsp; E X P E R I E N C E S</div><div style="font-size:8px;font-weight:700">Senior SWE &nbsp;|&nbsp; Jan 2019 – Present</div><div style="font-size:7.5px;color:#555;margin-bottom:4px">Employer: Acme Corp &nbsp;|&nbsp; Hours Per Week: 40</div><div style="height:1.5px;background:#2f3236;margin-bottom:6px"></div><div style="font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#111;margin-bottom:4px">E D U C A T I O N &nbsp;&amp;&nbsp; C E R T I F I C A T I O N</div><div style="font-size:7.5px;color:#333">B.S. Computer Science &nbsp;|&nbsp; 2019</div><div style="font-size:7.5px;color:#555">State University, New York</div></div></div></div>
-            <div class="tpl-info"><div class="tpl-name">A4 Federal Resume</div><div class="tpl-meta">ATS Score: 97/100 · US Federal Format</div><div class="tpl-tags"><span class="tpl-tag">US Federal</span><span class="tpl-tag">Government</span><span class="tpl-tag">Executive</span></div><div class="tpl-actions"><button class="tpl-btn tpl-btn-ghost" onclick="openEditor('A4 Federal Resume')">Preview</button><button class="tpl-btn tpl-btn-fill" onclick="openEditor('A4 Federal Resume')">Edit &amp; Use</button></div></div>
+            <div class="tpl-info"><div class="tpl-name">Executive Split</div><div class="tpl-meta">ATS Score: 93/100 · Pro only</div><div class="tpl-tags"><span class="tpl-tag">Executive</span><span class="tpl-tag">Management</span><span class="tpl-tag">Pro</span></div><div class="tpl-actions"><button class="tpl-btn tpl-btn-ghost" onclick="openEditor('Executive Split')">Preview</button><button class="tpl-btn tpl-btn-fill" onclick="go('pricing',null,'careerliftai.com/pricing')">Unlock Pro</button></div></div>
           </div>
         </div>
       </div>
@@ -1566,315 +935,70 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
     <!-- ══ PRICING ══ -->
     <div class="screen" id="sc-pricing">
-      <div class="service-nav">
-        <div class="nav-logo" onclick="go('landing',null,'/')" style="cursor:pointer">CareerLift AI</div>
-        <div class="nav-links">
-          <a onclick="go('landing',null,'/')">Home</a>
-          <a onclick="go('analyze',null,'/analyze')">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates')">Templates</a>
-          <a class="active" onclick="go('pricing',null,'/pricing')">Pricing</a>
-        </div>
-        <div class="nav-right">
-          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
-          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
-          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
-        </div>
-        <div class="nav-mobile-menu">
-          <a onclick="go('landing',null,'/');closeMobileNav()">Home</a>
-          <a onclick="go('analyze',null,'/analyze');closeMobileNav()">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score');closeMobileNav()">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter');closeMobileNav()">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates');closeMobileNav()">Templates</a>
-          <a onclick="go('pricing',null,'/pricing');closeMobileNav()">Pricing</a>
-        </div>
-      </div>
       <div class="pricing-page">
         <div class="pr-hd"><h2>Simple, transparent pricing</h2><p>Start free — upgrade when you need more analyses.</p></div>
         <div class="toggle-row">
           <span style="font-weight:500;color:#111" id="bill-monthly-lbl">Monthly</span>
           <div class="sw" onclick="toggleBill()"><div class="sw-k off" id="swk"></div></div>
           <span id="bill-annual-lbl">Annual</span>
-          <span class="save-badge" id="save-t" style="display:none">Save up to $189/yr</span>
+          <span class="save-badge" id="save-t" style="display:none">Save 20%</span>
         </div>
         <div class="plans-grid">
           <div class="plan">
-            <div class="plan-nm">Free</div><div class="plan-pr">$0</div><div class="plan-pd">forever</div><div class="plan-div"></div>
-            <div class="plan-f">3 AI analyses (one-time)</div><div class="plan-f">ATS score check</div><div class="plan-f">1 cover letter</div><div class="plan-f">3 basic templates</div><div class="plan-f">Watermark on downloads</div>
+            <div class="plan-nm">Free Plan</div><div class="plan-pr">$0</div><div class="plan-pd">forever</div><div class="plan-div"></div>
+            <div class="plan-f">3 AI analyses (one-time)</div>
+            <div class="plan-f">ATS score check</div>
+            <div class="plan-f">1 cover letter</div>
+            <div class="plan-f">3 basic templates</div>
+            <div class="plan-f">Watermark on downloads</div>
             <button class="plan-btn" onclick="openModal('signup-modal')">Get started free</button>
+            <div class="trust-notes">
+              <div class="trust-note">✓ No card required</div>
+              <div class="trust-note">✓ Cancel anytime</div>
+              <div class="trust-note">✓ Secured by Stripe</div>
+            </div>
           </div>
           <div class="plan">
-            <div class="plan-nm">Basic</div><div class="plan-pr" id="bp">$19</div><div class="plan-pd" id="bpd">/month</div><div class="plan-div"></div>
-            <div class="plan-f">10 CV analyses / month</div><div class="plan-f">Full ATS rewrite</div><div class="plan-f">10 cover letters / month</div><div class="plan-f">LinkedIn optimizer (5/mo)</div><div class="plan-f">All 6 templates (editable)</div><div class="plan-f">PDF &amp; DOCX downloads</div>
+            <div class="plan-nm">Basic Plan</div>
+            <div class="plan-pr" id="bp">$19</div>
+            <div class="plan-pd" id="bpd">/month</div>
+            <div class="plan-div"></div>
+            <div class="plan-f">10 CV analyses per month</div>
+            <div class="plan-f">Full ATS rewrite</div>
+            <div class="plan-f">10 cover letters per month</div>
+            <div class="plan-f">LinkedIn optimizer (5/month)</div>
+            <div class="plan-f">All 6 templates (editable)</div>
+            <div class="plan-f">PDF &amp; DOCX downloads</div>
             <button class="plan-btn" onclick="openModal('signup-modal')">Start Basic</button>
           </div>
           <div class="plan featured">
             <div class="pop-tag">Most Popular</div>
-            <div class="plan-nm">Pro</div><div class="plan-pr" id="pp">$49</div><div class="plan-pd" id="ppd">/month · 7-day free trial</div><div class="plan-div"></div>
-            <div class="plan-f">Unlimited CV analyses</div><div class="plan-f">Unlimited cover letters</div><div class="plan-f">Unlimited LinkedIn opt.</div><div class="plan-f">All markets supported</div><div class="plan-f">All premium templates</div><div class="plan-f">Priority AI + 24hr support</div>
+            <div class="plan-nm">Pro Plan</div>
+            <div class="plan-pr" id="pp">$49</div>
+            <div class="plan-pd" id="ppd">/month · 7-day free trial</div>
+            <div class="plan-div"></div>
+            <div class="plan-f">Unlimited CV analyses</div>
+            <div class="plan-f">Unlimited cover letters</div>
+            <div class="plan-f">Unlimited LinkedIn optimizations</div>
+            <div class="plan-f">All markets supported</div>
+            <div class="plan-f">All premium templates</div>
+            <div class="plan-f">Priority AI + 24hr support</div>
             <button class="plan-btn p" onclick="openModal('signup-modal')">Start free trial</button>
           </div>
           <div class="plan">
-            <div class="plan-nm">One-time</div><div class="plan-pr">$49</div><div class="plan-pd">no expiry</div><div class="plan-div"></div>
-            <div class="plan-f">5 CV analyses</div><div class="plan-f">5 cover letters</div><div class="plan-f">2 LinkedIn optimizations</div><div class="plan-f">ATS Score Checker</div><div class="plan-f">No subscription needed</div>
+            <div class="plan-nm">One-Time Plan</div>
+            <div class="plan-pr">$49</div>
+            <div class="plan-pd">no expiry</div>
+            <div class="plan-div"></div>
+            <div class="plan-f">5 CV analyses</div>
+            <div class="plan-f">5 cover letters</div>
+            <div class="plan-f">2 LinkedIn optimizations</div>
+            <div class="plan-f">ATS Score Checker</div>
+            <div class="plan-f">No subscription needed</div>
             <button class="plan-btn" onclick="openModal('signup-modal')">Buy now</button>
           </div>
         </div>
         <div class="trust-row"><span>✓ No card for free plan</span><span>✓ Cancel anytime</span><span>✓ Secured by Stripe</span></div>
-      </div>
-    </div>
-
-    <!-- ══ ABOUT ══ -->
-    <div class="screen" id="sc-about">
-      <div class="service-nav">
-        <div class="nav-logo" onclick="go('landing',null,'/')" style="cursor:pointer">CareerLift AI</div>
-        <div class="nav-links">
-          <a onclick="go('landing',null,'/')">Home</a>
-          <a onclick="go('analyze',null,'/analyze')">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates')">Templates</a>
-          <a onclick="go('pricing',null,'/pricing')">Pricing</a>
-        </div>
-        <div class="nav-right">
-          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
-          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
-          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
-        </div>
-        <div class="nav-mobile-menu">
-          <a onclick="go('landing',null,'/');closeMobileNav()">Home</a>
-          <a onclick="go('analyze',null,'/analyze');closeMobileNav()">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score');closeMobileNav()">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter');closeMobileNav()">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates');closeMobileNav()">Templates</a>
-          <a onclick="go('pricing',null,'/pricing');closeMobileNav()">Pricing</a>
-        </div>
-      </div>
-      <div class="static-page">
-        <h1>About CareerLift AI</h1>
-        <p class="sp-meta">Helping professionals land their dream jobs, faster.</p>
-        <p>CareerLift AI was founded with one mission: to level the playing field for job seekers everywhere. Every day, thousands of qualified candidates are rejected not because of their skills — but because their CVs fail automated screening systems before a human ever reads them.</p>
-        <p>We built CareerLift AI to fix that. Our platform uses advanced AI to rewrite, optimize, and score your CV against ATS systems used by top companies — including Taleo, Workday, Greenhouse, Lever, and iCIMS.</p>
-        <div class="about-stats">
-          <div class="about-stat"><div class="about-stat-n">12K+</div><div class="about-stat-l">Professionals helped</div></div>
-          <div class="about-stat"><div class="about-stat-n">94%</div><div class="about-stat-l">ATS pass rate</div></div>
-          <div class="about-stat"><div class="about-stat-n">3×</div><div class="about-stat-l">More interviews</div></div>
-          <div class="about-stat"><div class="about-stat-n">70+</div><div class="about-stat-l">Industries supported</div></div>
-        </div>
-        <h2>Our Mission</h2>
-        <p>To give every professional — regardless of background, country, or experience level — the tools they need to present themselves at their very best.</p>
-        <h2>What We Offer</h2>
-        <ul>
-          <li><strong>ATS CV Rewriter</strong> — Restructures and rewrites your CV to pass ATS filters and impress recruiters</li>
-          <li><strong>ATS Score Checker</strong> — Analyses your CV against a job description and scores it across 8 criteria</li>
-          <li><strong>LinkedIn Optimizer</strong> — Rewrites your LinkedIn headline, summary, and experience for maximum visibility</li>
-          <li><strong>Cover Letter AI</strong> — Generates tailored, professional cover letters in seconds</li>
-          <li><strong>CV Templates</strong> — Professional templates designed for modern ATS systems and human recruiters</li>
-        </ul>
-        <h2>Our Values</h2>
-        <div class="about-values">
-          <div class="about-val-card"><h3>Transparency</h3><p>We show you exactly why your CV scores the way it does — no black boxes.</p></div>
-          <div class="about-val-card"><h3>Accessibility</h3><p>Our free tier ensures every job seeker gets a fighting chance, no credit card needed.</p></div>
-          <div class="about-val-card"><h3>Results-first</h3><p>Every feature is built to get you more interviews, not just to look impressive.</p></div>
-        </div>
-        <h2>Get in Touch</h2>
-        <p><a onclick="go('contact',null,'/contact')">Reach out via our contact page</a> or email us at <a href="mailto:hello@careerliftai.com">hello@careerliftai.com</a>.</p>
-      </div>
-    </div>
-
-    <!-- ══ CONTACT ══ -->
-    <div class="screen" id="sc-contact">
-      <div class="service-nav">
-        <div class="nav-logo" onclick="go('landing',null,'/')" style="cursor:pointer">CareerLift AI</div>
-        <div class="nav-links">
-          <a onclick="go('landing',null,'/')">Home</a>
-          <a onclick="go('analyze',null,'/analyze')">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates')">Templates</a>
-          <a onclick="go('pricing',null,'/pricing')">Pricing</a>
-        </div>
-        <div class="nav-right">
-          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
-          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
-          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
-        </div>
-        <div class="nav-mobile-menu">
-          <a onclick="go('landing',null,'/');closeMobileNav()">Home</a>
-          <a onclick="go('analyze',null,'/analyze');closeMobileNav()">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score');closeMobileNav()">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter');closeMobileNav()">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates');closeMobileNav()">Templates</a>
-          <a onclick="go('pricing',null,'/pricing');closeMobileNav()">Pricing</a>
-        </div>
-      </div>
-      <div class="static-page">
-        <h1>Contact Us</h1>
-        <p class="sp-meta">We typically reply within 24 hours on business days.</p>
-        <div class="contact-grid">
-          <div class="contact-form-block">
-            <h3>Send us a message</h3>
-            <div class="cf-field"><label>Your name</label><input type="text" id="cf-name" placeholder="Jane Smith"></div>
-            <div class="cf-field"><label>Email address</label><input type="email" id="cf-email" placeholder="jane@example.com"></div>
-            <div class="cf-field"><label>Subject</label>
-              <select id="cf-subject">
-                <option value="">Select a topic…</option>
-                <option>Account &amp; Billing</option>
-                <option>Technical Issue</option>
-                <option>Feature Request</option>
-                <option>Partnership / Business</option>
-                <option>Other</option>
-              </select>
-            </div>
-            <div class="cf-field"><label>Message</label><textarea id="cf-message" placeholder="Tell us how we can help…"></textarea></div>
-            <button class="btn-primary" style="width:100%;margin-top:4px" onclick="submitContact()">Send Message</button>
-            <p id="cf-status" style="font-size:12px;color:#10B981;margin-top:8px;text-align:center;display:none"></p>
-          </div>
-          <div>
-            <div class="contact-info-block">
-              <h3>Contact information</h3>
-              <div class="contact-info-item"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>hello@careerliftai.com</span></div>
-              <div class="contact-info-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Mon – Fri, 9am – 6pm GMT</span></div>
-              <div class="contact-info-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>London, United Kingdom</span></div>
-            </div>
-            <div class="contact-info-block" style="margin-top:16px">
-              <h3>Follow us</h3>
-              <div style="display:flex;gap:12px;margin-top:8px">
-                <a href="https://linkedin.com" target="_blank" rel="noopener" style="color:#6366F1;font-size:12px">LinkedIn</a>
-                <a href="https://twitter.com" target="_blank" rel="noopener" style="color:#6366F1;font-size:12px">Twitter / X</a>
-                <a href="https://instagram.com" target="_blank" rel="noopener" style="color:#6366F1;font-size:12px">Instagram</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══ PRIVACY ══ -->
-    <div class="screen" id="sc-privacy">
-      <div class="service-nav">
-        <div class="nav-logo" onclick="go('landing',null,'/')" style="cursor:pointer">CareerLift AI</div>
-        <div class="nav-links">
-          <a onclick="go('landing',null,'/')">Home</a>
-          <a onclick="go('analyze',null,'/analyze')">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates')">Templates</a>
-          <a onclick="go('pricing',null,'/pricing')">Pricing</a>
-        </div>
-        <div class="nav-right">
-          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
-          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
-          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
-        </div>
-        <div class="nav-mobile-menu">
-          <a onclick="go('landing',null,'/');closeMobileNav()">Home</a>
-          <a onclick="go('analyze',null,'/analyze');closeMobileNav()">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score');closeMobileNav()">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter');closeMobileNav()">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates');closeMobileNav()">Templates</a>
-          <a onclick="go('pricing',null,'/pricing');closeMobileNav()">Pricing</a>
-        </div>
-      </div>
-      <div class="static-page">
-        <h1>Privacy Policy</h1>
-        <p class="sp-meta">Last updated: 1 January 2025</p>
-        <p>CareerLift AI is committed to protecting your privacy. This policy explains what data we collect, how we use it, and your rights.</p>
-        <h2>1. Information We Collect</h2>
-        <ul>
-          <li><strong>Account data</strong>: your name and email address when you register</li>
-          <li><strong>CV / resume content</strong>: text you paste or upload for analysis (processed in memory; not stored permanently)</li>
-          <li><strong>Usage data</strong>: pages visited, features used, browser type, IP address (anonymised)</li>
-          <li><strong>Payment data</strong>: handled entirely by Stripe; we never see or store card numbers</li>
-        </ul>
-        <h2>2. How We Use Your Data</h2>
-        <ul>
-          <li>To provide and improve our AI-powered CV analysis services</li>
-          <li>To manage your account and credit balance</li>
-          <li>To send transactional emails (OTP codes, receipts) — never marketing without consent</li>
-          <li>To detect and prevent fraud or abuse</li>
-        </ul>
-        <h2>3. Data Retention</h2>
-        <p>CV text submitted for analysis is processed in real time and not stored beyond your session. Account metadata is retained while your account is active. Request deletion at <a href="mailto:privacy@careerliftai.com">privacy@careerliftai.com</a>.</p>
-        <h2>4. Third-Party Services</h2>
-        <ul>
-          <li><strong>Supabase</strong> — authentication and database (EU region)</li>
-          <li><strong>Anthropic / Claude API</strong> — AI analysis engine</li>
-          <li><strong>Stripe</strong> — payment processing</li>
-          <li><strong>Netlify</strong> — website hosting</li>
-        </ul>
-        <h2>5. Cookies</h2>
-        <p>We use only essential session cookies required for authentication. We do not use advertising or tracking cookies.</p>
-        <h2>6. Your Rights (GDPR &amp; CCPA)</h2>
-        <ul>
-          <li>Access a copy of your personal data</li>
-          <li>Request correction or deletion of your data</li>
-          <li>Withdraw consent at any time</li>
-          <li>Lodge a complaint with your local data protection authority</li>
-        </ul>
-        <h2>7. Contact</h2>
-        <p>Email <a href="mailto:privacy@careerliftai.com">privacy@careerliftai.com</a> or <a onclick="go('contact',null,'/contact')">use our contact form</a>.</p>
-      </div>
-    </div>
-
-    <!-- ══ TERMS ══ -->
-    <div class="screen" id="sc-terms">
-      <div class="service-nav">
-        <div class="nav-logo" onclick="go('landing',null,'/')" style="cursor:pointer">CareerLift AI</div>
-        <div class="nav-links">
-          <a onclick="go('landing',null,'/')">Home</a>
-          <a onclick="go('analyze',null,'/analyze')">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score')">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin')">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter')">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates')">Templates</a>
-          <a onclick="go('pricing',null,'/pricing')">Pricing</a>
-        </div>
-        <div class="nav-right">
-          <button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button>
-          <button class="btn-ghost" onclick="openModal('login-modal')">Log in</button>
-          <button class="btn-indigo" onclick="openModal('signup-modal')">Sign up free</button>
-        </div>
-        <div class="nav-mobile-menu">
-          <a onclick="go('landing',null,'/');closeMobileNav()">Home</a>
-          <a onclick="go('analyze',null,'/analyze');closeMobileNav()">Analyze Resume</a>
-          <a onclick="go('atsscore',null,'/ats-score');closeMobileNav()">ATS Score Checker</a>
-          <a onclick="go('linkedin',null,'/linkedin');closeMobileNav()">LinkedIn Optimizer</a>
-          <a onclick="go('coverletter',null,'/cover-letter');closeMobileNav()">Cover Letter AI</a>
-          <a onclick="go('templates',null,'/templates');closeMobileNav()">Templates</a>
-          <a onclick="go('pricing',null,'/pricing');closeMobileNav()">Pricing</a>
-        </div>
-      </div>
-      <div class="static-page">
-        <h1>Terms of Service</h1>
-        <p class="sp-meta">Last updated: 1 January 2025</p>
-        <p>By accessing or using CareerLift AI, you agree to be bound by these Terms.</p>
-        <h2>1. Use of Service</h2>
-        <ul>
-          <li>You must be at least 16 years old to use CareerLift AI</li>
-          <li>You are responsible for the security of your account credentials</li>
-          <li>You may not use the service for any unlawful or abusive purposes</li>
-          <li>You may not attempt to reverse-engineer or scrape our AI systems</li>
-        </ul>
-        <h2>2. Credits &amp; Subscriptions</h2>
-        <p>Free accounts receive 3 one-time AI credits. Paid plans include monthly rolling credits as described on the <a onclick="go('pricing',null,'/pricing')">Pricing page</a>. Unused monthly credits do not roll over.</p>
-        <h2>3. Payments &amp; Refunds</h2>
-        <p>All payments are processed via Stripe. Monthly and annual subscriptions renew automatically; cancel anytime. We offer a 7-day refund for annual plans if fewer than 5 credits have been used.</p>
-        <h2>4. Content Ownership</h2>
-        <p>You retain full ownership of all CV content you submit. We do not train AI models on your personal data.</p>
-        <h2>5. Disclaimers</h2>
-        <p>CareerLift AI provides tools to help improve your CV. We do not guarantee job placement or interview outcomes. Always review AI-generated content before submitting to employers.</p>
-        <h2>6. Contact</h2>
-        <p>Questions? Email <a href="mailto:legal@careerliftai.com">legal@careerliftai.com</a> or <a onclick="go('contact',null,'/contact')">contact us here</a>.</p>
       </div>
     </div>
 
@@ -1897,246 +1021,41 @@ function populateCountries(){
   });
 }
 populateCountries();
-// Session restore handled by initAuth() via Supabase onAuthStateChange
 
 /* ════════════════════════════════════
-   SUPABASE CLIENT
+   ROUTE INITIALIZATION
 ════════════════════════════════════ */
-const SUPABASE_URL='https://fusxcijaklbrfkszlzsv.supabase.co';
-const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1c3hjaWpha2xicmZrc3psenN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMjg2NDAsImV4cCI6MjA5MDgwNDY0MH0.XezE53OT9jRAQCmah2L-f6JSIs5FwWpa92l660LoAgo';
-// Lazy init — Supabase CDN may not be parsed yet at script start
-let _sb=null;
-function getSB(){
-  if(!_sb&&window.supabase){
-    try{_sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);}catch(e){}
+function initRoutes(){
+  const path=window.location.pathname;
+  console.log('Page path:', path);
+  if(path.includes('/pricing')||path==='/pricing'){
+    console.log('Routing to pricing page');
+    setTimeout(()=>{go('pricing',null,'careerliftai.com/pricing');},150);
+    return 'pricing';
   }
-  return _sb;
+  return 'landing';
 }
 
-/* ════════════════════════════════════
-   AUTH LOADING HELPERS
-════════════════════════════════════ */
-function showAuthLoading(msg='Signing you in…'){
-  document.getElementById('auth-loading-msg').textContent=msg;
-  document.getElementById('auth-loading').classList.add('show');
-}
-function hideAuthLoading(){
-  document.getElementById('auth-loading').classList.remove('show');
-}
-function finishLogin(name){
-  showAuthLoading('Loading your dashboard…');
-  setTimeout(()=>{
-    hideAuthLoading();
-    setUser(name);
-    go('dashboard',null,'/dashboard');
-  },1400);
-}
-
-/* ════════════════════════════════════
-   GOOGLE OAUTH
-════════════════════════════════════ */
-async function googleAuth(){
-  closeModal('login-modal');closeModal('signup-modal');
-  const sb=getSB();
-  if(!sb){showToast('Loading…please try again in a moment.');return;}
-  showAuthLoading('Redirecting to Google…');
-  try{
-    const redirectTo=window.location.origin+'/';
-    const {error}=await sb.auth.signInWithOAuth({
-      provider:'google',
-      options:{queryParams:{access_type:'offline',prompt:'select_account'},redirectTo}
-    });
-    if(error){hideAuthLoading();throw error;}
-  }catch(err){
-    hideAuthLoading();
-    showToast('Google sign-in failed: '+err.message);
-  }
-}
-
-/* ════════════════════════════════════
-   LOGIN
-════════════════════════════════════ */
-async function doLogin(){
-  const e=document.getElementById('login-email').value.trim().toLowerCase();
-  const p=document.getElementById('login-pass').value;
-  if(!e||!p){showToast('Please enter your email and password.');return;}
-  const sb=getSB();
-  if(!sb){showToast('Still loading — please try again in a moment.');return;}
-  closeModal('login-modal');
-  showAuthLoading('Signing you in…');
-  try{
-    const {data,error}=await sb.auth.signInWithPassword({email:e,password:p});
-    if(error)throw error;
-    hideAuthLoading();
-    const name=data.user.user_metadata?.full_name||(e.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
-    finishLogin(name);
-    showToast('Welcome back! ✓');
-  }catch(err){
-    hideAuthLoading();
-    openModal('login-modal');
-    showToast('Login failed: '+err.message);
-  }
-}
-
-/* ════════════════════════════════════
-   SIGNUP + OTP
-════════════════════════════════════ */
-let _otpEmail='';
-let _otpName='';
-let _otpPass='';
-let _otpTimer=null;
-
-async function doSignup(){
-  const n=document.getElementById('signup-name').value.trim();
-  const e=document.getElementById('signup-email').value.trim().toLowerCase();
-  const p=document.getElementById('signup-pass').value;
-  if(!n||!e||!p){showToast('Please fill in all fields.');return;}
-  if(p.length<8){showToast('Password must be at least 8 characters.');return;}
-  _otpName=n;_otpEmail=e;_otpPass=p;
-  const sb=getSB();
-  if(!sb){showToast('Still loading — please try again in a moment.');return;}
-  // Check if email is already registered
-  try{
-    const {data:existing}=await sb.from('profiles').select('id').eq('email',e).maybeSingle();
-    if(existing){
-      showToast('This email is already in use. Please log in instead.');
-      return;
-    }
-  }catch(_){}
-  closeModal('signup-modal');
-  showAuthLoading('Sending verification code…');
-  try{
-    const {error}=await sb.auth.signInWithOtp({email:e,options:{shouldCreateUser:true,data:{full_name:n}}});
-    if(error){
-      if(error.message&&(error.message.toLowerCase().includes('already registered')||error.message.toLowerCase().includes('already in use'))){
-        hideAuthLoading();
-        openModal('signup-modal');
-        showToast('This email is already in use. Please log in instead.');
-        return;
-      }
-      throw error;
-    }
-    hideAuthLoading();
-    openOTPModal(e);
-  }catch(err){
-    hideAuthLoading();
-    openModal('signup-modal');
-    showToast('Could not send code: '+err.message);
-  }
-}
-
-function openOTPModal(email){
-  document.getElementById('otp-email-display').textContent=email;
-  document.getElementById('otp-err').textContent='';
-  document.getElementById('otp-code-input').value='';
-  document.getElementById('otp-modal').classList.add('open');
-  setTimeout(()=>document.getElementById('otp-code-input').focus(),100);
-  startOTPTimer();
-}
-
-function startOTPTimer(){
-  clearInterval(_otpTimer);
-  let t=60;
-  document.getElementById('otp-countdown').textContent=t;
-  document.getElementById('otp-timer-row').style.display='';
-  document.getElementById('otp-resend-row').style.display='none';
-  _otpTimer=setInterval(()=>{
-    t--;
-    document.getElementById('otp-countdown').textContent=t;
-    if(t<=0){
-      clearInterval(_otpTimer);
-      document.getElementById('otp-timer-row').style.display='none';
-      document.getElementById('otp-resend-row').style.display='';
-    }
-  },1000);
-}
-
-async function verifyOTP(){
-  const code=document.getElementById('otp-code-input').value.trim();
-  if(code.length<4){document.getElementById('otp-err').textContent='Please enter the full verification code.';return;}
-  document.getElementById('otp-err').textContent='';
-  const sb=getSB();
-  if(sb){
-    try{
-      const {data,error}=await sb.auth.verifyOtp({email:_otpEmail,token:code,type:'email'});
-      if(error)throw error;
-      try{await sb.from('profiles').upsert({id:data.user.id,full_name:_otpName,email:_otpEmail,subscription:'free',credits:3,created_at:new Date().toISOString()});}catch(_){}
-      closeModal('otp-modal');clearInterval(_otpTimer);finishLogin(_otpName);
-      showToast('Account created! Welcome to CareerLift AI ✓');
-    }catch(err){
-      document.getElementById('otp-err').textContent='Invalid code. Please try again.';
-    }
-  }else{
-    document.getElementById('otp-err').textContent='Service loading — please try again.';
-  }
-}
-
-async function resendOTP(){
-  const sb=getSB();
-  if(sb){
-    try{
-      await sb.auth.signInWithOtp({email:_otpEmail,options:{shouldCreateUser:true,data:{full_name:_otpName}}});
-      showToast('New code sent to '+_otpEmail);
-    }catch(err){showToast('Could not resend: '+err.message);}
-  }else{showToast('Still loading — please wait a moment.');}
-  startOTPTimer();
-}
-
-function forgotPassword(){
-  const e=document.getElementById('login-email').value.trim();
-  if(!e){showToast('Enter your email address first.');return;}
-  const sb=getSB();
-  if(sb){
-    sb.auth.resetPasswordForEmail(e,{redirectTo:window.location.origin+'/'}).then(({error})=>{
-      if(error)showToast('Error: '+error.message);
-      else showToast('Password reset link sent to '+e);
-    });
-    return;
-  }
-  showToast('Please wait for the page to finish loading.');
-}
-
+// Initialize routes on page load
+window.addEventListener('DOMContentLoaded', function(){ 
+  initRoutes();
+  initGoogleSignIn(); 
+  restoreSession(); 
+});
 
 /* ════════════════════════════════════
    NAVIGATION
 ════════════════════════════════════ */
-const screens=['landing','dashboard','analyze','linkedin','coverletter','atsscore','templates','pricing','about','contact','privacy','terms'];
-const _screenPaths={landing:'/',dashboard:'/dashboard',analyze:'/analyze',linkedin:'/linkedin',coverletter:'/cover-letter',atsscore:'/ats-score',templates:'/templates',pricing:'/pricing',about:'/about',contact:'/contact',privacy:'/privacy',terms:'/terms'};
-
-function go(id,tabEl,url,skipHistory){
+const screens=['landing','dashboard','analyze','linkedin','coverletter','atsscore','templates','pricing'];
+function go(id,tabEl,url){
   screens.forEach(s=>{const el=document.getElementById('sc-'+s);if(el)el.classList.toggle('on',s===id);});
-  const urlBar=document.getElementById('url-bar');if(url&&urlBar)urlBar.textContent=url;
+  if(url)document.getElementById('url-bar').textContent=url;
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   if(tabEl)tabEl.classList.add('on');
   else document.querySelectorAll('.tab').forEach(t=>{if((t.getAttribute('onclick')||'').includes("'"+id+"'"))t.classList.add('on');});
   // sync sidebar links
   document.querySelectorAll('.sb-link').forEach(l=>l.classList.remove('on'));
   document.querySelectorAll('.sb-link').forEach(l=>{if((l.getAttribute('onclick')||'').includes("'"+id+"'"))l.classList.add('on');});
-  closeMobileNav();
-  // push browser history so back button works
-  if(!skipHistory){
-    const path=_screenPaths[id]||'/';
-    history.pushState({screen:id},document.title,path);
-  }
-}
-
-// Handle browser back/forward buttons
-window.addEventListener('popstate',function(e){
-  const id=(e.state&&e.state.screen)||'landing';
-  go(id,null,null,true);
-});
-
-// Set initial history state for landing (non-landing paths already handled by early head script)
-history.replaceState({screen:'landing'},document.title,window.location.pathname||'/');
-
-function toggleMobileNav(btn){
-  const nav=btn.closest('.site-nav,.service-nav');
-  if(!nav)return;
-  const menu=nav.querySelector('.nav-mobile-menu');
-  if(menu)menu.classList.toggle('open');
-}
-function closeMobileNav(){
-  document.querySelectorAll('.nav-mobile-menu.open').forEach(m=>m.classList.remove('open'));
 }
 
 /* ════════════════════════════════════
@@ -2146,80 +1065,74 @@ function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function switchModal(from,to){closeModal(from);openModal(to);}
 
+function googleAuth(){
+  if(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com'){
+    if(window.google && google.accounts && google.accounts.id){
+      google.accounts.id.prompt();
+      return;
+    }
+    showToast('Google sign-in is loading. Please try again in a moment.');
+    return;
+  }
+  closeModal('login-modal');closeModal('signup-modal');
+  showToast('Google sign-in is not configured. Use email signup or set GOOGLE_CLIENT_ID.');
+}
+
+function doLogin(){
+  const e=document.getElementById('login-email').value.trim().toLowerCase();
+  const p=document.getElementById('login-pass').value;
+  if(!e||!p){showToast('Please enter your email and password.');return;}
+  const account=findAccount(e);
+  if(!account){showToast('No account found for this email. Please sign up first.');return;}
+  if(account.password!==p){showToast('Incorrect password. Please try again.');return;}
+  setCurrentAccount(account.email);
+  closeModal('login-modal');
+  go('dashboard',null,'careerliftai.com/dashboard');
+  showToast('Welcome back! ✓');
+}
+
+function doSignup(){
+  const n=document.getElementById('signup-name').value.trim();
+  const e=document.getElementById('signup-email').value.trim().toLowerCase();
+  const p=document.getElementById('signup-pass').value;
+  if(!n||!e||!p){showToast('Please fill in all fields.');return;}
+  if(p.length<8){showToast('Password must be at least 8 characters.');return;}
+  if(findAccount(e)){showToast('This email is already in use. Please log in instead.');return;}
+  const accounts=loadAccounts();
+  const newAccount={name:n,email:e,password:p,credits:FREE_CREDITS,history:[]};
+  accounts.push(newAccount);saveAccounts(accounts);
+  setCurrentAccount(e);
+  closeModal('signup-modal');
+  go('dashboard',null,'careerliftai.com/dashboard');
+  showToast('Account created! Welcome to CareerLift AI ✓');
+}
+
+function forgotPassword(){
+  const e=document.getElementById('login-email').value;
+  if(!e){showToast('Enter your email address first.');return;}
+  showToast('Password reset link sent to '+e);
+}
+
+let currentAccount=null;
+const ACCOUNT_STORAGE_KEY='cl_accounts';
+const ACTIVE_USER_KEY='cl_active_user';
+const GOOGLE_CLIENT_ID='119140138936-3g0d47584ih5qghfo05dg4ngcuphapqh.apps.googleusercontent.com';
+
+function loadAccounts(){try{return JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY)||'[]');}catch(e){return[];}}
+function saveAccounts(accounts){localStorage.setItem(ACCOUNT_STORAGE_KEY,JSON.stringify(accounts));}
+function findAccount(email){return loadAccounts().find(a=>a.email===String(email).toLowerCase());}
+function setCurrentAccount(email){const account=findAccount(email);if(!account)return;localStorage.setItem(ACTIVE_USER_KEY,account.email);currentAccount=account;setUser(account.name);_credits=typeof account.credits==='number'?account.credits:FREE_CREDITS;localStorage.setItem('cl_credits',_credits);if(Array.isArray(account.history)&&account.history.length){saveHistoryStore(account.history);}refreshCreditUI();}
+function syncCurrentAccount(){if(!currentAccount)return;currentAccount.credits=_credits;currentAccount.history=loadHistory();const accounts=loadAccounts().map(a=>a.email===currentAccount.email?currentAccount:a);saveAccounts(accounts);}
+function restoreSession(){const email=localStorage.getItem(ACTIVE_USER_KEY);if(!email)return;const account=findAccount(email);if(!account)return;currentAccount=account;_credits=typeof account.credits==='number'?account.credits:FREE_CREDITS;localStorage.setItem('cl_credits',_credits);if(Array.isArray(account.history)&&account.history.length){saveHistoryStore(account.history);}setUser(account.name);refreshCreditUI();go('dashboard',null,'careerliftai.com/dashboard');}
+function initGoogleSignIn(){if(window.google && google.accounts && google.accounts.id && GOOGLE_CLIENT_ID && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com'){google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID, callback:handleGoogleCredentialResponse, ux_mode:'popup'});} }
+function decodeJwt(token){try{return JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));}catch(e){return null;}}
+function handleGoogleCredentialResponse(response){const payload=decodeJwt(response.credential);if(!payload||!payload.email){showToast('Google sign in failed.');return;}const email=payload.email.toLowerCase();const name=payload.name||email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase());let account=findAccount(email);if(!account){const accounts=loadAccounts();account={name,email,password:'',credits:FREE_CREDITS,history:[]};accounts.push(account);saveAccounts(accounts);}setCurrentAccount(email);closeModal('login-modal');closeModal('signup-modal');go('dashboard',null,'careerliftai.com/dashboard');showToast('Signed in with Google ✓');}
 
 function setUser(name){
   const initials=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
   const el=document.getElementById('dash-av');if(el)el.textContent=initials;
   const nm=document.getElementById('dash-nm');if(nm)nm.textContent=name;
   const wl=document.getElementById('dash-welcome');if(wl)wl.textContent='Welcome back, '+name.split(' ')[0]+'!';
-  updateNavForAuth(true);
-}
-
-/* ════════════════════════════════════
-   AUTH NAV VISIBILITY
-════════════════════════════════════ */
-function updateNavForAuth(loggedIn){
-  const authBtns=loggedIn
-    ?'<button class="btn-ghost" onclick="go(\'dashboard\',null,\'/dashboard\')">Dashboard</button><button class="btn-indigo" onclick="signOut()">Sign out</button>'
-    :'<button class="nav-hamburger" onclick="toggleMobileNav(this)" aria-label="Menu"><span></span><span></span><span></span></button><button class="btn-ghost" onclick="openModal(\'login-modal\')">Log in</button><button class="btn-indigo" onclick="openModal(\'signup-modal\')">Sign up free</button>';
-  document.querySelectorAll('.nav-right').forEach(nr=>nr.innerHTML=authBtns);
-}
-
-async function signOut(){
-  const sb=getSB();if(sb)await sb.auth.signOut();
-  updateNavForAuth(false);
-  go('landing',null,'/');
-  showToast('Signed out successfully');
-}
-
-/* ════════════════════════════════════
-   SUPABASE AUTH INIT — handles OAuth
-   callback and session restore
-════════════════════════════════════ */
-async function initAuth(){
-  const sb=getSB();
-  if(!sb)return;
-  sb.auth.onAuthStateChange((event,session)=>{
-    if((event==='SIGNED_IN'||event==='TOKEN_REFRESHED')&&session){
-      const u=session.user;
-      const name=u.user_metadata?.full_name||u.user_metadata?.name||(u.email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
-      hideAuthLoading();
-      closeModal('login-modal');closeModal('signup-modal');closeModal('otp-modal');
-      setUser(name);
-      go('dashboard',null,'/dashboard');
-      if(window.location.hash&&window.location.hash.includes('access_token')){
-        history.replaceState(null,'',window.location.pathname);
-      }
-      showToast('Welcome, '+name.split(' ')[0]+'! ✓');
-    }
-    if(event==='SIGNED_OUT'){
-      updateNavForAuth(false);
-      // Only redirect to landing if on a protected/auth-required screen
-      const protectedScreens=['dashboard'];
-      const onProtected=protectedScreens.some(s=>{const el=document.getElementById('sc-'+s);return el&&el.classList.contains('on');});
-      if(onProtected)go('landing',null,'/');
-    }
-  });
-  const {data:{session}}=await sb.auth.getSession();
-  if(session){
-    const u=session.user;
-    const name=u.user_metadata?.full_name||u.user_metadata?.name||(u.email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()));
-    setUser(name);
-    go('dashboard',null,'/dashboard');
-    if(window.location.hash&&window.location.hash.includes('access_token')){
-      history.replaceState(null,'',window.location.pathname);
-    }
-  }
-}
-// Run initAuth after window load so Supabase CDN is guaranteed to be available
-window.addEventListener('load',function(){getSB();initAuth();});
-
-/* ════════════════════════════════════
-   FAQ TOGGLE
-════════════════════════════════════ */
-function toggleFaq(el){
-  const item=el.parentElement;
-  item.classList.toggle('open');
 }
 
 document.querySelectorAll('.modal-overlay').forEach(o=>{
@@ -2277,7 +1190,7 @@ async function callClaude(systemPrompt, userMessage){
     method:'POST',
     headers:{
       'Content-Type':'application/json',
-      'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1c3hjaWpha2xicmZrc3psenN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMjg2NDAsImV4cCI6MjA5MDgwNDY0MH0.XezE53OT9jRAQCmah2L-f6JSIs5FwWpa92l660LoAgo'
+      'Authorization':'Bearer sb_publishable_jwwBwa_k4Rdzz8WTP6B97A_Zo3qBq3n'
     },
     body:JSON.stringify({systemPrompt,userMessage})
   });
@@ -2292,21 +1205,16 @@ async function callClaude(systemPrompt, userMessage){
 ════════════════════════════════════ */
 async function runAnalysis(){
   const cvText=document.getElementById('analyze-cv-text').value.trim();
-  const jobTitle=document.getElementById('analyze-jobtitle').value.trim()||'this role';
+  const jobTitle=document.getElementById('analyze-jobtitle').value||'this role';
   const country=document.getElementById('analyze-country').value||'United States';
   const industry=document.getElementById('analyze-industry').value||'Technology';
-  const jd=document.getElementById('analyze-jd').value.trim()||'';
-  const jobLink=document.getElementById('analyze-job-link').value.trim()||'';
-  const doRewrite=document.getElementById('chk-rewrite').checked;
-  const doScore=document.getElementById('chk-score').checked;
-  const doCoverLetter=document.getElementById('chk-coverletter').checked;
+  const jd=document.getElementById('analyze-jd').value||'';
 
   if(!cvText){showToast('Please paste your CV text in the text area below the upload zone.');return;}
 
   const btn=document.getElementById('analyze-btn');
   btn.disabled=true;btn.textContent='Analyzing…';
   document.getElementById('analyze-results').style.display='none';
-  document.getElementById('analyze-cl-result').style.display='none';
   document.getElementById('analyze-loading').style.display='flex';
 
   const steps=['Reading your CV content','Scoring against ATS criteria','Identifying keyword gaps','Rewriting for maximum impact','Finalizing optimized version'];
@@ -2317,7 +1225,6 @@ async function runAnalysis(){
   },1800);
 
   try{
-    const jdBlock=`Job Description: ${jd||'Not provided'}${jobLink?'\nJob Link: '+jobLink:''}`;
     const systemPrompt=`You are an expert ATS CV optimizer. Analyze the user's CV and return ONLY valid JSON with this exact structure:
 {
   "scoreBefore": <integer 20-60>,
@@ -2330,9 +1237,9 @@ async function runAnalysis(){
   "optimizedCV": "<full rewritten CV text optimized for ATS, with strong action verbs, quantified achievements, proper sections>",
   "notes": "<3-4 bullet points starting with · explaining key changes made>"
 }
-All percentage values are integers 0-100. The optimizedCV must be a complete, professional CV rewrite targeting ${jobTitle} in ${country} in the ${industry} industry${jd?' tailored to the provided job description':''}. Return ONLY the JSON, no markdown, no backticks.`;
+All percentage values are integers 0-100. The optimizedCV must be a complete, professional CV rewrite targeting ${jobTitle} in ${country} in the ${industry} industry. Return ONLY the JSON, no markdown, no backticks.`;
 
-    const userMsg=`Target Role: ${jobTitle}\nTarget Country: ${country}\nIndustry: ${industry}\n${jdBlock}\n\nCV Content:\n${cvText}`;
+    const userMsg=`Target Role: ${jobTitle}\nTarget Country: ${country}\nIndustry: ${industry}\nJob Description: ${jd||'Not provided'}\n\nCV Content:\n${cvText}`;
 
     const raw=await callClaude(systemPrompt,userMsg);
     clearInterval(stepInterval);
@@ -2373,59 +1280,12 @@ All percentage values are integers 0-100. The optimizedCV must be a complete, pr
     setTimeout(()=>document.getElementById('analyze-results').scrollIntoView({behavior:'smooth'}),100);
     showToast('Analysis complete! CV optimized ✓');
 
-    // Generate cover letter if requested
-    if(doCoverLetter){
-      try{
-        document.getElementById('analyze-cl-body').textContent='Generating cover letter…';
-        document.getElementById('analyze-cl-result').style.display='block';
-        const clPrompt=`You are an expert career writer specializing in ATS-optimized cover letters. Write a professional, tailored cover letter based on the applicant's CV and the provided job details. The cover letter must:
-- Open with a strong, specific hook (no generic "I am writing to apply" openers)
-- Mirror keywords and phrases from the job description for ATS compatibility
-- Highlight 2-3 specific achievements from the CV that directly match the role requirements
-- Show genuine knowledge of the role and industry
-- Close with a confident call to action
-- Be 3-4 paragraphs, 250-350 words total
-- Use a professional but engaging tone
-- Include standard letter formatting: Date, Hiring Manager, Company, Body, Sign-off
-Return ONLY the cover letter text, no extra commentary.`;
-        const clMsg=`Applicant CV:\n${parsed.optimizedCV||cvText}\n\nTarget Role: ${jobTitle}\nIndustry: ${industry}\nCountry: ${country}\n${jdBlock}`;
-        const clRaw=await callClaude(clPrompt,clMsg);
-        window._analyzeCL=clRaw.trim();
-        document.getElementById('analyze-cl-body').textContent=window._analyzeCL;
-        showToast('Cover letter generated ✓');
-      }catch(clErr){
-        document.getElementById('analyze-cl-body').textContent='Could not generate cover letter: '+clErr.message;
-      }
-    }
-
   }catch(err){
     clearInterval(stepInterval);
     document.getElementById('analyze-loading').style.display='none';
     showToast('Error: '+err.message);
   }
   btn.disabled=false;btn.textContent='Analyze Now — uses 1 credit';
-}
-
-function copyAnalyzeCL(){
-  const txt=window._analyzeCL||document.getElementById('analyze-cl-body').textContent;
-  navigator.clipboard.writeText(txt).then(()=>showToast('Cover letter copied ✓')).catch(()=>showToast('Copy failed'));
-}
-
-function downloadAnalyzeCLPDF(){
-  const txt=window._analyzeCL||document.getElementById('analyze-cl-body').textContent;
-  if(!txt||txt==='—'){showToast('No cover letter to download.');return;}
-  if(typeof window.jspdf==='undefined'&&typeof jspdf==='undefined'){showToast('PDF library not ready, try again in a moment.');return;}
-  const {jsPDF}=window.jspdf||jspdf;
-  const doc=new jsPDF({unit:'mm',format:'a4'});
-  const margin=20,pageW=210,usableW=pageW-margin*2;
-  doc.setFont('helvetica','normal');doc.setFontSize(11);
-  const lines=doc.splitTextToSize(txt,usableW);
-  let y=margin;
-  lines.forEach(line=>{
-    if(y>280){doc.addPage();y=margin;}
-    doc.text(line,margin,y);y+=6;
-  });
-  doc.save('cover-letter.pdf');
 }
 
 function setBar(key,data){
@@ -2452,21 +1312,23 @@ async function runATSCheck(){
   document.getElementById('ats-loading').style.display='flex';
 
   try{
-    const systemPrompt=`You are a senior ATS (Applicant Tracking System) analyst with expert knowledge of how enterprise ATS platforms — including Taleo, Workday, Greenhouse, Lever, iCIMS, SmartRecruiters, and BambooHR — parse, score, and rank CVs. Your analysis must be accurate, detailed, and actionable.
+    const systemPrompt=`You are an ATS scoring expert. Analyze the CV and return ONLY valid JSON:
+{
+  "score": <integer 20-95>,
+  "grade": "<Excellent|Good|Needs Improvement|Poor>",
+  "description": "<1-2 sentence description of what this score means>",
+  "keywords": <integer 20-90>,
+  "format": <integer 30-95>,
+  "completeness": <integer 20-90>,
+  "readability": <integer 40-95>,
+  "issues": [
+    {"type": "<err|warn|ok>", "title": "<short title>", "detail": "<concise explanation>"},
+    ... (5-6 items total)
+  ]
+}
+Return ONLY JSON, no markdown, no backticks.`;
 
-Scoring dimensions:
-- keywords (0-100): % match of role-specific hard skills, soft skills, industry terms, action verbs, and certifications found in the CV vs. expected for the target role/country
-- format (0-100): ATS parse compatibility — deduct for: columns/tables/text boxes (severe), headers/footers with text, graphics/logos, fancy fonts, missing standard section headings; award high scores for clean single-column plain text
-- completeness (0-100): presence and quality of: contact info, professional summary, work experience with quantified achievements, education, skills section, and (if relevant) certifications
-- readability (0-100): consistent date formats, clear job titles, proper bullet structure, no excessive abbreviations, correct spelling
-
-Return ONLY this exact JSON (no markdown, no backticks, no extra text):
-{"score":<int 10-97>,"grade":"<Excellent|Good|Needs Improvement|Poor>","description":"<2-3 sentences: overall ATS compatibility verdict, main strength, main weakness>","keywords":<int 0-100>,"format":<int 0-100>,"completeness":<int 0-100>,"readability":<int 0-100>,"sections":{"contact":<true|false>,"summary":<true|false>,"experience":<true|false>,"education":<true|false>,"skills":<true|false>,"certifications":<true|false>},"missingKeywords":["<kw1>","<kw2>","<kw3>","<kw4>","<kw5>","<kw6>"],"issues":[{"type":"<err|warn|ok>","title":"<concise title max 8 words>","detail":"<specific actionable advice, mention exact fix>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"},{"type":"<err|warn|ok>","title":"<title>","detail":"<advice>"}]}
-
-Score calibration (be realistic, not generous): 88-97=Excellent (near-perfect, rare), 70-87=Good (strong but improvable), 50-69=Needs Improvement (significant gaps), 10-49=Poor (major issues).
-For ATS System "Auto-detect": analyze for broadest ATS compatibility.`;
-
-    const userMsg=`Target Role: ${role}\nCountry: ${country}\nATS System: ${atsSystem}\n\nCV:\n${cvText}`;
+    const userMsg=`Role: ${role}\nCountry: ${country}\nATS System: ${atsSystem}\n\nCV:\n${cvText}`;
     const raw=await callClaude(systemPrompt,userMsg);
     document.getElementById('ats-loading').style.display='none';
 
@@ -2489,30 +1351,7 @@ For ATS System "Auto-detect": analyze for broadest ATS compatibility.`;
       <div class="bar-row"><span class="bar-name">Completeness</span><div class="bar-track"><div class="b-after" style="width:${p.completeness}%;background:${scoreColor}"></div></div><span class="bar-nums">${p.completeness}%</span></div>
       <div class="bar-row"><span class="bar-name">Readability</span><div class="bar-track"><div class="b-after" style="width:${p.readability}%;background:${scoreColor}"></div></div><span class="bar-nums">${p.readability}%</span></div>`;
 
-    // Section detection
-    if(p.sections){
-      const secEl=document.getElementById('ats-sections');
-      const secGrid=document.getElementById('ats-sections-grid');
-      const labels={contact:'Contact Info',summary:'Summary',experience:'Experience',education:'Education',skills:'Skills',certifications:'Certifications'};
-      secGrid.innerHTML='';
-      Object.entries(p.sections).forEach(([k,v])=>{
-        secGrid.innerHTML+=`<span style="padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;background:${v?'#D1FAE5':'#FEE2E2'};color:${v?'#065F46':'#991B1B'}">${v?'✓':'✕'} ${labels[k]||k}</span>`;
-      });
-      secEl.style.display='block';
-    }
-
-    // Missing keywords
-    if(p.missingKeywords&&p.missingKeywords.length){
-      const mkEl=document.getElementById('ats-missing-kw');
-      const mkList=document.getElementById('ats-missing-kw-list');
-      mkList.innerHTML='';
-      p.missingKeywords.forEach(kw=>{
-        mkList.innerHTML+=`<span style="padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE">+ ${kw}</span>`;
-      });
-      mkEl.style.display='block';
-    }
-
-    // Tips / issues
+    // Tips
     const tipsList=document.getElementById('ats-tips-list');
     tipsList.innerHTML='';
     (p.issues||[]).forEach(issue=>{
@@ -2748,55 +1587,9 @@ function downloadEditorCV(){
 }
 
 /* ════════════════════════════════════
-   TEMPLATE PICKER & AUTO-POPULATION
-════════════════════════════════════ */
-function showTemplatePicker(){
-  if(!window._optimizedCV){showToast('Please run an ATS analysis first.');return;}
-  document.getElementById('tpl-picker-modal').style.display='flex';
-}
-
-async function populateTemplate(templateName){
-  const cvText=window._optimizedCV;
-  if(!cvText){showToast('No optimized CV found. Please run ATS analysis first.');return;}
-  document.getElementById('tpl-picker-grid').style.display='none';
-  document.getElementById('tpl-picker-loading').style.display='block';
-  try{
-    const sp=`You are a CV data extractor. Extract structured data from the provided CV text and return ONLY valid JSON with no markdown:
-{"name":"<full name or empty string>","title":"<job title or empty string>","email":"<email or empty string>","phone":"<phone or empty string>","location":"<city, country or empty string>","url":"<linkedin or portfolio url or empty string>","summary":"<professional summary paragraph>","job1":"<most recent: Job Title — Company Name>","dates1":"<date range e.g. Jan 2020 – Present>","bullets1":"<achievements as newline-separated list, 3-5 items, each on own line>","edu":"<Degree — Institution>","eduYear":"<year range or graduation year>","skills":"<comma-separated list of skills>"}
-Return ONLY JSON, no extra text.`;
-    const raw=await callClaude(sp,cvText);
-    let d;
-    try{d=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){throw new Error('Could not parse CV fields.');}
-    if(d.name)document.getElementById('ed-name').value=d.name;
-    if(d.title)document.getElementById('ed-title').value=d.title;
-    if(d.email)document.getElementById('ed-email').value=d.email;
-    if(d.phone)document.getElementById('ed-phone').value=d.phone;
-    if(d.location)document.getElementById('ed-location').value=d.location;
-    if(d.url)document.getElementById('ed-url').value=d.url;
-    if(d.summary)document.getElementById('ed-summary').value=d.summary;
-    if(d.job1)document.getElementById('ed-job1').value=d.job1;
-    if(d.dates1)document.getElementById('ed-dates1').value=d.dates1;
-    if(d.bullets1)document.getElementById('ed-bullets1').value=d.bullets1;
-    if(d.edu)document.getElementById('ed-edu').value=d.edu;
-    if(d.eduYear)document.getElementById('ed-edu-year').value=d.eduYear;
-    if(d.skills)document.getElementById('ed-skills').value=d.skills;
-    document.getElementById('tpl-picker-modal').style.display='none';
-    document.getElementById('tpl-picker-loading').style.display='none';
-    document.getElementById('tpl-picker-grid').style.display='grid';
-    openEditor(templateName);
-    showToast('Template populated with your optimized CV ✓');
-  }catch(err){
-    document.getElementById('tpl-picker-loading').style.display='none';
-    document.getElementById('tpl-picker-grid').style.display='grid';
-    showToast('Error: '+err.message);
-  }
-}
-
-/* ════════════════════════════════════
    CV EDITOR
 ════════════════════════════════════ */
 function openEditor(name){
-  window._currentTemplate=name||'Classic Professional';
   document.getElementById('editor-title').textContent='Edit Template — '+name;
   document.getElementById('editor-modal').classList.add('open');
   updatePreview();
@@ -2820,51 +1613,10 @@ function updatePreview(){
   const job1=document.getElementById('ed-job1').value||'Job Title — Company';
   const dates1=document.getElementById('ed-dates1').value||'2020 – Present';
   const rawBullets=(document.getElementById('ed-bullets1').value||'').split('\n').filter(b=>b.trim());
+  const bulletsHTML=rawBullets.map(b=>`<div style="font-size:10px;color:#444;padding-left:12px;position:relative;margin-bottom:3px"><span style="position:absolute;left:0;color:#6366F1">▸</span>${b.trim()}</div>`).join('');
   const edu=document.getElementById('ed-edu').value||'Degree — University';
   const eduYear=document.getElementById('ed-edu-year').value||'Year';
   const skillsList=(document.getElementById('ed-skills').value||'').split(',').filter(s=>s.trim());
-
-  const tpl=window._currentTemplate||'Classic Professional';
-
-  if(tpl==='A4 Federal Resume'){
-    const jobParts=job1.split(/\s*[|—–]\s*/);
-    const jobTitle=(jobParts[0]||job1).trim();
-    const company=(jobParts[1]||'').trim();
-    const bulletsHTML=rawBullets.map(b=>`<p style="font-size:10.5px;color:#333;line-height:1.6;margin-bottom:4px;padding-left:14px;position:relative"><span style="position:absolute;left:2px">•</span>${b.trim()}</p>`).join('');
-    const certsHTML=skillsList.map(s=>`<div style="font-size:10.5px;color:#333;margin-bottom:3px">${s.trim()}</div>`).join('');
-    const rule=`<div style="height:1.5px;background:#2f3236;margin:10px 0 12px"></div>`;
-    const secHead=(t)=>`<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#111;margin-bottom:8px">${t}</div>`;
-    document.getElementById('cv-live-preview').innerHTML=`
-<div style="font-family:'Times New Roman',Times,serif;padding:36px 40px;color:#1a1a1a;font-size:11px;line-height:1.5;background:#fff">
-  <div style="font-size:24px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:#111;margin-bottom:3px">${name.split('').join(' ').replace(/  /g,' &nbsp;')}</div>
-  <div style="font-size:12px;color:#444;letter-spacing:1px;margin-bottom:10px">${title}</div>
-  ${rule}
-  <div style="display:flex;flex-wrap:wrap;gap:4px 20px;font-size:10px;color:#333;margin-bottom:4px">
-    <span><strong>Phone:</strong> ${phone}</span>
-    <span><strong>Email:</strong> ${email}</span>
-    <span><strong>Address:</strong> ${location}</span>
-    <span><strong>Availability:</strong> Permanent, Full Time</span>
-    ${url?`<span><strong>Announcement #:</strong> ${url}</span>`:''}
-  </div>
-  ${rule}
-  ${secHead('P R O F E S S I O N A L &nbsp; S T A T E M E N T')}
-  <p style="font-size:10.5px;color:#333;line-height:1.65;margin-bottom:8px">${summary}</p>
-  ${rule}
-  ${secHead('W O R K &nbsp; E X P E R I E N C E S')}
-  <div style="font-size:11px;font-weight:700;color:#111;margin-bottom:2px">${jobTitle}${company?' &nbsp;|&nbsp; '+dates1:' &nbsp;|&nbsp; '+dates1}</div>
-  <div style="font-size:10px;color:#555;margin-bottom:6px">Employer: ${company||'Company Name'} &nbsp;|&nbsp; Hours Per Week: 40</div>
-  ${bulletsHTML}
-  ${rule}
-  ${secHead('E D U C A T I O N &nbsp;&amp;&nbsp; C E R T I F I C A T I O N')}
-  <div style="font-size:11px;font-weight:700;color:#111;margin-bottom:2px">${edu}</div>
-  <div style="font-size:10px;color:#555;margin-bottom:8px">${eduYear}</div>
-  ${certsHTML}
-</div>`;
-    return;
-  }
-
-  // Default preview (Classic style)
-  const bulletsHTML=rawBullets.map(b=>`<div style="font-size:10px;color:#444;padding-left:12px;position:relative;margin-bottom:3px"><span style="position:absolute;left:0;color:#6366F1">▸</span>${b.trim()}</div>`).join('');
   const skillsHTML=skillsList.map(s=>`<span style="padding:3px 9px;background:#EEF2FF;color:#4338CA;border-radius:4px;font-size:10px;font-weight:500;margin:2px;display:inline-block">${s.trim()}</span>`).join('');
 
   document.getElementById('cv-live-preview').innerHTML=`
@@ -2918,8 +1670,8 @@ function toggleBill(){
     swk.classList.remove('off');saveT.style.display='inline-block';
     monthlyLbl.style.fontWeight='400';monthlyLbl.style.color='#888';
     annualLbl.style.fontWeight='600';annualLbl.style.color='#111';
-    document.getElementById('bp').textContent='$15';document.getElementById('bpd').textContent='/month · billed annually';
-    document.getElementById('pp').textContent='$39';document.getElementById('ppd').textContent='/month · billed annually · 7-day free trial';
+    document.getElementById('bp').textContent='$16';document.getElementById('bpd').textContent='/month (billed $190/yr)';
+    document.getElementById('pp').textContent='$33';document.getElementById('ppd').textContent='/month (billed $399/yr) · 7-day free trial';
   } else {
     swk.classList.add('off');saveT.style.display='none';
     monthlyLbl.style.fontWeight='600';monthlyLbl.style.color='#111';
@@ -3104,7 +1856,7 @@ function restoreAnalysis(id){
   (e.keywordsAdded||[]).forEach(kw=>{const s=document.createElement('span');s.className='kw-chip';s.textContent=kw;cr.appendChild(s);});
   setBar('kw',{before:40,after:85});setBar('fmt',{before:50,after:90});setBar('comp',{before:45,after:88});setBar('read',{before:55,after:87});
   document.getElementById('analyze-results').style.display='block';
-  go('analyze',null,'/analyze');
+  go('analyze',null,'careerliftai.com/analyze');
   setTimeout(()=>document.getElementById('analyze-results').scrollIntoView({behavior:'smooth'}),150);
   showToast('Analysis restored ✓');
 }
@@ -3113,182 +1865,10 @@ function addActivityRow(docName,score,country){
   const empty=document.getElementById('activity-empty-row');if(empty)empty.remove();
   const pc=score==='—'?'p-y':(parseInt(score)>=70?'p-g':'p-r');
   const tr=document.createElement('tr');
-  tr.innerHTML=`<td>${docName}</td><td><span class="pill ${pc}">${score}</span></td><td>${country}</td><td><span class="done">&#10003; Done</span></td><td><button class="row-btn" onclick="go('analyze',null,'/analyze')">View</button></td>`;
+  tr.innerHTML=`<td>${docName}</td><td><span class="pill ${pc}">${score}</span></td><td>${country}</td><td><span class="done">&#10003; Done</span></td><td><button class="row-btn" onclick="go('analyze',null,'careerliftai.com/analyze')">View</button></td>`;
   tbody.insertBefore(tr,tbody.firstChild);
   while(tbody.rows.length>5)tbody.deleteRow(tbody.rows.length-1);
 }
-
-/* ════════════════════════════════════
-   CLAUDE API CALL
-════════════════════════════════════ */
-async function callClaude(systemPrompt,userMessage){
-  const resp=await fetch('https://fusxcijaklbrfkszlzsv.supabase.co/functions/v1/ai-proxy',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1c3hjaWpha2xicmZrc3psenN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMjg2NDAsImV4cCI6MjA5MDgwNDY0MH0.XezE53OT9jRAQCmah2L-f6JSIs5FwWpa92l660LoAgo'
-    },
-    body:JSON.stringify({systemPrompt,userMessage})
-  });
-  if(!resp.ok)throw new Error('API error '+resp.status);
-  const data=await resp.json();
-  if(data.error)throw new Error(data.error);
-  return data.text;
-}
-
-/* ════════════════════════════════════
-   ANALYZE CV
-════════════════════════════════════ */
-async function runAnalysis(){
-  if(!checkCreditGate('analyze')){showToast('No credits remaining. Please upgrade.');return;}
-  const cvText=document.getElementById('analyze-cv-text').value.trim();
-  const jobTitle=document.getElementById('analyze-jobtitle').value||'this role';
-  const country=document.getElementById('analyze-country').value||'United States';
-  const industry=document.getElementById('analyze-industry').value||'Technology';
-  const jd=document.getElementById('analyze-jd').value||'';
-  if(!cvText){showToast('Please paste your CV text, or upload a PDF file.');return;}
-  const btn=document.getElementById('analyze-btn');
-  btn.disabled=true;btn.textContent='Analyzing…';
-  document.getElementById('analyze-results').style.display='none';
-  document.getElementById('analyze-loading').style.display='flex';
-  const steps=['Reading your CV content','Scoring against ATS criteria','Identifying keyword gaps','Rewriting for maximum impact','Finalizing optimized version'];
-  let si=0;
-  const stepInterval=setInterval(()=>{const el=document.getElementById('analyze-step');if(el&&si<steps.length)el.textContent=steps[si++];},1800);
-  try{
-    const systemPrompt=`You are an expert ATS CV optimizer. Analyze the user's CV and return ONLY valid JSON:
-{"scoreBefore":<int 20-60>,"scoreAfter":<int 70-95>,"keywords":{"before":<int>,"after":<int>},"format":{"before":<int>,"after":<int>},"completeness":{"before":<int>,"after":<int>},"readability":{"before":<int>,"after":<int>},"keywordsAdded":[<6-10 strings>],"optimizedCV":"<full ATS-optimized CV rewrite targeting ${jobTitle} in ${country} in ${industry}>","notes":"<3-4 bullet points starting with · explaining key changes>"}
-Return ONLY JSON, no markdown, no backticks.`;
-    const userMsg=`Target Role: ${jobTitle}\nCountry: ${country}\nIndustry: ${industry}\nJob Description: ${jd||'Not provided'}\n\nCV:\n${cvText}`;
-    const raw=await callClaude(systemPrompt,userMsg);
-    clearInterval(stepInterval);
-    document.getElementById('analyze-loading').style.display='none';
-    let parsed;
-    try{parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){throw new Error('Could not parse AI response. Try again.');}
-    document.getElementById('score-before').textContent=parsed.scoreBefore;
-    document.getElementById('score-after').textContent=parsed.scoreAfter;
-    document.getElementById('score-arrow').textContent='→ +'+(parsed.scoreAfter-parsed.scoreBefore)+' pts';
-    setBar('kw',parsed.keywords);setBar('fmt',parsed.format);setBar('comp',parsed.completeness);setBar('read',parsed.readability);
-    document.getElementById('original-cv-display').textContent=cvText.substring(0,800)+(cvText.length>800?'…':'');
-    document.getElementById('optimized-cv-display').textContent=parsed.optimizedCV;
-    const chipRow=document.getElementById('keywords-added');chipRow.innerHTML='';
-    (parsed.keywordsAdded||[]).forEach(kw=>{const s=document.createElement('span');s.className='kw-chip';s.textContent=kw;chipRow.appendChild(s);});
-    document.getElementById('analysis-notes').innerHTML=(parsed.notes||'').replace(/·/g,'<br>·');
-    document.getElementById('analyze-results').style.display='block';
-    window._optimizedCV=parsed.optimizedCV;
-    window._lastAnalysis={
-      fileName:document.getElementById('file-name-analyze').textContent||'Pasted CV',
-      jobTitle,country,industry,
-      scoreBefore:parsed.scoreBefore,scoreAfter:parsed.scoreAfter,
-      optimizedCV:parsed.optimizedCV,notes:parsed.notes,keywordsAdded:parsed.keywordsAdded
-    };
-    deductCredit();
-    setTimeout(()=>document.getElementById('analyze-results').scrollIntoView({behavior:'smooth'}),100);
-    showToast('Analysis complete! CV optimized ✓');
-    autoSaveToHistory(window._lastAnalysis);
-  }catch(err){
-    clearInterval(stepInterval);
-    document.getElementById('analyze-loading').style.display='none';
-    showToast('Error: '+err.message);
-  }
-  btn.disabled=false;btn.textContent='Analyze Now — uses 1 credit';
-}
-
-function setBar(key,data){
-  if(!data)return;
-  document.getElementById('bar-'+key+'-b').style.width=data.before+'%';
-  document.getElementById('bar-'+key+'-a').style.width=data.after+'%';
-  document.getElementById('bar-'+key+'-t').textContent=data.before+'% → '+data.after+'%';
-}
-
-/* ════════════════════════════════════
-   LINKEDIN OPTIMIZER
-════════════════════════════════════ */
-async function optimizeLinkedIn(){
-  if(!checkCreditGate('analyze')){showToast('No credits remaining. Please upgrade.');go('pricing',null,'/pricing');return;}
-  const headline=document.getElementById('li-headline').value;
-  const about=document.getElementById('li-about').value;
-  const jobtitle=document.getElementById('li-jobtitle').value||'Professional';
-  const skills=document.getElementById('li-skills').value||'various skills';
-  const country=document.getElementById('li-country').value||'United States';
-  const role=document.getElementById('li-role').value||jobtitle;
-  const tone=document.getElementById('li-tone').value;
-  const btn=document.getElementById('li-btn');
-  btn.disabled=true;btn.textContent='Optimizing…';
-  document.getElementById('li-empty').style.display='none';
-  document.getElementById('li-results').style.display='none';
-  document.getElementById('li-loading').style.display='flex';
-  try{
-    const sp=`You are a LinkedIn profile optimization expert. Return ONLY valid JSON:
-{"headline1":"<keyword-rich under 120 chars>","headline2":"<achievement-led under 120 chars>","headline3":"<role-focused under 120 chars>","about":"<full rewritten About, 3 paragraphs, tone:${tone}, ends with call to connect>","tips":["<tip1>","<tip2>","<tip3>","<tip4>","<tip5>"]}
-Return ONLY JSON, no markdown.`;
-    const um=`Headline: ${headline}\nAbout: ${about}\nJob: ${jobtitle}\nTarget: ${role}\nSkills: ${skills}\nCountry: ${country}\nTone: ${tone}`;
-    const raw=await callClaude(sp,um);
-    document.getElementById('li-loading').style.display='none';
-    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){throw new Error('Parse error.');}
-    document.getElementById('li-h1').textContent=p.headline1||'—';
-    document.getElementById('li-h2').textContent=p.headline2||'—';
-    document.getElementById('li-h3').textContent=p.headline3||'—';
-    document.getElementById('li-about-result').textContent=p.about||'—';
-    (p.tips||[]).forEach((t,i)=>{const el=document.getElementById('li-tip'+(i+1));if(el)el.textContent=t;});
-    document.getElementById('li-results').style.display='block';
-    deductCredit();addActivityRow('LinkedIn Optimization','—',country);
-    document.querySelectorAll('.li-tab').forEach(t=>t.classList.remove('on'));
-    document.querySelector('.li-tab').classList.add('on');
-    ['li-hl','li-ab','li-ti'].forEach(id=>{const d=document.getElementById(id);if(d)d.style.display=id==='li-hl'?'block':'none';});
-    showToast('LinkedIn profile optimized ✓');
-  }catch(err){
-    document.getElementById('li-loading').style.display='none';
-    document.getElementById('li-empty').style.display='flex';
-    showToast('Error: '+err.message);
-  }
-  btn.disabled=false;btn.textContent='Optimize LinkedIn — 1 credit';
-}
-
-/* ════════════════════════════════════
-   COVER LETTER
-════════════════════════════════════ */
-async function generateCoverLetter(){
-  if(!checkCreditGate('analyze')){showToast('No credits remaining. Please upgrade.');go('pricing',null,'/pricing');return;}
-  const company=document.getElementById('cl-company').value||'the Company';
-  const jobtitle=document.getElementById('cl-jobtitle').value||'this role';
-  const name=document.getElementById('cl-yourname').value||'Applicant';
-  const country=document.getElementById('cl-country').value||'United States';
-  const jd=document.getElementById('cl-jd').value||'';
-  const skills=document.getElementById('cl-skills').value||'my skills';
-  const why=document.getElementById('cl-why').value||'';
-  const tone=document.querySelector('.tone-opt.on')?.textContent||'Professional';
-  const length=document.getElementById('cl-length').value||'Standard';
-  const lg=length.includes('Short')?'~250 words':length.includes('Detailed')?'~600 words':'~400 words';
-  const btn=document.getElementById('cl-btn');
-  btn.disabled=true;btn.textContent='Generating…';
-  document.getElementById('cl-empty-state').style.display='none';
-  document.getElementById('cl-body-text').style.display='none';
-  document.getElementById('cl-loading').style.display='flex';
-  try{
-    const sp=`You are an expert cover letter writer. Write a compelling tailored cover letter in plain text (no markdown, no asterisks). Start with the date, end with the signature. Length: ${lg}. Tone: ${tone}.`;
-    const um=`Company: ${company}\nJob: ${jobtitle}\nName: ${name}\nCountry: ${country}\nJD: ${jd}\nSkills: ${skills}\nWhy: ${why}`;
-    const txt=await callClaude(sp,um);
-    document.getElementById('cl-loading').style.display='none';
-    const fmt=txt.split('\n').map(l=>l.trim()?`<p>${l.trim()}</p>`:'').filter(Boolean).join('');
-    document.getElementById('cl-body-text').innerHTML=fmt;
-    document.getElementById('cl-body-text').style.display='block';
-    document.getElementById('cl-preview-title').textContent=company+' · '+jobtitle;
-    ['cl-regen-btn','cl-copy-btn','cl-pdf-btn'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='inline-block';});
-    window._coverLetterText=txt;
-    deductCredit();addActivityRow('Cover Letter — '+company,'—',country);
-    showToast('Cover letter generated ✓');
-  }catch(err){
-    document.getElementById('cl-loading').style.display='none';
-    document.getElementById('cl-empty-state').style.display='flex';
-    showToast('Error: '+err.message);
-  }
-  btn.disabled=false;btn.textContent='Generate Cover Letter — 1 credit';
-}
-
-/* ════════════════════════════════════
-   COPY + PDF DOWNLOADS
-════════════════════════════════════ */
-function selectTone(el){document.querySelectorAll('.tone-opt').forEach(t=>t.classList.remove('on'));el.classList.add('on');}
 function copyElText(id){
   const el=document.getElementById(id);if(!el)return;
   const text=el.innerText||el.textContent||'';
@@ -3343,34 +1923,6 @@ function downloadEditorCV(){
 }
 
 /* ════════════════════════════════════
-   CONTACT FORM
-════════════════════════════════════ */
-async function submitContact(){
-  const name=document.getElementById('cf-name').value.trim();
-  const email=document.getElementById('cf-email').value.trim();
-  const subject=document.getElementById('cf-subject').value;
-  const message=document.getElementById('cf-message').value.trim();
-  const status=document.getElementById('cf-status');
-  if(!name||!email||!subject||!message){showToast('Please fill in all fields.');return;}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showToast('Please enter a valid email.');return;}
-  status.style.display='block';status.style.color='#888';status.textContent='Sending…';
-  try{
-    const sb=getSB();
-    if(sb){
-      await sb.from('contact_messages').insert([{name,email,subject,message,created_at:new Date().toISOString()}]);
-    }
-    status.style.color='#10B981';status.textContent='Message sent! We\'ll reply within 24 hours.';
-    document.getElementById('cf-name').value='';
-    document.getElementById('cf-email').value='';
-    document.getElementById('cf-subject').value='';
-    document.getElementById('cf-message').value='';
-  }catch(e){
-    window.location.href=`mailto:hello@careerliftai.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent('Name: '+name+'\nEmail: '+email+'\n\n'+message)}`;
-    status.style.color='#10B981';status.textContent='Opening your email client…';
-  }
-}
-
-/* ════════════════════════════════════
    INIT
 ════════════════════════════════════ */
 refreshCreditUI();
@@ -3379,3 +1931,4 @@ renderHistory();
 </script>
 </body>
 </html>
+
