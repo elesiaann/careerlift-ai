@@ -1,3 +1,4 @@
+// Edge Function: Send OTP verification email via Resend API
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
