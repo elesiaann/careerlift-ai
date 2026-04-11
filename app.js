@@ -17,29 +17,35 @@ populateCountries();
 /* ════════════════════════════════════
    ROUTE INITIALIZATION
 ════════════════════════════════════ */
+const ROUTE_MAP={
+  '/':          'landing',
+  '/analyze':   'analyze',
+  '/linkedin':  'linkedin',
+  '/cover-letter':'coverletter',
+  '/ats-score': 'atsscore',
+  '/templates': 'templates',
+  '/pricing':   'pricing',
+  '/dashboard': 'dashboard',
+};
 function initRoutes(){
-  const path=window.location.pathname;
-  console.log('Page path:', path);
-  if(path.includes('/pricing')||path==='/pricing'){
-    console.log('Routing to pricing page');
-    setTimeout(()=>{go('pricing',null,'careerliftai.com/pricing');},150);
-    return 'pricing';
-  }
-  return 'landing';
+  const path=window.location.pathname.replace(/\/+$/,'') || '/';
+  const screen=ROUTE_MAP[path]||'landing';
+  if(screen!=='landing') go(screen,null,null,true);
 }
 
 // Initialize routes on page load
-window.addEventListener('DOMContentLoaded', function(){ 
+window.addEventListener('DOMContentLoaded', function(){
   initRoutes();
-  initGoogleSignIn(); 
-  restoreSession(); 
+  initGoogleSignIn();
+  restoreSession();
 });
 
 /* ════════════════════════════════════
    NAVIGATION
 ════════════════════════════════════ */
 const screens=['landing','dashboard','analyze','linkedin','coverletter','atsscore','templates','pricing'];
-function go(id,tabEl,url){
+const SCREEN_PATH={'landing':'/','analyze':'/analyze','linkedin':'/linkedin','coverletter':'/cover-letter','atsscore':'/ats-score','templates':'/templates','pricing':'/pricing','dashboard':'/dashboard'};
+function go(id,tabEl,_unused,skipPush){
   screens.forEach(s=>{const el=document.getElementById('sc-'+s);if(el)el.classList.toggle('on',s===id);});
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   if(tabEl)tabEl.classList.add('on');
@@ -50,9 +56,16 @@ function go(id,tabEl,url){
   // sync global nav active state
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
   document.querySelectorAll('.nav-links a[data-screen="'+id+'"]').forEach(a=>a.classList.add('active'));
+  // push real URL path
+  if(!skipPush){const p=SCREEN_PATH[id]||'/';history.pushState({screen:id},'',(p==='/'&&window.location.pathname==='/')?window.location.href.split('?')[0]:p);}
   // scroll to top on page change
   window.scrollTo(0,0);
 }
+// Handle browser back/forward
+window.addEventListener('popstate',function(e){
+  const screen=(e.state&&e.state.screen)||ROUTE_MAP[window.location.pathname.replace(/\/+$/,'')||'/']||'landing';
+  go(screen,null,null,true);
+});
 
 /* ════════════════════════════════════
    MOBILE NAV
@@ -75,9 +88,9 @@ function closeMobileNav(){
   if(nav)nav.classList.remove('open');
   if(btn)btn.classList.remove('open');
 }
-function mobileGo(id,url){
+function mobileGo(id){
   closeMobileNav();
-  go(id,null,url);
+  go(id);
 }
 // Close mobile nav when clicking outside
 document.addEventListener('click',function(e){
@@ -149,7 +162,7 @@ async function doLogin(){
   setCurrentAccount(account.email);
   closeModal('login-modal');
   showLoader();
-  setTimeout(function(){go('dashboard',null,'careerliftai.com/dashboard');hideLoader();showToast('Welcome back, '+account.name.split(' ')[0]+'! ✓');},900);
+  setTimeout(function(){go('dashboard');hideLoader();showToast('Welcome back, '+account.name.split(' ')[0]+'! ✓');},900);
 }
 
 function clearFieldError(id){const el=document.getElementById(id);if(el)el.textContent='';}
@@ -257,7 +270,7 @@ function verifyOTP(){
     setCurrentAccount(email);
     closeModal('otp-verification-modal');
     showLoader();
-    setTimeout(function(){go('dashboard',null,'careerliftai.com/dashboard');hideLoader();showToast('✓ Email verified! Account created. Welcome to CareerLift AI!');},900);
+    setTimeout(function(){go('dashboard');hideLoader();showToast('✓ Email verified! Account created. Welcome to CareerLift AI!');},900);
   }else{
     showToast('Invalid code. Please try again.');
     document.getElementById('otp-input').value='';
@@ -356,7 +369,7 @@ function saveAccounts(accounts){localStorage.setItem(ACCOUNT_STORAGE_KEY,JSON.st
 function findAccount(email){return loadAccounts().find(a=>a.email===String(email).toLowerCase());}
 function setCurrentAccount(email){const account=findAccount(email);if(!account)return;localStorage.setItem(ACTIVE_USER_KEY,account.email);currentAccount=account;setUser(account.name);_credits=typeof account.credits==='number'?account.credits:FREE_CREDITS;localStorage.setItem('cl_credits',_credits);if(Array.isArray(account.history)&&account.history.length){saveHistoryStore(account.history);}refreshCreditUI();}
 function syncCurrentAccount(){if(!currentAccount)return;currentAccount.credits=_credits;currentAccount.history=loadHistory();const accounts=loadAccounts().map(a=>a.email===currentAccount.email?currentAccount:a);saveAccounts(accounts);}
-function restoreSession(){const email=localStorage.getItem(ACTIVE_USER_KEY);if(!email)return;const account=findAccount(email);if(!account)return;currentAccount=account;_credits=typeof account.credits==='number'?account.credits:FREE_CREDITS;localStorage.setItem('cl_credits',_credits);if(Array.isArray(account.history)&&account.history.length){saveHistoryStore(account.history);}setUser(account.name);refreshCreditUI();go('dashboard',null,'careerliftai.com/dashboard');}
+function restoreSession(){const email=localStorage.getItem(ACTIVE_USER_KEY);if(!email)return;const account=findAccount(email);if(!account)return;currentAccount=account;_credits=typeof account.credits==='number'?account.credits:FREE_CREDITS;localStorage.setItem('cl_credits',_credits);if(Array.isArray(account.history)&&account.history.length){saveHistoryStore(account.history);}setUser(account.name);refreshCreditUI();go('dashboard');}
 function initGoogleSignIn(){
   const tryInit=()=>{
     if(!window.google||!google.accounts||!google.accounts.id){setTimeout(tryInit,300);return;}
@@ -369,7 +382,7 @@ function initGoogleSignIn(){
 function showLoader(){var el=document.getElementById('auth-loader');if(el)el.classList.add('show');}
 function hideLoader(){var el=document.getElementById('auth-loader');if(el)el.classList.remove('show');}
 function decodeJwt(token){try{return JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));}catch(e){return null;}}
-function handleGoogleCredentialResponse(response){const payload=decodeJwt(response.credential);if(!payload||!payload.email){showToast('Google sign in failed.');return;}const email=payload.email.toLowerCase();const name=payload.name||email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase());let account=findAccount(email);if(!account){const accounts=loadAccounts();account={name,email,password:'',credits:FREE_CREDITS,history:[]};accounts.push(account);saveAccounts(accounts);}setCurrentAccount(email);closeModal('login-modal');closeModal('signup-modal');showLoader();setTimeout(function(){go('dashboard',null,'careerliftai.com/dashboard');hideLoader();showToast('Signed in with Google ✓');},900);}
+function handleGoogleCredentialResponse(response){const payload=decodeJwt(response.credential);if(!payload||!payload.email){showToast('Google sign in failed.');return;}const email=payload.email.toLowerCase();const name=payload.name||email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase());let account=findAccount(email);if(!account){const accounts=loadAccounts();account={name,email,password:'',credits:FREE_CREDITS,history:[]};accounts.push(account);saveAccounts(accounts);}setCurrentAccount(email);closeModal('login-modal');closeModal('signup-modal');showLoader();setTimeout(function(){go('dashboard');hideLoader();showToast('Signed in with Google ✓');},900);}
 
 function setUser(name){
   const initials=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
@@ -411,7 +424,7 @@ function logout(){
   if(mUser)mUser.style.display='none';
   closeMobileNav();
   refreshCreditUI();
-  go('landing',null,'careerliftai.com');
+  go('landing');
   showToast('Logged out successfully.');
 }
 
@@ -643,7 +656,7 @@ Return ONLY JSON, no markdown, no backticks.`;
    LINKEDIN OPTIMIZER — REAL AI
 ════════════════════════════════════ */
 async function optimizeLinkedIn(){
-  if(_credits<=0){showToast('No credits remaining. Please upgrade to continue.');go('pricing',null,'careerliftai.com/pricing');return;}
+  if(_credits<=0){showToast('No credits remaining. Please upgrade to continue.');go('pricing');return;}
 
   const headline=document.getElementById('li-headline').value;
   const about=document.getElementById('li-about').value;
@@ -720,7 +733,7 @@ function liTab(el,tab){
    COVER LETTER — REAL AI
 ════════════════════════════════════ */
 async function generateCoverLetter(){
-  if(_credits<=0){showToast('No credits remaining. Please upgrade to continue.');go('pricing',null,'careerliftai.com/pricing');return;}
+  if(_credits<=0){showToast('No credits remaining. Please upgrade to continue.');go('pricing');return;}
 
   const company=document.getElementById('cl-company').value||'the Company';
   const jobtitle=document.getElementById('cl-jobtitle').value||'this role';
@@ -1072,7 +1085,7 @@ function restoreAnalysis(id){
   (e.keywordsAdded||[]).forEach(kw=>{const s=document.createElement('span');s.className='kw-chip';s.textContent=kw;cr.appendChild(s);});
   setBar('kw',{before:40,after:85});setBar('fmt',{before:50,after:90});setBar('comp',{before:45,after:88});setBar('read',{before:55,after:87});
   document.getElementById('analyze-results').style.display='block';
-  go('analyze',null,'careerliftai.com/analyze');
+  go('analyze');
   setTimeout(()=>document.getElementById('analyze-results').scrollIntoView({behavior:'smooth'}),150);
   showToast('Analysis restored ✓');
 }
@@ -1081,7 +1094,7 @@ function addActivityRow(docName,score,country){
   const empty=document.getElementById('activity-empty-row');if(empty)empty.remove();
   const pc=score==='—'?'p-y':(parseInt(score)>=70?'p-g':'p-r');
   const tr=document.createElement('tr');
-  tr.innerHTML=`<td>${docName}</td><td><span class="pill ${pc}">${score}</span></td><td>${country}</td><td><span class="done">&#10003; Done</span></td><td><button class="row-btn" onclick="go('analyze',null,'careerliftai.com/analyze')">View</button></td>`;
+  tr.innerHTML=`<td>${docName}</td><td><span class="pill ${pc}">${score}</span></td><td>${country}</td><td><span class="done">&#10003; Done</span></td><td><button class="row-btn" onclick="go('analyze')">View</button></td>`;
   tbody.insertBefore(tr,tbody.firstChild);
   while(tbody.rows.length>5)tbody.deleteRow(tbody.rows.length-1);
 }

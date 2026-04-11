@@ -118,25 +118,23 @@
     <div class="editor-body">
       <div class="editor-fields">
         <h4>Personal details</h4>
-        <div class="ef"><label>Full name</label><input type="text" id="ed-name" value="John Davis" oninput="updatePreview()"></div>
-        <div class="ef"><label>Job title</label><input type="text" id="ed-title" value="Senior Software Engineer" oninput="updatePreview()"></div>
-        <div class="ef"><label>Email</label><input type="text" id="ed-email" value="john.davis@email.com" oninput="updatePreview()"></div>
-        <div class="ef"><label>Phone</label><input type="text" id="ed-phone" value="+1 555 0123" oninput="updatePreview()"></div>
-        <div class="ef"><label>Location</label><input type="text" id="ed-location" value="New York, NY" oninput="updatePreview()"></div>
-        <div class="ef"><label>LinkedIn / Portfolio URL</label><input type="text" id="ed-url" value="linkedin.com/in/johndavis" oninput="updatePreview()"></div>
+        <div class="ef"><label>Full name</label><input type="text" id="ed-name" placeholder="Your full name" oninput="updatePreview()"></div>
+        <div class="ef"><label>Job title</label><input type="text" id="ed-title" placeholder="e.g. Software Engineer" oninput="updatePreview()"></div>
+        <div class="ef"><label>Email</label><input type="text" id="ed-email" placeholder="you@email.com" oninput="updatePreview()"></div>
+        <div class="ef"><label>Phone</label><input type="text" id="ed-phone" placeholder="+1 555 0000" oninput="updatePreview()"></div>
+        <div class="ef"><label>Location</label><input type="text" id="ed-location" placeholder="City, Country" oninput="updatePreview()"></div>
+        <div class="ef"><label>LinkedIn / Portfolio URL</label><input type="text" id="ed-url" placeholder="linkedin.com/in/yourname" oninput="updatePreview()"></div>
         <h4 style="margin-top:16px">Professional summary</h4>
-        <div class="ef"><textarea id="ed-summary" oninput="updatePreview()" style="min-height:80px">Results-driven Senior Software Engineer with 5+ years building scalable distributed systems serving 2M+ users. Expert in React, Node.js and AWS.</textarea></div>
+        <div class="ef"><textarea id="ed-summary" oninput="updatePreview()" style="min-height:80px" placeholder="Write a short professional summary about yourself..."></textarea></div>
         <h4 style="margin-top:16px">Work experience</h4>
-        <div class="ef"><label>Job title</label><input type="text" id="ed-job1" value="Senior Software Engineer — Acme Corp" oninput="updatePreview()"></div>
-        <div class="ef"><label>Dates</label><input type="text" id="ed-dates1" value="Jan 2019 – Present · New York, NY" oninput="updatePreview()"></div>
-        <div class="ef"><label>Achievements (one per line)</label><textarea id="ed-bullets1" oninput="updatePreview()" style="min-height:80px">Architected microservices reducing latency by 40%
-Led team of 6 engineers across 3 product launches
-Automated CI/CD cutting deployment time by 60%</textarea></div>
+        <div class="ef"><label>Job title</label><input type="text" id="ed-job1" placeholder="Job Title — Company Name" oninput="updatePreview()"></div>
+        <div class="ef"><label>Dates</label><input type="text" id="ed-dates1" placeholder="Jan 2020 – Present · City" oninput="updatePreview()"></div>
+        <div class="ef"><label>Achievements (one per line)</label><textarea id="ed-bullets1" oninput="updatePreview()" style="min-height:80px" placeholder="List your key achievements, one per line..."></textarea></div>
         <h4 style="margin-top:16px">Education</h4>
-        <div class="ef"><label>Degree &amp; Institution</label><input type="text" id="ed-edu" value="B.S. Computer Science — State University" oninput="updatePreview()"></div>
-        <div class="ef"><label>Year / GPA</label><input type="text" id="ed-edu-year" value="2015 – 2019 · GPA 3.8" oninput="updatePreview()"></div>
+        <div class="ef"><label>Degree &amp; Institution</label><input type="text" id="ed-edu" placeholder="B.S. Computer Science — University Name" oninput="updatePreview()"></div>
+        <div class="ef"><label>Year / GPA</label><input type="text" id="ed-edu-year" placeholder="2018 – 2022 · GPA 3.5" oninput="updatePreview()"></div>
         <h4 style="margin-top:16px">Skills (comma separated)</h4>
-        <div class="ef"><input type="text" id="ed-skills" value="React, Node.js, TypeScript, AWS, PostgreSQL, Docker" oninput="updatePreview()"></div>
+        <div class="ef"><input type="text" id="ed-skills" placeholder="e.g. Python, Excel, Project Management" oninput="updatePreview()"></div>
       </div>
       <div class="editor-preview">
         <div class="cv-preview-doc" id="cv-live-preview"></div>
@@ -189,13 +187,13 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
 
   <!-- ═══════ MOBILE NAV DROPDOWN ═══════ -->
   <div class="mobile-nav" id="mobile-nav">
-    <a data-screen="landing"     onclick="mobileGo('landing','careerliftai.com')">Home</a>
-    <a data-screen="analyze"     onclick="mobileGo('analyze','careerliftai.com/analyze')">Analyze CV</a>
-    <a data-screen="atsscore"    onclick="mobileGo('atsscore','careerliftai.com/ats-score')">ATS Score Checker</a>
-    <a data-screen="coverletter" onclick="mobileGo('coverletter','careerliftai.com/cover-letter')">Cover Letter AI</a>
-    <a data-screen="linkedin"    onclick="mobileGo('linkedin','careerliftai.com/linkedin')">LinkedIn Optimizer</a>
-    <a data-screen="templates"   onclick="mobileGo('templates','careerliftai.com/templates')">Templates</a>
-    <a data-screen="pricing"     onclick="mobileGo('pricing','careerliftai.com/pricing')">Pricing</a>
+    <a data-screen="landing"     onclick="mobileGo('landing')">Home</a>
+    <a data-screen="analyze"     onclick="mobileGo('analyze')">Analyze CV</a>
+    <a data-screen="atsscore"    onclick="mobileGo('atsscore')">ATS Score Checker</a>
+    <a data-screen="coverletter" onclick="mobileGo('coverletter')">Cover Letter AI</a>
+    <a data-screen="linkedin"    onclick="mobileGo('linkedin')">LinkedIn Optimizer</a>
+    <a data-screen="templates"   onclick="mobileGo('templates')">Templates</a>
+    <a data-screen="pricing"     onclick="mobileGo('pricing')">Pricing</a>
     <div class="mobile-nav-divider"></div>
     <!-- Guest buttons -->
     <div id="mobile-nav-guest" class="mobile-nav-btns">
@@ -205,7 +203,7 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
     <!-- User buttons (shown when logged in) -->
     <div id="mobile-nav-user" class="mobile-nav-btns" style="display:none">
       <span id="mobile-nav-username" style="font-size:12px;color:#666;font-weight:500;padding:4px 8px;align-self:center"></span>
-      <button class="btn-indigo" style="flex:1;padding:9px" onclick="mobileGo('dashboard','careerliftai.com/dashboard')">Dashboard</button>
+      <button class="btn-indigo" style="flex:1;padding:9px" onclick="mobileGo('dashboard')">Dashboard</button>
       <button class="btn-ghost"  style="flex:1;padding:9px" onclick="closeMobileNav();logout()">Log out</button>
     </div>
   </div>
@@ -522,7 +520,7 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
           <div class="cfg-box">
             <h3 style="display:flex;justify-content:space-between;align-items:center">Configuration <span class="credit-pill" id="analyze-credit-pill">3 credits left</span></h3>
             <div class="fg"><label>Target country *</label><select id="analyze-country"></select></div>
-            <div class="fg"><label>Target job title *</label><input type="text" id="analyze-jobtitle" value="Senior Software Engineer"></div>
+            <div class="fg"><label>Target job title *</label><input type="text" id="analyze-jobtitle" placeholder="e.g. Marketing Manager"></div>
             <div class="fg"><label>Industry</label><select id="analyze-industry"><option>Technology</option><option>Finance</option><option>Healthcare</option><option>Marketing</option><option>Engineering</option><option>Oil &amp; Gas</option><option>Energy</option><option>Telecommunications</option><option>Pharmaceuticals</option><option>Biotechnology</option><option>Automotive</option><option>Manufacturing</option><option>Retail</option><option>Hospitality</option><option>Consumer Goods</option><option>Real Estate</option><option>Civil Construction</option><option>Transportation &amp; Logistics</option><option>Consulting</option><option>Government</option><option>Nonprofit</option><option>Education</option><option>Legal</option><option>Media &amp; Entertainment</option><option>Cybersecurity</option><option>Environmental Services</option><option>Human Resources</option><option>Insurance</option><option>Other</option></select></div>
             <div class="fg"><label>Job description (optional)</label><textarea id="analyze-jd" placeholder="Paste the job description for better accuracy..."></textarea></div>
             <div class="fg"><label>Include in analysis</label>
@@ -587,12 +585,12 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
         <div class="li-grid">
           <div class="panel-box">
             <h3>Your LinkedIn sections</h3>
-            <div class="fg"><label>Current headline (120 chars)</label><textarea id="li-headline" style="min-height:46px">Software Developer at Acme Corp | 5 Years Experience | Open to Work</textarea></div>
-            <div class="fg"><label>Current about / summary</label><textarea id="li-about" style="min-height:80px">I am a software developer with 5 years of experience. I enjoy coding and problem solving. I am looking for new opportunities in tech.</textarea></div>
-            <div class="fg"><label>Most recent job title</label><input type="text" id="li-jobtitle" value="Senior Software Engineer"></div>
-            <div class="fg"><label>Key skills (comma separated)</label><input type="text" id="li-skills" value="React, Node.js, TypeScript, AWS, PostgreSQL"></div>
+            <div class="fg"><label>Current headline (120 chars)</label><textarea id="li-headline" style="min-height:46px" placeholder="e.g. Software Developer at Company | 5 Years Experience"></textarea></div>
+            <div class="fg"><label>Current about / summary</label><textarea id="li-about" style="min-height:80px" placeholder="Paste your current LinkedIn About/Summary section here..."></textarea></div>
+            <div class="fg"><label>Most recent job title</label><input type="text" id="li-jobtitle" placeholder="e.g. Software Engineer"></div>
+            <div class="fg"><label>Key skills (comma separated)</label><input type="text" id="li-skills" placeholder="e.g. Python, SQL, Project Management"></div>
             <div class="fg"><label>Target country</label><select id="li-country"></select></div>
-            <div class="fg"><label>Target role</label><input type="text" id="li-role" value="Senior Software Engineer"></div>
+            <div class="fg"><label>Target role</label><input type="text" id="li-role" placeholder="e.g. Product Manager"></div>
             <div class="fg"><label>Tone preference</label><select id="li-tone"><option>Professional</option><option>Approachable</option><option>Technical</option></select></div>
             <button class="action-btn" id="li-btn" onclick="optimizeLinkedIn()">Optimize LinkedIn — 1 credit</button>
           </div>
@@ -712,7 +710,7 @@ Automated CI/CD cutting deployment time by 60%</textarea></div>
           </div>
           <div class="cfg-box">
             <h3>Targeting</h3>
-            <div class="fg"><label>Target role</label><input type="text" id="ats-role" value="Senior Software Engineer"></div>
+            <div class="fg"><label>Target role</label><input type="text" id="ats-role" placeholder="e.g. Data Analyst"></div>
             <div class="fg"><label>Target country</label><select id="ats-country"></select></div>
             <div class="fg"><label>ATS system (optional)</label><select id="ats-system"><option>Auto-detect</option><option>Workday</option><option>Taleo</option><option>Greenhouse</option><option>Lever</option><option>iCIMS</option><option>SAP SuccessFactors</option></select></div>
             <button class="action-btn" id="ats-btn" onclick="runATSCheck()">Check ATS Score — Free</button>
