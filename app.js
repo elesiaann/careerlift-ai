@@ -55,6 +55,40 @@ function go(id,tabEl,url){
 }
 
 /* ════════════════════════════════════
+   MOBILE NAV
+════════════════════════════════════ */
+function toggleMobileNav(){
+  const nav=document.getElementById('mobile-nav');
+  const btn=document.getElementById('nav-hamburger');
+  if(!nav)return;
+  const isOpen=nav.classList.toggle('open');
+  if(btn)btn.classList.toggle('open',isOpen);
+  // Sync active links in mobile nav
+  const currentScreen=screens.find(s=>{const el=document.getElementById('sc-'+s);return el&&el.classList.contains('on');})||'landing';
+  document.querySelectorAll('.mobile-nav a[data-screen]').forEach(a=>{
+    a.classList.toggle('active',a.dataset.screen===currentScreen);
+  });
+}
+function closeMobileNav(){
+  const nav=document.getElementById('mobile-nav');
+  const btn=document.getElementById('nav-hamburger');
+  if(nav)nav.classList.remove('open');
+  if(btn)btn.classList.remove('open');
+}
+function mobileGo(id,url){
+  closeMobileNav();
+  go(id,null,url);
+}
+// Close mobile nav when clicking outside
+document.addEventListener('click',function(e){
+  const nav=document.getElementById('mobile-nav');
+  const btn=document.getElementById('nav-hamburger');
+  if(nav&&nav.classList.contains('open')&&!nav.contains(e.target)&&btn&&!btn.contains(e.target)){
+    closeMobileNav();
+  }
+});
+
+/* ════════════════════════════════════
    MODALS
 ════════════════════════════════════ */
 function openModal(id){document.getElementById(id).classList.add('open');}
@@ -118,13 +152,27 @@ async function doLogin(){
   setTimeout(function(){go('dashboard',null,'careerliftai.com/dashboard');hideLoader();showToast('Welcome back, '+account.name.split(' ')[0]+'! ✓');},900);
 }
 
+function clearFieldError(id){const el=document.getElementById(id);if(el)el.textContent='';}
+function showFieldError(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.scrollIntoView({behavior:'smooth',block:'nearest'});}}
+
 async function doSignup(){
   const n=document.getElementById('signup-name').value.trim();
   const e=document.getElementById('signup-email').value.trim().toLowerCase();
   const p=document.getElementById('signup-pass').value;
+  clearFieldError('signup-email-error');
+  clearFieldError('signup-pass-error');
   if(!n||!e||!p){showToast('Please fill in all fields.');return;}
-  if(p.length<8){showToast('Password must be at least 8 characters.');return;}
-  if(findAccount(e)){showToast('This email is already in use. Please log in instead.');return;}
+  if(p.length<8){
+    showFieldError('signup-pass-error','Password must be at least 8 characters.');
+    return;
+  }
+  if(findAccount(e)){
+    showFieldError('signup-email-error','This email is already registered. Please log in instead.');
+    // Shake the email input
+    const emailInput=document.getElementById('signup-email');
+    if(emailInput){emailInput.style.borderColor='#DC2626';emailInput.style.animation='shake .3s ease';setTimeout(()=>{emailInput.style.animation='';emailInput.style.borderColor='';},500);}
+    return;
+  }
 
   // Hash password before storing
   const hashed=await hashPassword(p);
@@ -328,13 +376,20 @@ function setUser(name){
   const el=document.getElementById('dash-av');if(el)el.textContent=initials;
   const nm=document.getElementById('dash-nm');if(nm)nm.textContent=name;
   const wl=document.getElementById('dash-welcome');if(wl)wl.textContent='Welcome back, '+name.split(' ')[0]+'!';
-  // Show user nav, hide guest nav
+  // Desktop nav: show user state
   const guest=document.getElementById('nav-right-guest');
   const user=document.getElementById('nav-right-user');
   const navNm=document.getElementById('nav-user-name');
   if(guest)guest.style.display='none';
   if(user)user.style.display='flex';
   if(navNm)navNm.textContent=name.split(' ')[0];
+  // Mobile nav: show user state
+  const mGuest=document.getElementById('mobile-nav-guest');
+  const mUser=document.getElementById('mobile-nav-user');
+  const mNm=document.getElementById('mobile-nav-username');
+  if(mGuest)mGuest.style.display='none';
+  if(mUser)mUser.style.display='flex';
+  if(mNm)mNm.textContent='Hi, '+name.split(' ')[0];
   updateDashboardMetrics();
 }
 
@@ -344,11 +399,17 @@ function logout(){
   currentAccount=null;
   _credits=FREE_CREDITS;
   localStorage.setItem('cl_credits',FREE_CREDITS);
-  // Reset nav back to guest state
+  // Desktop nav: reset to guest state
   const guest=document.getElementById('nav-right-guest');
   const user=document.getElementById('nav-right-user');
   if(guest)guest.style.display='flex';
   if(user)user.style.display='none';
+  // Mobile nav: reset to guest state
+  const mGuest=document.getElementById('mobile-nav-guest');
+  const mUser=document.getElementById('mobile-nav-user');
+  if(mGuest)mGuest.style.display='flex';
+  if(mUser)mUser.style.display='none';
+  closeMobileNav();
   refreshCreditUI();
   go('landing',null,'careerliftai.com');
   showToast('Logged out successfully.');
