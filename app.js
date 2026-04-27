@@ -4,7 +4,7 @@
 const COUNTRIES=["Afghanistan","Albania","Algeria","Andorra","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Belgium","Bolivia","Brazil","Bulgaria","Cambodia","Canada","Chile","China","Colombia","Croatia","Cuba","Czech Republic","Denmark","Ecuador","Egypt","Estonia","Ethiopia","Finland","France","Germany","Ghana","Greece","Guatemala","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kuwait","Latvia","Lebanon","Lithuania","Luxembourg","Malaysia","Mexico","Moldova","Morocco","Myanmar","Netherlands","New Zealand","Nigeria","Norway","Oman","Pakistan","Panama","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saudi Arabia","Senegal","Serbia","Singapore","Slovakia","South Africa","South Korea","Spain","Sri Lanka","Sweden","Switzerland","Taiwan","Tanzania","Thailand","Turkey","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
 
 function populateCountries(){
-  ['analyze-country','li-country','cl-country','ats-country'].forEach(id=>{
+  ['analyze-country','li-country','cl-country','ats-country','tailor-country'].forEach(id=>{
     const sel=document.getElementById(id);if(!sel)return;
     COUNTRIES.forEach(c=>{
       const opt=document.createElement('option');opt.value=c;opt.textContent=c;
@@ -18,14 +18,19 @@ populateCountries();
    ROUTE INITIALIZATION
 ════════════════════════════════════ */
 const ROUTE_MAP={
-  '/':          'landing',
-  '/analyze':   'analyze',
-  '/linkedin':  'linkedin',
+  '/':            'landing',
+  '/analyze':     'analyze',
+  '/linkedin':    'linkedin',
   '/cover-letter':'coverletter',
-  '/ats-score': 'atsscore',
-  '/templates': 'templates',
-  '/pricing':   'pricing',
-  '/dashboard': 'dashboard',
+  '/ats-score':   'atsscore',
+  '/templates':   'templates',
+  '/pricing':     'pricing',
+  '/dashboard':   'dashboard',
+  '/admin':       'admin',
+  '/tailor':      'tailor',
+  '/tracker':     'tracker',
+  '/interview':   'interview',
+  '/keywords':    'keywords',
 };
 function initRoutes(){
   const path=window.location.pathname.replace(/\/+$/,'') || '/';
@@ -43,9 +48,10 @@ window.addEventListener('DOMContentLoaded', function(){
 /* ════════════════════════════════════
    NAVIGATION
 ════════════════════════════════════ */
-const screens=['landing','dashboard','analyze','linkedin','coverletter','atsscore','templates','pricing'];
-const SCREEN_PATH={'landing':'/','analyze':'/analyze','linkedin':'/linkedin','coverletter':'/cover-letter','atsscore':'/ats-score','templates':'/templates','pricing':'/pricing','dashboard':'/dashboard'};
+const screens=['landing','dashboard','analyze','linkedin','coverletter','atsscore','templates','pricing','admin','tailor','tracker','interview','keywords'];
+const SCREEN_PATH={'landing':'/','analyze':'/analyze','linkedin':'/linkedin','coverletter':'/cover-letter','atsscore':'/ats-score','templates':'/templates','pricing':'/pricing','dashboard':'/dashboard','admin':'/admin','tailor':'/tailor','tracker':'/tracker','interview':'/interview','keywords':'/keywords'};
 function go(id,tabEl,_unused,skipPush){
+  if(id==='admin'){if(!isAdmin()){showToast('Admin access only.');return;}loadAdminData();}
   screens.forEach(s=>{const el=document.getElementById('sc-'+s);if(el)el.classList.toggle('on',s===id);});
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   if(tabEl)tabEl.classList.add('on');
@@ -254,7 +260,7 @@ function verifyOTP(){
     const password=localStorage.getItem('signup_temp_password');
     
     const accounts=loadAccounts();
-    const newAccount={name,email,password,credits:FREE_CREDITS,history:[]};
+    const newAccount={name,email,password,credits:FREE_CREDITS,history:[],plan:'free',createdAt:Date.now(),liCount:0,clCount:0};
     accounts.push(newAccount);
     saveAccounts(accounts);
     
@@ -363,6 +369,7 @@ let currentAccount=null;
 const ACCOUNT_STORAGE_KEY='cl_accounts';
 const ACTIVE_USER_KEY='cl_active_user';
 const GOOGLE_CLIENT_ID='119140138936-3g0d47584ih5qghfo05dg4ngcuphapqh.apps.googleusercontent.com';
+const ADMIN_EMAIL='YOUR_EMAIL_HERE@example.com'; // ← Replace with your own email
 
 function loadAccounts(){try{return JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY)||'[]');}catch(e){return[];}}
 function saveAccounts(accounts){localStorage.setItem(ACCOUNT_STORAGE_KEY,JSON.stringify(accounts));}
@@ -382,7 +389,7 @@ function initGoogleSignIn(){
 function showLoader(){var el=document.getElementById('auth-loader');if(el)el.classList.add('show');}
 function hideLoader(){var el=document.getElementById('auth-loader');if(el)el.classList.remove('show');}
 function decodeJwt(token){try{return JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));}catch(e){return null;}}
-function handleGoogleCredentialResponse(response){const payload=decodeJwt(response.credential);if(!payload||!payload.email){showToast('Google sign in failed.');return;}const email=payload.email.toLowerCase();const name=payload.name||email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase());let account=findAccount(email);if(!account){const accounts=loadAccounts();account={name,email,password:'',credits:FREE_CREDITS,history:[]};accounts.push(account);saveAccounts(accounts);}setCurrentAccount(email);closeModal('login-modal');closeModal('signup-modal');showLoader();setTimeout(function(){go('dashboard');hideLoader();showToast('Signed in with Google ✓');},900);}
+function handleGoogleCredentialResponse(response){const payload=decodeJwt(response.credential);if(!payload||!payload.email){showToast('Google sign in failed.');return;}const email=payload.email.toLowerCase();const name=payload.name||email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase());let account=findAccount(email);if(!account){const accounts=loadAccounts();account={name,email,password:'',credits:FREE_CREDITS,history:[],plan:'free',createdAt:Date.now(),liCount:0,clCount:0};accounts.push(account);saveAccounts(accounts);}setCurrentAccount(email);closeModal('login-modal');closeModal('signup-modal');showLoader();setTimeout(function(){go('dashboard');hideLoader();showToast('Signed in with Google ✓');},900);}
 
 function setUser(name){
   const initials=name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
@@ -404,6 +411,9 @@ function setUser(name){
   if(mUser)mUser.style.display='flex';
   if(mNm)mNm.textContent='Hi, '+name.split(' ')[0];
   updateDashboardMetrics();
+  // Show admin link only for admin account
+  const adminLink=document.getElementById('sb-admin-link');
+  if(adminLink)adminLink.style.display=isAdmin()?'flex':'none';
 }
 
 function logout(){
@@ -710,6 +720,7 @@ Return ONLY JSON, no markdown, no backticks.`;
     ['li-hl','li-ab','li-ti'].forEach(id=>{const d=document.getElementById(id);if(d)d.style.display=id==='li-hl'?'block':'none';});
 
     // Deduct credit on success and update metrics
+    if(currentAccount)currentAccount.liCount=(currentAccount.liCount||0)+1;
     deductCredit();
     const liCount=document.getElementById('metric-li');
     if(liCount)liCount.textContent=parseInt(liCount.textContent||0)+1;
@@ -779,6 +790,7 @@ async function generateCoverLetter(){
     window._coverLetterText=letterText;
 
     // Deduct credit on success and update metrics
+    if(currentAccount)currentAccount.clCount=(currentAccount.clCount||0)+1;
     deductCredit();
     const clCount=document.getElementById('metric-cl');
     if(clCount)clCount.textContent=parseInt(clCount.textContent||0)+1;
@@ -920,11 +932,13 @@ function refreshCreditUI(){
   const dn=document.getElementById('dash-credit-n');if(dn)dn.textContent=c;
   const dm=document.getElementById('dash-credit-msg');
   if(dm)dm.textContent='You have '+c+' AI '+(c===1?'analysis':'analyses')+' remaining.';
-  const pill=document.getElementById('analyze-credit-pill');
-  if(pill){
-    pill.textContent=c+' credit'+(c!==1?'s':'')+' left';
-    pill.className='credit-pill'+(c===0?' credit-pill-zero':c<=1?' credit-pill-low':'');
-  }
+  ['analyze-credit-pill','tailor-credit-pill','interview-credit-pill'].forEach(id=>{
+    const pill=document.getElementById(id);
+    if(pill){
+      pill.textContent=c+' credit'+(c!==1?'s':'')+' left';
+      pill.className='credit-pill'+(c===0?' credit-pill-zero':c<=1?' credit-pill-low':'');
+    }
+  });
 }
 
 function updateDashboardMetrics(){
@@ -1152,9 +1166,481 @@ function downloadEditorCV(){
 }
 
 /* ════════════════════════════════════
+   ADMIN DASHBOARD
+════════════════════════════════════ */
+function isAdmin(){
+  return !!(currentAccount && currentAccount.email.toLowerCase()===ADMIN_EMAIL.toLowerCase());
+}
+
+function goAdmin(){
+  if(!isAdmin()){showToast('Admin access only.');return;}
+  go('admin');
+}
+
+function loadAdminData(){
+  if(!isAdmin())return;
+  const accounts=loadAccounts();
+  const total=accounts.length;
+  const freeUsers=accounts.filter(a=>!a.plan||a.plan==='free').length;
+  const paidUsers=accounts.filter(a=>a.plan==='basic'||a.plan==='pro').length;
+  const totalCV=accounts.reduce((s,a)=>s+(a.history||[]).length,0);
+  const totalLi=accounts.reduce((s,a)=>s+(a.liCount||0),0);
+  const totalCl=accounts.reduce((s,a)=>s+(a.clCount||0),0);
+  const totalUses=totalCV+totalLi+totalCl;
+  const totalCreditsUsed=accounts.reduce((s,a)=>{
+    const base=a.plan==='pro'?100:a.plan==='basic'?30:FREE_CREDITS;
+    const rem=typeof a.credits==='number'?a.credits:FREE_CREDITS;
+    return s+Math.max(0,base-rem);
+  },0);
+  const mrr=accounts.filter(a=>a.plan==='basic').length*19+accounts.filter(a=>a.plan==='pro').length*49;
+
+  // Stat cards
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('adm-total-users',total);
+  set('adm-free-users',freeUsers);
+  set('adm-paid-users',paidUsers);
+  set('adm-total-analyses',totalUses);
+  set('adm-credits-used',totalCreditsUsed);
+  set('adm-revenue','$'+mrr);
+  set('adm-user-count','('+total+' total)');
+  // Tool breakdown
+  set('adm-cv-analyses',totalCV);
+  set('adm-li-opts',totalLi);
+  set('adm-cover-letters',totalCl);
+
+  // User table
+  renderAdminUserTable(accounts,'');
+
+  // Recent sign-ups (last 10, newest first)
+  const sorted=[...accounts].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,10);
+  const rtb=document.getElementById('adm-recent-tbody');
+  if(rtb){
+    if(!sorted.length){rtb.innerHTML='<tr><td colspan="4" style="text-align:center;padding:24px;color:#bbb">No sign-ups recorded yet</td></tr>';return;}
+    rtb.innerHTML=sorted.map(a=>{
+      const pb=_admPlanBadge(a.plan||'free');
+      const joined=a.createdAt?new Date(a.createdAt).toLocaleDateString():'Unknown';
+      return`<tr><td><strong>${a.name}</strong></td><td style="color:#888;font-size:11px">${a.email}</td><td>${pb}</td><td>${joined}</td></tr>`;
+    }).join('');
+  }
+}
+
+function _admPlanBadge(plan){
+  if(plan==='pro')return'<span class="adm-badge adm-badge-pro">Pro</span>';
+  if(plan==='basic')return'<span class="adm-badge adm-badge-basic">Basic</span>';
+  return'<span class="adm-badge adm-badge-free">Free</span>';
+}
+
+function renderAdminUserTable(accounts,filter){
+  const tbody=document.getElementById('adm-users-tbody');if(!tbody)return;
+  const list=filter?accounts.filter(a=>(a.name||'').toLowerCase().includes(filter.toLowerCase())||(a.email||'').toLowerCase().includes(filter.toLowerCase())):accounts;
+  if(!list.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:24px;color:#bbb">No users found</td></tr>';return;}
+  tbody.innerHTML=list.map(a=>{
+    const plan=a.plan||'free';
+    const uses=(a.history||[]).length+(a.liCount||0)+(a.clCount||0);
+    const joined=a.createdAt?new Date(a.createdAt).toLocaleDateString():'Unknown';
+    const ini=(a.name||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const em=a.email.replace(/'/g,"\\'");
+    return`<tr>
+      <td><div class="adm-user-cell"><div class="adm-av">${ini}</div><div><div class="adm-user-name">${a.name}</div><div class="adm-user-email">${a.email}</div></div></div></td>
+      <td>${_admPlanBadge(plan)}</td>
+      <td style="font-weight:600">${typeof a.credits==='number'?a.credits:FREE_CREDITS}</td>
+      <td>${uses}</td>
+      <td>${joined}</td>
+      <td style="white-space:nowrap">
+        <button class="adm-action-btn adm-action-btn-success" onclick="admGrantCredits('${em}')">+ Credits</button>
+        <select class="adm-plan-select" title="Set plan" onchange="admSetPlan('${em}',this.value)">
+          <option value="free"${plan==='free'?' selected':''}>Free</option>
+          <option value="basic"${plan==='basic'?' selected':''}>Basic</option>
+          <option value="pro"${plan==='pro'?' selected':''}>Pro</option>
+        </select>
+        <button class="adm-action-btn adm-action-btn-danger" onclick="admDeleteUser('${em}')">Delete</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function admSearchUsers(val){
+  renderAdminUserTable(loadAccounts(),val);
+}
+
+function admGrantCredits(email){
+  const n=parseInt(prompt('Credits to add to:\n'+email,'10'));
+  if(isNaN(n)||n<=0)return;
+  const accounts=loadAccounts().map(a=>{
+    if(a.email===email)return{...a,credits:(typeof a.credits==='number'?a.credits:FREE_CREDITS)+n};
+    return a;
+  });
+  saveAccounts(accounts);
+  // Update live session if this is the current user
+  if(currentAccount&&currentAccount.email===email){
+    _credits=(typeof currentAccount.credits==='number'?currentAccount.credits:FREE_CREDITS)+n;
+    currentAccount.credits=_credits;
+    localStorage.setItem('cl_credits',_credits);
+    refreshCreditUI();
+  }
+  showToast('Added '+n+' credits to '+email+' ✓');
+  loadAdminData();
+}
+
+function admSetPlan(email,plan){
+  const creditMap={free:FREE_CREDITS,basic:30,pro:100};
+  const accounts=loadAccounts().map(a=>{
+    if(a.email===email)return{...a,plan,credits:creditMap[plan]};
+    return a;
+  });
+  saveAccounts(accounts);
+  if(currentAccount&&currentAccount.email===email){
+    currentAccount.plan=plan;
+    _credits=creditMap[plan];
+    currentAccount.credits=_credits;
+    localStorage.setItem('cl_credits',_credits);
+    refreshCreditUI();
+  }
+  showToast('Plan set to '+plan+' for '+email+' ✓');
+  loadAdminData();
+}
+
+function admDeleteUser(email){
+  if(!confirm('Delete account:\n'+email+'\n\nThis cannot be undone.'))return;
+  const accounts=loadAccounts().filter(a=>a.email!==email);
+  saveAccounts(accounts);
+  showToast('User deleted ✓');
+  loadAdminData();
+}
+
+function admExportCSV(){
+  const accounts=loadAccounts();
+  if(!accounts.length){showToast('No users to export.');return;}
+  const header=['Name','Email','Plan','Credits Left','CV Analyses','LinkedIn Opts','Cover Letters','Total Uses','Joined'];
+  const rows=accounts.map(a=>{
+    const cv=(a.history||[]).length,li=a.liCount||0,cl=a.clCount||0;
+    const joined=a.createdAt?new Date(a.createdAt).toLocaleDateString():'Unknown';
+    return[a.name,a.email,a.plan||'free',typeof a.credits==='number'?a.credits:FREE_CREDITS,cv,li,cl,cv+li+cl,joined]
+      .map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',');
+  });
+  const csv=[header.join(','),...rows].join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;
+  a.download='careerlift_users_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(url);
+  showToast('CSV exported ('+accounts.length+' users) ✓');
+}
+
+/* ════════════════════════════════════
+   JOB TAILOR — REAL AI (zaiki core feature)
+   CV + Job Description → tailored role-specific CV
+════════════════════════════════════ */
+async function runTailor(){
+  if(!checkCreditGate('tailor'))return;
+  const cvText=document.getElementById('tailor-cv-text').value.trim();
+  const jd=document.getElementById('tailor-jd').value.trim();
+  const jobTitle=document.getElementById('tailor-jobtitle').value||'this role';
+  const company=document.getElementById('tailor-company').value||'the company';
+  const country=document.getElementById('tailor-country').value||'United States';
+  if(!cvText){showToast('Please paste your CV text first.');return;}
+  if(!jd){showToast('Please paste the job description.');return;}
+  const btn=document.getElementById('tailor-btn');
+  btn.disabled=true;btn.textContent='Tailoring…';
+  document.getElementById('tailor-results').style.display='none';
+  document.getElementById('tailor-loading').style.display='flex';
+  const steps=['Parsing job description','Extracting required keywords','Matching your experience','Rewriting for this exact role','Calculating match score'];
+  let si=0;
+  const stepInterval=setInterval(()=>{const el=document.getElementById('tailor-step');if(el&&si<steps.length)el.textContent=steps[si++];},1600);
+  try{
+    const systemPrompt=`You are an expert at tailoring CVs to specific job descriptions. Analyze the CV against the job description and return ONLY valid JSON:
+{
+  "matchBefore": <integer 20-55>,
+  "matchAfter": <integer 75-96>,
+  "tailoredCV": "<full CV rewritten to match this exact job description — use keywords from JD, mirror the language, highlight relevant experience>",
+  "keywordsAdded": [<8-12 keyword strings extracted from the job description and added to the CV>],
+  "keywordsMissing": [<3-5 important JD keywords that were not in the original CV>],
+  "changes": "<3-4 bullet points starting with · explaining key tailoring changes>"
+}
+Return ONLY the JSON, no markdown, no backticks.`;
+    const userMsg=`Target Role: ${jobTitle}\nCompany: ${company}\nCountry: ${country}\n\nJOB DESCRIPTION:\n${jd}\n\nORIGINAL CV:\n${cvText}`;
+    const raw=await callClaude(systemPrompt,userMsg);
+    clearInterval(stepInterval);
+    document.getElementById('tailor-loading').style.display='none';
+    let parsed;
+    try{parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){throw new Error('Could not parse AI response. Try again.');}
+    document.getElementById('tailor-match-before').textContent=parsed.matchBefore+'%';
+    document.getElementById('tailor-match-after').textContent=parsed.matchAfter+'%';
+    const diff=parsed.matchAfter-parsed.matchBefore;
+    document.getElementById('tailor-match-diff').textContent='+'+diff+'%';
+    document.getElementById('tailor-original-cv').textContent=cvText.substring(0,800)+(cvText.length>800?'…':'');
+    document.getElementById('tailor-output-cv').textContent=parsed.tailoredCV;
+    const chipRow=document.getElementById('tailor-keywords-added');
+    chipRow.innerHTML='';
+    (parsed.keywordsAdded||[]).forEach(kw=>{const s=document.createElement('span');s.className='kw-chip';s.textContent=kw;chipRow.appendChild(s);});
+    const missingRow=document.getElementById('tailor-keywords-missing');
+    missingRow.innerHTML='';
+    (parsed.keywordsMissing||[]).forEach(kw=>{const s=document.createElement('span');s.className='kw-chip kw-chip-missing';s.textContent=kw;missingRow.appendChild(s);});
+    document.getElementById('tailor-changes').innerHTML=(parsed.changes||'').replace(/·/g,'<br>·');
+    document.getElementById('tailor-results').style.display='block';
+    window._tailoredCV=parsed.tailoredCV;
+    deductCredit();
+    setTimeout(()=>document.getElementById('tailor-results').scrollIntoView({behavior:'smooth'}),100);
+    showToast('CV tailored for '+jobTitle+' ✓');
+  }catch(err){
+    clearInterval(stepInterval);
+    document.getElementById('tailor-loading').style.display='none';
+    showToast('Error: '+err.message);
+  }
+  btn.disabled=false;btn.textContent='Tailor My CV — 1 credit';
+}
+function copyTailored(){
+  const text=window._tailoredCV||document.getElementById('tailor-output-cv').textContent||'';
+  navigator.clipboard.writeText(text).then(()=>showToast('Tailored CV copied ✓')).catch(()=>showToast('Copy failed.'));
+}
+function downloadTailoredPDF(){
+  makePDF('Tailored CV — CareerLift AI',window._tailoredCV||document.getElementById('tailor-output-cv').textContent||'');
+}
+function downloadTailoredTXT(){
+  const text=window._tailoredCV||document.getElementById('tailor-output-cv').textContent||'';
+  const blob=new Blob([text],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='tailored-cv.txt';a.click();URL.revokeObjectURL(url);
+}
+
+/* ════════════════════════════════════
+   KEYWORD EXTRACTOR — FREE TOOL
+   Paste job description → get ATS keywords
+════════════════════════════════════ */
+async function runKeywordExtract(){
+  const jd=document.getElementById('kw-jd').value.trim();
+  const cvText=document.getElementById('kw-cv').value.trim();
+  if(!jd){showToast('Please paste a job description first.');return;}
+  const btn=document.getElementById('kw-btn');
+  btn.disabled=true;btn.textContent='Extracting…';
+  document.getElementById('kw-results').style.display='none';
+  document.getElementById('kw-loading').style.display='flex';
+  try{
+    const systemPrompt=`You are an ATS keyword expert. Extract all important ATS keywords from the job description and return ONLY valid JSON:
+{
+  "hardSkills":   [<array of technical skills, tools, languages, frameworks mentioned>],
+  "softSkills":   [<array of soft skills and competencies mentioned>],
+  "qualifications": [<array of degrees, certifications, years of experience mentioned>],
+  "industry":     [<array of industry-specific terms and jargon>],
+  "inCv":         [<if CV provided, which extracted keywords ARE already in the CV>],
+  "missingFromCv":[<if CV provided, which extracted keywords are MISSING from the CV — otherwise empty array>]
+}
+Return ONLY the JSON, no markdown, no backticks.`;
+    const userMsg=`JOB DESCRIPTION:\n${jd}\n\nCV (optional — for gap analysis):\n${cvText||'Not provided'}`;
+    const raw=await callClaude(systemPrompt,userMsg);
+    document.getElementById('kw-loading').style.display='none';
+    let p;
+    try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){throw new Error('Parse error. Try again.');}
+    const renderGroup=(containerId,items,cls='kw-chip')=>{
+      const el=document.getElementById(containerId);if(!el)return;
+      el.innerHTML=(items||[]).length?items.map(k=>`<span class="${cls}" onclick="copyWord('${k.replace(/'/g,"\\'")}',this)">${k}</span>`).join(''):'<span style="color:#bbb;font-size:11px">None found</span>';
+    };
+    renderGroup('kw-hard',p.hardSkills);
+    renderGroup('kw-soft',p.softSkills,'kw-chip kw-chip-soft');
+    renderGroup('kw-qual',p.qualifications,'kw-chip kw-chip-qual');
+    renderGroup('kw-industry',p.industry,'kw-chip kw-chip-ind');
+    if(cvText){
+      document.getElementById('kw-gap-section').style.display='block';
+      renderGroup('kw-in-cv',p.inCv,'kw-chip kw-chip-ok');
+      renderGroup('kw-missing',p.missingFromCv,'kw-chip kw-chip-missing');
+    }else{
+      document.getElementById('kw-gap-section').style.display='none';
+    }
+    document.getElementById('kw-results').style.display='block';
+    setTimeout(()=>document.getElementById('kw-results').scrollIntoView({behavior:'smooth'}),100);
+    showToast('Keywords extracted ✓');
+  }catch(err){
+    document.getElementById('kw-loading').style.display='none';
+    showToast('Error: '+err.message);
+  }
+  btn.disabled=false;btn.textContent='Extract Keywords — Free';
+}
+function copyWord(word,el){
+  navigator.clipboard.writeText(word).then(()=>{el.style.background='#dcfce7';el.style.borderColor='#16a34a';setTimeout(()=>{el.style.background='';el.style.borderColor='';},1000);}).catch(()=>showToast('Copy failed.'));
+}
+function copyAllKeywords(){
+  const sections=['kw-hard','kw-soft','kw-qual','kw-industry'];
+  const words=[];
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.querySelectorAll('.kw-chip').forEach(s=>words.push(s.textContent));
+  });
+  navigator.clipboard.writeText(words.join(', ')).then(()=>showToast('All keywords copied ✓')).catch(()=>showToast('Copy failed.'));
+}
+
+/* ════════════════════════════════════
+   INTERVIEW PREP — REAL AI
+   JD + CV → interview questions + answers
+════════════════════════════════════ */
+async function runInterviewPrep(){
+  if(!checkCreditGate('interview'))return;
+  const jd=document.getElementById('iv-jd').value.trim();
+  const cvText=document.getElementById('iv-cv').value.trim();
+  const jobTitle=document.getElementById('iv-jobtitle').value||'this role';
+  if(!jd){showToast('Please paste the job description.');return;}
+  const btn=document.getElementById('iv-btn');
+  btn.disabled=true;btn.textContent='Preparing…';
+  document.getElementById('iv-results').style.display='none';
+  document.getElementById('iv-loading').style.display='flex';
+  try{
+    const systemPrompt=`You are an expert interview coach. Generate interview questions tailored to this job and candidate. Return ONLY valid JSON:
+{
+  "questions": [
+    {
+      "category": "<Behavioral|Technical|Role-Specific|Culture Fit>",
+      "question": "<the interview question>",
+      "whyAsked": "<1 sentence: why interviewers ask this>",
+      "idealAnswer": "<3-5 sentence ideal answer framework using STAR method where relevant, tailored to the CV if provided>"
+    }
+  ]
+}
+Generate exactly 10 questions: 3 behavioral, 3 technical/role-specific, 2 culture fit, 2 situational. Return ONLY JSON.`;
+    const userMsg=`Job Title: ${jobTitle}\nJob Description:\n${jd}\n\nCandidate CV:\n${cvText||'Not provided'}`;
+    const raw=await callClaude(systemPrompt,userMsg);
+    document.getElementById('iv-loading').style.display='none';
+    let p;
+    try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){throw new Error('Parse error. Try again.');}
+    const container=document.getElementById('iv-questions-list');
+    container.innerHTML='';
+    const catColors={Behavioral:'#6366f1',Technical:'#0ea5e9','Role-Specific':'#10b981','Culture Fit':'#f59e0b',Situational:'#8b5cf6'};
+    (p.questions||[]).forEach((q,i)=>{
+      const color=catColors[q.category]||'#6366f1';
+      const card=document.createElement('div');card.className='iv-card';
+      card.innerHTML=`
+        <div class="iv-card-header">
+          <span class="iv-cat-badge" style="background:${color}22;color:${color};border:1px solid ${color}44">${q.category}</span>
+          <span class="iv-qnum">Q${i+1}</span>
+        </div>
+        <div class="iv-question">${q.question}</div>
+        <div class="iv-why">💡 Why they ask: <em>${q.whyAsked}</em></div>
+        <div class="iv-answer-toggle" onclick="toggleIvAnswer(this)">
+          <span>Show ideal answer</span>
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="iv-answer" style="display:none">${q.idealAnswer}</div>`;
+      container.appendChild(card);
+    });
+    document.getElementById('iv-results').style.display='block';
+    deductCredit();
+    setTimeout(()=>document.getElementById('iv-results').scrollIntoView({behavior:'smooth'}),100);
+    showToast('10 interview questions ready ✓');
+  }catch(err){
+    document.getElementById('iv-loading').style.display='none';
+    showToast('Error: '+err.message);
+  }
+  btn.disabled=false;btn.textContent='Generate Interview Questions — 1 credit';
+}
+function toggleIvAnswer(el){
+  const ans=el.nextElementSibling;
+  const isOpen=ans.style.display!=='none';
+  ans.style.display=isOpen?'none':'block';
+  el.querySelector('span').textContent=isOpen?'Show ideal answer':'Hide ideal answer';
+  el.querySelector('svg').style.transform=isOpen?'':'rotate(180deg)';
+}
+
+/* ════════════════════════════════════
+   JOB TRACKER — localStorage CRUD
+════════════════════════════════════ */
+const TRACKER_KEY='cl_job_tracker';
+function loadTracker(){try{return JSON.parse(localStorage.getItem(TRACKER_KEY)||'[]');}catch(e){return[];}}
+function saveTracker(jobs){localStorage.setItem(TRACKER_KEY,JSON.stringify(jobs));}
+
+function renderTracker(){
+  const jobs=loadTracker();
+  const tbody=document.getElementById('tracker-tbody');
+  const empty=document.getElementById('tracker-empty');
+  if(!tbody)return;
+  if(!jobs.length){
+    tbody.innerHTML='';
+    if(empty)empty.style.display='flex';
+    updateTrackerStats(jobs);
+    return;
+  }
+  if(empty)empty.style.display='none';
+  const statusColor={Applied:'#6366f1',Screening:'#f59e0b',Interview:'#0ea5e9',Offer:'#10b981',Rejected:'#ef4444'};
+  tbody.innerHTML=jobs.slice().reverse().map((j,ri)=>{
+    const i=jobs.length-1-ri;
+    const col=statusColor[j.status]||'#888';
+    const date=j.appliedDate?new Date(j.appliedDate).toLocaleDateString():'—';
+    return`<tr>
+      <td><strong>${j.company}</strong></td>
+      <td>${j.role}</td>
+      <td><select class="tracker-status-sel" style="color:${col};border-color:${col}44;background:${col}11" onchange="updateTrackerStatus(${i},this.value)">
+        ${['Applied','Screening','Interview','Offer','Rejected'].map(s=>`<option${s===j.status?' selected':''}>${s}</option>`).join('')}
+      </select></td>
+      <td>${date}</td>
+      <td style="font-size:11px;color:#888;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${j.notes||'—'}</td>
+      <td><button class="row-btn" style="color:#ef4444;border-color:#fca5a5" onclick="deleteTrackerJob(${i})">Remove</button></td>
+    </tr>`;
+  }).join('');
+  updateTrackerStats(jobs);
+}
+function updateTrackerStats(jobs){
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('tracker-stat-total',jobs.length);
+  set('tracker-stat-interview',jobs.filter(j=>j.status==='Interview').length);
+  set('tracker-stat-offer',jobs.filter(j=>j.status==='Offer').length);
+  set('tracker-stat-rejected',jobs.filter(j=>j.status==='Rejected').length);
+}
+function addTrackerJob(){
+  const company=document.getElementById('tracker-company').value.trim();
+  const role=document.getElementById('tracker-role').value.trim();
+  const status=document.getElementById('tracker-status').value;
+  const date=document.getElementById('tracker-date').value;
+  const notes=document.getElementById('tracker-notes').value.trim();
+  if(!company||!role){showToast('Company and role are required.');return;}
+  const jobs=loadTracker();
+  jobs.push({company,role,status,appliedDate:date,notes,addedAt:Date.now()});
+  saveTracker(jobs);
+  // Clear form
+  ['tracker-company','tracker-role','tracker-notes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('tracker-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('tracker-add-form').style.display='none';
+  renderTracker();
+  showToast('Application added ✓');
+}
+function updateTrackerStatus(index,status){
+  const jobs=loadTracker();
+  if(jobs[index])jobs[index].status=status;
+  saveTracker(jobs);
+  renderTracker();
+  showToast('Status updated ✓');
+}
+function deleteTrackerJob(index){
+  if(!confirm('Remove this application?'))return;
+  const jobs=loadTracker();
+  jobs.splice(index,1);
+  saveTracker(jobs);
+  renderTracker();
+  showToast('Removed ✓');
+}
+function showTrackerForm(){
+  const form=document.getElementById('tracker-add-form');
+  if(!form)return;
+  form.style.display=form.style.display==='none'?'block':'none';
+  if(form.style.display==='block'){
+    const today=new Date().toISOString().slice(0,10);
+    const dateEl=document.getElementById('tracker-date');
+    if(dateEl&&!dateEl.value)dateEl.value=today;
+  }
+}
+function exportTrackerCSV(){
+  const jobs=loadTracker();
+  if(!jobs.length){showToast('No applications to export.');return;}
+  const header=['Company','Role','Status','Applied Date','Notes'];
+  const rows=jobs.map(j=>[j.company,j.role,j.status,j.appliedDate||'',j.notes||''].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(','));
+  const csv=[header.join(','),...rows].join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='job-applications.csv';a.click();URL.revokeObjectURL(url);
+  showToast('CSV exported ✓');
+}
+
+/* ════════════════════════════════════
    INIT
 ════════════════════════════════════ */
 refreshCreditUI();
 renderHistory();
 updateDashboardMetrics();
+renderTracker();
 

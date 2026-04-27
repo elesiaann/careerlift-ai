@@ -167,6 +167,10 @@
       <a data-screen="atsscore"    onclick="go('atsscore',null,'careerliftai.com/ats-score')">ATS Score</a>
       <a data-screen="coverletter" onclick="go('coverletter',null,'careerliftai.com/cover-letter')">Cover Letter</a>
       <a data-screen="linkedin"    onclick="go('linkedin',null,'careerliftai.com/linkedin')">LinkedIn</a>
+      <a data-screen="tailor"      onclick="go('tailor',null,'careerliftai.com/tailor')">Job Tailor</a>
+      <a data-screen="keywords"    onclick="go('keywords',null,'careerliftai.com/keywords')">Keywords</a>
+      <a data-screen="interview"   onclick="go('interview',null,'careerliftai.com/interview')">Interview Prep</a>
+      <a data-screen="tracker"     onclick="go('tracker',null,'careerliftai.com/tracker')">Job Tracker</a>
       <a data-screen="templates"   onclick="go('templates',null,'careerliftai.com/templates')">Templates</a>
       <a data-screen="pricing"     onclick="go('pricing',null,'careerliftai.com/pricing')">Pricing</a>
     </div>
@@ -192,6 +196,10 @@
     <a data-screen="atsscore"    onclick="mobileGo('atsscore')">ATS Score Checker</a>
     <a data-screen="coverletter" onclick="mobileGo('coverletter')">Cover Letter AI</a>
     <a data-screen="linkedin"    onclick="mobileGo('linkedin')">LinkedIn Optimizer</a>
+    <a data-screen="tailor"      onclick="mobileGo('tailor')">Job Tailor</a>
+    <a data-screen="keywords"    onclick="mobileGo('keywords')">Keyword Extractor</a>
+    <a data-screen="interview"   onclick="mobileGo('interview')">Interview Prep</a>
+    <a data-screen="tracker"     onclick="mobileGo('tracker')">Job Tracker</a>
     <a data-screen="templates"   onclick="mobileGo('templates')">Templates</a>
     <a data-screen="pricing"     onclick="mobileGo('pricing')">Pricing</a>
     <div class="mobile-nav-divider"></div>
@@ -252,9 +260,162 @@
             <div class="feat-ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
             <h3>CV Templates</h3><p>Professional ATS-friendly templates for every market and industry.</p>
           </div>
+          <div class="feat-card" onclick="go('tailor',null,'careerliftai.com/tailor')">
+            <div class="feat-ic"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+            <h3>Job Tailor</h3><p>Paste a job description and your CV — AI rewrites your CV to match that exact role with 80–95% match score.</p>
+          </div>
+          <div class="feat-card" onclick="go('keywords',null,'careerliftai.com/keywords')">
+            <div class="feat-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+            <h3>Keyword Extractor</h3><p>Extract every ATS keyword from any job description — hard skills, soft skills, qualifications and industry terms.</p>
+          </div>
+          <div class="feat-card" onclick="go('interview',null,'careerliftai.com/interview')">
+            <div class="feat-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <h3>Interview Prep</h3><p>10 AI-generated questions with ideal STAR-method answers — tailored to the specific role and your background.</p>
+          </div>
+          <div class="feat-card" onclick="go('tracker',null,'careerliftai.com/tracker')">
+            <div class="feat-ic"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/></svg></div>
+            <h3>Job Application Tracker</h3><p>Track every application by status — Applied, Screening, Interview, Offer, Rejected. Export to CSV anytime.</p>
+          </div>
           <div class="feat-card" onclick="go('pricing',null,'careerliftai.com/pricing')">
             <div class="feat-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
             <h3>Works for Any Market</h3><p>USA, UK, Germany, Canada, UAE — our AI adapts to local hiring norms automatically.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ BEFORE / AFTER COMPARISON ══ -->
+      <div class="ba-section">
+        <div class="section-eyebrow">See the transformation</div>
+        <h2 class="section-title">Before &amp; After — Real AI Rewrite</h2>
+        <p class="section-sub">Watch a generic CV become a keyword-rich, recruiter-ready document in seconds.</p>
+
+        <div class="ba-layout">
+          <!-- Left: split CV comparison -->
+          <div class="ba-compare-wrap">
+            <div class="ba-compare" id="ba-compare">
+              <!-- Original side -->
+              <div class="ba-side ba-original">
+                <div class="ba-side-label">Original CV</div>
+                <div class="ba-cv-mock">
+                  <div class="ba-name">JAMES CARTER</div>
+                  <div class="ba-role" style="color:#888">Operations Manager</div>
+                  <div class="ba-divline"></div>
+                  <div class="ba-section-title-mock">EXPERIENCE</div>
+                  <div class="ba-job-title">Operations Manager — RetailCo</div>
+                  <div class="ba-date">2020 – Present · London, UK</div>
+                  <div class="ba-bullets">
+                    <div class="ba-bullet ba-bullet-weak">• Responsible for managing warehouse operations</div>
+                    <div class="ba-bullet ba-bullet-weak">• Helped improve delivery times</div>
+                    <div class="ba-bullet ba-bullet-weak">• Worked with cross-functional teams</div>
+                    <div class="ba-bullet ba-bullet-weak">• Did cost reduction work</div>
+                  </div>
+                  <div class="ba-section-title-mock" style="margin-top:10px">SKILLS</div>
+                  <div class="ba-skills-row">
+                    <span class="ba-skill-tag ba-skill-plain">Management</span>
+                    <span class="ba-skill-tag ba-skill-plain">Excel</span>
+                    <span class="ba-skill-tag ba-skill-plain">Logistics</span>
+                  </div>
+                  <div class="ba-section-title-mock" style="margin-top:10px">EDUCATION</div>
+                  <div class="ba-edu">BSc Business · University of Leeds · 2018</div>
+                </div>
+              </div>
+
+              <!-- Drag handle -->
+              <div class="ba-handle-wrap" id="ba-handle">
+                <div class="ba-handle-line"></div>
+                <div class="ba-handle-btn">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/><polyline points="9 18 3 12 9 6" transform="translate(6,0)"/></svg>
+                </div>
+                <div class="ba-handle-line"></div>
+              </div>
+
+              <!-- Optimized side -->
+              <div class="ba-side ba-optimized">
+                <div class="ba-side-label ba-side-label-opt">ATS-Optimized</div>
+                <div class="ba-cv-mock">
+                  <div class="ba-name">JAMES CARTER</div>
+                  <div class="ba-role" style="color:#6366F1;font-weight:600">Senior Operations &amp; Supply Chain Manager</div>
+                  <div class="ba-divline" style="background:#6366F1"></div>
+                  <div class="ba-section-title-mock" style="color:#6366F1">EXPERIENCE</div>
+                  <div class="ba-job-title">Senior Operations Manager — RetailCo</div>
+                  <div class="ba-date">2020 – Present · London, UK</div>
+                  <div class="ba-bullets">
+                    <div class="ba-bullet ba-bullet-strong">• <span class="ba-kw">Led end-to-end warehouse operations</span> across 3 sites, reducing lead times by <span class="ba-kw">34%</span></div>
+                    <div class="ba-bullet ba-bullet-strong">• <span class="ba-kw">Delivered 98.7% on-time fulfilment</span> through SLA-driven KPI framework</div>
+                    <div class="ba-bullet ba-bullet-strong">• <span class="ba-kw">Drove cross-functional collaboration</span> with procurement, logistics &amp; 3PL vendors</div>
+                    <div class="ba-bullet ba-bullet-strong">• <span class="ba-kw">Achieved £280K annual cost savings</span> via process re-engineering and ERP optimisation</div>
+                  </div>
+                  <div class="ba-section-title-mock" style="margin-top:10px;color:#6366F1">SKILLS</div>
+                  <div class="ba-skills-row">
+                    <span class="ba-skill-tag ba-skill-opt">Supply Chain</span>
+                    <span class="ba-skill-tag ba-skill-opt">ERP</span>
+                    <span class="ba-skill-tag ba-skill-opt">SAP</span>
+                    <span class="ba-skill-tag ba-skill-opt">KPI Management</span>
+                    <span class="ba-skill-tag ba-skill-opt">3PL</span>
+                    <span class="ba-skill-tag ba-skill-opt">Excel</span>
+                  </div>
+                  <div class="ba-section-title-mock" style="margin-top:10px;color:#6366F1">EDUCATION</div>
+                  <div class="ba-edu">BSc Business Administration · University of Leeds · 2018</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Score bar below -->
+            <div class="ba-score-bar">
+              <div class="ba-score-item"><span class="ba-score-val" style="color:#EF4444">38</span><span class="ba-score-lbl">ATS Score Before</span></div>
+              <div class="ba-score-arrow">→</div>
+              <div class="ba-score-item"><span class="ba-score-val" style="color:#10B981">91</span><span class="ba-score-lbl">ATS Score After</span></div>
+              <div class="ba-score-badge">+53 pts</div>
+            </div>
+          </div>
+
+          <!-- Right: What changed? -->
+          <div class="ba-changes">
+            <h3 class="ba-changes-title">What changed?</h3>
+
+            <div class="ba-change-card">
+              <div class="ba-change-ic" style="background:#ECFDF5">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div>
+                <div class="ba-change-name">Keywords added</div>
+                <div class="ba-change-desc">Job-specific terms extracted and woven into your experience</div>
+              </div>
+            </div>
+
+            <div class="ba-change-card">
+              <div class="ba-change-ic" style="background:#FFFBEB">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#F59E0B" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              </div>
+              <div>
+                <div class="ba-change-name">Weak verbs upgraded</div>
+                <div class="ba-change-desc">Action verbs like 'led', 'delivered', 'achieved' replace vague language</div>
+              </div>
+            </div>
+
+            <div class="ba-change-card">
+              <div class="ba-change-ic" style="background:#EEF2FF">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#6366F1" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              </div>
+              <div>
+                <div class="ba-change-name">ATS-safe formatting applied</div>
+                <div class="ba-change-desc">Clean structure that parses correctly in applicant tracking systems</div>
+              </div>
+            </div>
+
+            <div class="ba-change-card">
+              <div class="ba-change-ic" style="background:#F0FDF4">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#10B981" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div>
+                <div class="ba-change-name">Quantified achievements</div>
+                <div class="ba-change-desc">Numbers and metrics added to every bullet — recruiters stop on these</div>
+              </div>
+            </div>
+
+            <p class="ba-tagline">Simple formatting. Clear structure. Keyword-rich bullets that pass ATS scans and impress recruiters.</p>
+
+            <button class="btn-primary" style="margin-top:20px;width:100%" onclick="go('analyze',null,'careerliftai.com/analyze')">Rewrite My CV Free →</button>
           </div>
         </div>
       </div>
@@ -401,6 +562,10 @@
               <a onclick="go('linkedin',null,'careerliftai.com/linkedin')">LinkedIn Optimizer</a>
               <a onclick="go('coverletter',null,'careerliftai.com/cover-letter')">Cover Letter AI</a>
               <a onclick="go('atsscore',null,'careerliftai.com/ats-score')">ATS Score Checker</a>
+              <a onclick="go('tailor',null,'careerliftai.com/tailor')">Job Tailor</a>
+              <a onclick="go('keywords',null,'careerliftai.com/keywords')">Keyword Extractor</a>
+              <a onclick="go('interview',null,'careerliftai.com/interview')">Interview Prep</a>
+              <a onclick="go('tracker',null,'careerliftai.com/tracker')">Job Tracker</a>
               <a onclick="go('templates',null,'careerliftai.com/templates')">CV Templates</a>
             </div>
           </div>
@@ -449,8 +614,13 @@
           <div class="sb-link" onclick="go('linkedin',null,'careerliftai.com/linkedin')"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>LinkedIn</div>
           <div class="sb-link" onclick="go('coverletter',null,'careerliftai.com/cover-letter')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Cover Letters</div>
           <div class="sb-link" onclick="go('atsscore',null,'careerliftai.com/ats-score')"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>ATS Score</div>
+          <div class="sb-link" onclick="go('tailor',null,'careerliftai.com/tailor')"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>Job Tailor</div>
+          <div class="sb-link" onclick="go('keywords',null,'careerliftai.com/keywords')"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Keywords</div>
+          <div class="sb-link" onclick="go('interview',null,'careerliftai.com/interview')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Interview Prep</div>
+          <div class="sb-link" onclick="go('tracker',null,'careerliftai.com/tracker')"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/></svg>Job Tracker</div>
           <div class="sb-link" onclick="go('templates',null,'careerliftai.com/templates')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Templates</div>
           <div class="sb-link" onclick="go('pricing',null,'careerliftai.com/pricing')"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Billing</div>
+          <div class="sb-link" id="sb-admin-link" style="display:none;color:#F59E0B" onclick="goAdmin()"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin</div>
           <div class="sb-foot">
             <div class="cr-lbl" id="sb-cr-lbl">3 of 3 credits remaining</div>
             <div class="cr-track"><div class="cr-bar" id="sb-cr-bar" style="width:100%"></div></div>
@@ -469,6 +639,10 @@
             <div class="qa-card" onclick="go('analyze',null,'careerliftai.com/analyze')"><span class="qa-tag">Most Popular</span><div class="qa-ic"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h3>Analyze My CV</h3><p>ATS score + full rewrite for your target market</p><button class="qa-go">Start →</button></div>
             <div class="qa-card" onclick="go('linkedin',null,'careerliftai.com/linkedin')"><div class="qa-ic"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div><h3>Optimize LinkedIn</h3><p>Recruiter-ready profile for your target market</p><button class="qa-go">Optimize →</button></div>
             <div class="qa-card" onclick="go('coverletter',null,'careerliftai.com/cover-letter')"><div class="qa-ic"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><h3>Write Cover Letter</h3><p>AI-written letter matched to the job description</p><button class="qa-go">Generate →</button></div>
+            <div class="qa-card" onclick="go('tailor',null,'careerliftai.com/tailor')"><span class="qa-tag">New</span><div class="qa-ic"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><h3>Job Tailor</h3><p>CV rewritten for one specific job description</p><button class="qa-go">Tailor →</button></div>
+            <div class="qa-card" onclick="go('keywords',null,'careerliftai.com/keywords')"><span class="qa-tag">Free</span><div class="qa-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><h3>Keyword Extractor</h3><p>Extract all ATS keywords from any job description</p><button class="qa-go">Extract →</button></div>
+            <div class="qa-card" onclick="go('interview',null,'careerliftai.com/interview')"><span class="qa-tag">New</span><div class="qa-ic"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><h3>Interview Prep</h3><p>10 AI questions + ideal STAR answers for your role</p><button class="qa-go">Prepare →</button></div>
+            <div class="qa-card" onclick="go('tracker',null,'careerliftai.com/tracker')"><div class="qa-ic"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/></svg></div><h3>Job Tracker</h3><p>Track all applications by status in one place</p><button class="qa-go">Track →</button></div>
           </div>
           <div class="rec-card">
             <div class="rec-head">Recent activity</div>
@@ -478,6 +652,121 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ══ ADMIN ══ -->
+    <div class="screen" id="sc-admin">
+      <div class="adm-page">
+
+        <!-- Header -->
+        <div class="adm-header">
+          <div>
+            <div class="page-h">Admin Dashboard</div>
+            <div class="page-s">CareerLift AI &mdash; Owner Panel</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn-ghost" onclick="loadAdminData()" style="font-size:11px;padding:6px 14px">&#8635; Refresh</button>
+            <button class="btn-ghost" onclick="go('dashboard')" style="font-size:11px;padding:6px 14px">&larr; Dashboard</button>
+          </div>
+        </div>
+
+        <div class="adm-notice">&#9888; Data is stored in this browser — users who signed up on other devices appear after a backend sync is set up.</div>
+
+        <!-- Overview Stats -->
+        <div class="adm-stats">
+          <div class="adm-stat">
+            <div class="adm-stat-lbl">Total Users</div>
+            <div class="adm-stat-val" id="adm-total-users">—</div>
+            <div class="adm-stat-sub">All registered</div>
+          </div>
+          <div class="adm-stat">
+            <div class="adm-stat-lbl">Free Users</div>
+            <div class="adm-stat-val adm-blue" id="adm-free-users">—</div>
+            <div class="adm-stat-sub">Free plan</div>
+          </div>
+          <div class="adm-stat">
+            <div class="adm-stat-lbl">Paid Users</div>
+            <div class="adm-stat-val adm-green" id="adm-paid-users">—</div>
+            <div class="adm-stat-sub">Basic &amp; Pro</div>
+          </div>
+          <div class="adm-stat">
+            <div class="adm-stat-lbl">Total AI Uses</div>
+            <div class="adm-stat-val" id="adm-total-analyses">—</div>
+            <div class="adm-stat-sub">All tools</div>
+          </div>
+          <div class="adm-stat">
+            <div class="adm-stat-lbl">Credits Used</div>
+            <div class="adm-stat-val adm-orange" id="adm-credits-used">—</div>
+            <div class="adm-stat-sub">Total consumed</div>
+          </div>
+          <div class="adm-stat">
+            <div class="adm-stat-lbl">Est. MRR</div>
+            <div class="adm-stat-val adm-green" id="adm-revenue">$0</div>
+            <div class="adm-stat-sub">Monthly recurring</div>
+          </div>
+        </div>
+
+        <!-- Tool Usage Breakdown -->
+        <div class="adm-section-title">Tool Usage Breakdown</div>
+        <div class="adm-tool-grid">
+          <div class="adm-tool-card">
+            <div class="adm-tool-ic cv-ic">CV</div>
+            <div><div class="adm-tool-name">CV Analyses</div><div class="adm-tool-val" id="adm-cv-analyses">—</div></div>
+          </div>
+          <div class="adm-tool-card">
+            <div class="adm-tool-ic li-ic">LI</div>
+            <div><div class="adm-tool-name">LinkedIn Opts</div><div class="adm-tool-val" id="adm-li-opts">—</div></div>
+          </div>
+          <div class="adm-tool-card">
+            <div class="adm-tool-ic cl-ic">CL</div>
+            <div><div class="adm-tool-name">Cover Letters</div><div class="adm-tool-val" id="adm-cover-letters">—</div></div>
+          </div>
+          <div class="adm-tool-card">
+            <div class="adm-tool-ic ats-ic">ATS</div>
+            <div><div class="adm-tool-name">ATS Checks</div><div class="adm-tool-val">Free / open</div></div>
+          </div>
+        </div>
+
+        <!-- User Management -->
+        <div class="adm-users-header">
+          <div class="adm-section-title" style="margin:0">All Users <span id="adm-user-count" style="font-size:11px;color:#bbb;font-weight:400;margin-left:6px"></span></div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <input type="text" id="adm-search" class="adm-search" placeholder="Search name or email&hellip;" oninput="admSearchUsers(this.value)">
+            <button class="btn-ghost" onclick="admExportCSV()" style="font-size:11px;padding:6px 12px">&#8595; Export CSV</button>
+          </div>
+        </div>
+        <div class="adm-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Plan</th>
+                <th>Credits Left</th>
+                <th>Total Uses</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adm-users-tbody">
+              <tr><td colspan="6" style="text-align:center;padding:24px;color:#bbb">Loading users&hellip;</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Recent Sign-ups -->
+        <div class="adm-section-title">Recent Sign-ups</div>
+        <div class="adm-table-wrap">
+          <table>
+            <thead>
+              <tr><th>Name</th><th>Email</th><th>Plan</th><th>Joined</th></tr>
+            </thead>
+            <tbody id="adm-recent-tbody">
+              <tr><td colspan="4" style="text-align:center;padding:24px;color:#bbb">No sign-ups recorded yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+
       </div>
     </div>
 
@@ -786,6 +1075,252 @@
             <div class="tpl-preview"><div class="tpl-preview-inner"><div style="padding:32px 36px;font-family:-apple-system,sans-serif;font-size:11px;color:#1a1a1a;background:#fff"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:3px solid #1a1a1a;padding-bottom:14px"><div><div style="font-size:22px;font-weight:700;color:#111;margin-bottom:2px">John Davis</div><div style="font-size:13px;color:#6366F1;font-weight:600">Senior Software Engineer</div></div><div style="text-align:right;font-size:10px;color:#666"><div><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ff95909791bf9a929e9693d19c9092">[email&#160;protected]</a></div><div>+1 555 0123</div><div>New York, NY</div></div></div></div></div></div>
             <div class="tpl-info"><div class="tpl-name">Executive Split</div><div class="tpl-meta">ATS Score: 93/100 · Two column</div><div class="tpl-tags"><span class="tpl-tag">Executive</span><span class="tpl-tag">Management</span></div><div class="tpl-actions"><button class="tpl-btn tpl-btn-ghost" onclick="openEditor('Executive Split')">Preview</button><button class="tpl-btn tpl-btn-fill" onclick="openEditor('Executive Split')">Edit &amp; Use</button></div></div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ JOB TAILOR ══ -->
+    <div class="screen" id="sc-tailor">
+      <div class="inner-page">
+        <div class="page-h">Job Tailor</div>
+        <div class="page-s">Paste your CV and a job description — AI rewrites your CV to match that exact role and maximizes your match score.</div>
+        <div class="credit-gate" id="tailor-credit-gate">
+          <h3>&#128683; Out of credits</h3>
+          <p>You have used all your free credits. Upgrade to continue tailoring your CV to job descriptions.</p>
+          <div class="credit-gate-btns">
+            <button class="cg-btn cg-btn-buy" onclick="go('pricing',null,'careerliftai.com/pricing')">Buy Credits &#8594;</button>
+            <button class="cg-btn cg-btn-free" onclick="closeGate('tailor')">View last result</button>
+          </div>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="cfg-box" style="margin-bottom:12px">
+              <h3>Your CV</h3>
+              <div class="fg"><label>Paste your CV text</label><textarea id="tailor-cv-text" style="min-height:160px" placeholder="Paste your full CV / resume text here…&#10;&#10;The AI will rewrite it to match the job description."></textarea></div>
+            </div>
+            <div class="cfg-box">
+              <h3>Job Description</h3>
+              <div class="fg"><label>Paste the job description *</label><textarea id="tailor-jd" style="min-height:160px" placeholder="Paste the full job description here — the more detail, the better the match…"></textarea></div>
+            </div>
+          </div>
+          <div class="cfg-box">
+            <h3 style="display:flex;justify-content:space-between;align-items:center">Configuration <span class="credit-pill" id="tailor-credit-pill">3 credits left</span></h3>
+            <div class="fg"><label>Target job title *</label><input type="text" id="tailor-jobtitle" placeholder="e.g. Product Manager"></div>
+            <div class="fg"><label>Company name</label><input type="text" id="tailor-company" placeholder="e.g. Google"></div>
+            <div class="fg"><label>Target country</label><select id="tailor-country">
+              <option>United States</option><option>United Kingdom</option><option>Canada</option><option>Australia</option><option>Germany</option><option>Netherlands</option><option>UAE</option>
+            </select></div>
+            <div style="background:#EEF2FF;border-radius:8px;padding:12px;margin-bottom:12px;font-size:11px;color:#4338CA;line-height:1.55">
+              <strong>What this does:</strong><br>
+              Rewrites your CV using the exact keywords, tone and requirements from the job description — so you score 80–95% match instead of 30–50%.
+            </div>
+            <button class="action-btn" id="tailor-btn" onclick="runTailor()">Tailor My CV — 1 credit</button>
+          </div>
+        </div>
+        <div id="tailor-loading" style="display:none" class="ai-loading">
+          <div class="spinner"></div>
+          <p>AI is tailoring your CV…</p>
+          <div class="ai-step" id="tailor-step">Parsing job description</div>
+        </div>
+        <div id="tailor-results" style="display:none;margin-top:20px">
+          <div class="score-card">
+            <div class="sc-pair">
+              <div class="sc-item"><div class="sc-val" style="color:#EF4444" id="tailor-match-before">—</div><div class="sc-label">Match Before</div></div>
+              <div class="sc-arrow" id="tailor-match-diff" style="color:#10B981">→</div>
+              <div class="sc-item"><div class="sc-val" style="color:#10B981" id="tailor-match-after">—</div><div class="sc-label">Match After</div></div>
+            </div>
+            <div class="bars">
+              <h3>Tailoring summary</h3>
+              <div id="tailor-changes" style="font-size:12px;color:#555;line-height:1.8"></div>
+            </div>
+          </div>
+          <div class="cmp-grid">
+            <div class="cv-panel"><h4>Original CV</h4><div class="cv-body" id="tailor-original-cv">—</div></div>
+            <div class="cv-panel right"><h4 style="color:#10B981">Tailored CV</h4><div class="cv-body" id="tailor-output-cv">—</div></div>
+          </div>
+          <div class="kw-card">
+            <h3>Keywords injected from job description</h3>
+            <div class="chip-row" id="tailor-keywords-added"></div>
+            <div style="margin-top:12px">
+              <h3 style="font-size:13px;font-weight:600;color:#111;margin-bottom:8px">Keywords still missing (add manually)</h3>
+              <div class="chip-row" id="tailor-keywords-missing"></div>
+            </div>
+          </div>
+          <div class="dl-row">
+            <button class="dl-btn p" onclick="downloadTailoredPDF()">&#8595; Download PDF</button>
+            <button class="dl-btn" onclick="downloadTailoredTXT()">&#8595; Download TXT</button>
+            <button class="dl-btn" onclick="copyTailored()">Copy text</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ KEYWORD EXTRACTOR ══ -->
+    <div class="screen" id="sc-keywords">
+      <div class="inner-page">
+        <div class="page-h">Keyword Extractor</div>
+        <div class="page-s">Paste any job description — get every ATS keyword grouped by category. Free, no credits needed.</div>
+        <div class="two-col">
+          <div>
+            <div class="cfg-box" style="margin-bottom:12px">
+              <h3>Job Description</h3>
+              <div class="fg"><label>Paste the job description *</label><textarea id="kw-jd" style="min-height:180px" placeholder="Paste the full job description here to extract all ATS keywords…"></textarea></div>
+            </div>
+            <div class="cfg-box">
+              <h3>Your CV (optional — for gap analysis)</h3>
+              <div class="fg"><label>Paste your CV text</label><textarea id="kw-cv" style="min-height:120px" placeholder="Paste your CV here to see which keywords you already have and which are missing…"></textarea></div>
+            </div>
+            <button class="action-btn" id="kw-btn" onclick="runKeywordExtract()" style="margin-top:12px">Extract Keywords — Free</button>
+          </div>
+          <div>
+            <div class="cfg-box" style="background:#EEF2FF;border:1px solid #C7D2FE">
+              <h3 style="color:#4338CA">How to use these keywords</h3>
+              <div style="font-size:12px;color:#4338CA;line-height:1.7">
+                <p style="margin-bottom:8px">&#10003; Add missing hard skills to your skills section</p>
+                <p style="margin-bottom:8px">&#10003; Use exact phrases from the JD in your bullet points</p>
+                <p style="margin-bottom:8px">&#10003; Mirror qualifications language in your education section</p>
+                <p style="margin-bottom:8px">&#10003; Include industry terms in your professional summary</p>
+                <p>&#10003; Click any keyword to copy it instantly</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="kw-loading" style="display:none" class="ai-loading">
+          <div class="spinner"></div>
+          <p>Extracting keywords…</p>
+        </div>
+        <div id="kw-results" style="display:none;margin-top:20px">
+          <div class="kw-card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:11px">
+              <h3 style="margin-bottom:0">Hard Skills &amp; Technical Keywords</h3>
+              <button class="row-btn" onclick="copyAllKeywords()">Copy all</button>
+            </div>
+            <div class="chip-row" id="kw-hard"></div>
+          </div>
+          <div class="kw-card">
+            <h3>Soft Skills &amp; Competencies</h3>
+            <div class="chip-row" id="kw-soft"></div>
+          </div>
+          <div class="kw-card">
+            <h3>Qualifications &amp; Requirements</h3>
+            <div class="chip-row" id="kw-qual"></div>
+          </div>
+          <div class="kw-card">
+            <h3>Industry &amp; Role-Specific Terms</h3>
+            <div class="chip-row" id="kw-industry"></div>
+          </div>
+          <div id="kw-gap-section" style="display:none">
+            <div class="kw-card">
+              <h3 style="color:#10B981">Keywords already in your CV &#10003;</h3>
+              <div class="chip-row" id="kw-in-cv"></div>
+            </div>
+            <div class="kw-card">
+              <h3 style="color:#EF4444">Keywords missing from your CV &#9888;</h3>
+              <div class="chip-row" id="kw-missing"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ INTERVIEW PREP ══ -->
+    <div class="screen" id="sc-interview">
+      <div class="inner-page">
+        <div class="page-h">Interview Prep</div>
+        <div class="page-s">Paste the job description and your CV — AI generates 10 tailored interview questions with ideal answers using the STAR method.</div>
+        <div class="credit-gate" id="interview-credit-gate">
+          <h3>&#128683; Out of credits</h3>
+          <p>You have used all your free credits. Upgrade to continue generating interview questions.</p>
+          <div class="credit-gate-btns">
+            <button class="cg-btn cg-btn-buy" onclick="go('pricing',null,'careerliftai.com/pricing')">Buy Credits &#8594;</button>
+            <button class="cg-btn cg-btn-free" onclick="closeGate('interview')">View last result</button>
+          </div>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="cfg-box" style="margin-bottom:12px">
+              <h3>Job Description *</h3>
+              <div class="fg"><textarea id="iv-jd" style="min-height:160px" placeholder="Paste the job description here — AI will generate questions specifically for this role…"></textarea></div>
+            </div>
+            <div class="cfg-box">
+              <h3>Your CV (optional — for personalized answers)</h3>
+              <div class="fg"><textarea id="iv-cv" style="min-height:120px" placeholder="Paste your CV here and the AI will tailor the ideal answers to your specific background…"></textarea></div>
+            </div>
+          </div>
+          <div class="cfg-box">
+            <h3 style="display:flex;justify-content:space-between;align-items:center">Configuration <span class="credit-pill" id="interview-credit-pill">3 credits left</span></h3>
+            <div class="fg"><label>Target job title</label><input type="text" id="iv-jobtitle" placeholder="e.g. Data Analyst"></div>
+            <div style="background:#EEF2FF;border-radius:8px;padding:12px;margin:12px 0;font-size:11px;color:#4338CA;line-height:1.55">
+              <strong>What you get:</strong><br>
+              &#10003; 3 behavioral questions (STAR method)<br>
+              &#10003; 3 technical / role-specific questions<br>
+              &#10003; 2 culture fit questions<br>
+              &#10003; 2 situational judgment questions<br>
+              &#10003; Ideal answer for each question
+            </div>
+            <button class="action-btn" id="iv-btn" onclick="runInterviewPrep()">Generate Interview Questions — 1 credit</button>
+          </div>
+        </div>
+        <div id="iv-loading" style="display:none" class="ai-loading">
+          <div class="spinner"></div>
+          <p>AI is preparing your interview questions…</p>
+        </div>
+        <div id="iv-results" style="display:none;margin-top:20px">
+          <div class="kw-card" style="margin-bottom:14px">
+            <h3>Your 10 Tailored Interview Questions</h3>
+            <p style="font-size:12px;color:#888;margin-top:4px">Click "Show ideal answer" on any question to see the AI-coached response framework.</p>
+          </div>
+          <div id="iv-questions-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ JOB TRACKER ══ -->
+    <div class="screen" id="sc-tracker">
+      <div class="inner-page">
+        <div class="page-h">Job Application Tracker</div>
+        <div class="page-s">Track every application in one place — never lose track of where you applied and what stage you're at.</div>
+        <div class="tracker-stats">
+          <div class="tracker-stat"><div class="tracker-stat-val" id="tracker-stat-total">0</div><div class="tracker-stat-lbl">Total Applications</div></div>
+          <div class="tracker-stat"><div class="tracker-stat-val" style="color:#0ea5e9" id="tracker-stat-interview">0</div><div class="tracker-stat-lbl">Interviews</div></div>
+          <div class="tracker-stat"><div class="tracker-stat-val" style="color:#10b981" id="tracker-stat-offer">0</div><div class="tracker-stat-lbl">Offers</div></div>
+          <div class="tracker-stat"><div class="tracker-stat-val" style="color:#ef4444" id="tracker-stat-rejected">0</div><div class="tracker-stat-lbl">Rejected</div></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div></div>
+          <div style="display:flex;gap:8px">
+            <button class="dl-btn" onclick="exportTrackerCSV()">&#8595; Export CSV</button>
+            <button class="btn-indigo" onclick="showTrackerForm()" style="font-size:12px;padding:7px 16px">+ Add Application</button>
+          </div>
+        </div>
+        <!-- Add form (hidden by default) -->
+        <div id="tracker-add-form" style="display:none" class="cfg-box" style="margin-bottom:14px">
+          <h3>New Application</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+            <div class="fg"><label>Company *</label><input type="text" id="tracker-company" placeholder="e.g. Google"></div>
+            <div class="fg"><label>Role *</label><input type="text" id="tracker-role" placeholder="e.g. Product Manager"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+            <div class="fg"><label>Status</label><select id="tracker-status"><option>Applied</option><option>Screening</option><option>Interview</option><option>Offer</option><option>Rejected</option></select></div>
+            <div class="fg"><label>Date applied</label><input type="date" id="tracker-date"></div>
+          </div>
+          <div class="fg"><label>Notes</label><input type="text" id="tracker-notes" placeholder="e.g. Applied via LinkedIn, follow up in 1 week"></div>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="action-btn" style="margin-top:0;flex:1" onclick="addTrackerJob()">Save Application</button>
+            <button class="dl-btn" style="align-self:stretch" onclick="showTrackerForm()">Cancel</button>
+          </div>
+        </div>
+        <div class="rec-card">
+          <div class="rec-head">Applications</div>
+          <div id="tracker-empty" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;color:#aaa;text-align:center">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ddd" stroke-width="1.5" style="margin-bottom:12px"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/><line x1="12" y1="12" x2="12" y2="16"/></svg>
+            <p style="font-size:13px;font-weight:500;color:#999;margin-bottom:6px">No applications yet</p>
+            <p style="font-size:12px">Click "+ Add Application" to track your first job application.</p>
+          </div>
+          <table>
+            <thead><tr><th>Company</th><th>Role</th><th>Status</th><th>Applied</th><th>Notes</th><th></th></tr></thead>
+            <tbody id="tracker-tbody"></tbody>
+          </table>
         </div>
       </div>
     </div>

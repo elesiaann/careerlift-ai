@@ -614,3 +614,158 @@ tr:last-child td{border-bottom:none}
   .hero-badge{font-size:10px}
   .review-card:nth-child(n+3){display:none}
 }
+
+/* ════════════════════════════════════
+   ADMIN DASHBOARD
+════════════════════════════════════ */
+.adm-page{background:#f4f4f4;padding:22px clamp(16px,4vw,32px);overflow-y:auto;min-height:100%;width:100%}
+.adm-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.adm-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:18px}
+.adm-stat{background:#fff;border:1px solid #eee;border-radius:9px;padding:14px 13px}
+.adm-stat-lbl{font-size:9px;color:#888;margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+.adm-stat-val{font-size:26px;font-weight:700;color:#111;line-height:1}
+.adm-stat-sub{font-size:10px;color:#bbb;margin-top:4px}
+.adm-green{color:#10B981!important}
+.adm-blue{color:#6366F1!important}
+.adm-orange{color:#F59E0B!important}
+.adm-section-title{font-size:13px;font-weight:600;color:#111;margin-bottom:10px;margin-top:20px}
+.adm-tool-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:4px}
+.adm-tool-card{background:#fff;border:1px solid #eee;border-radius:9px;padding:14px 16px;display:flex;align-items:center;gap:13px}
+.adm-tool-ic{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;letter-spacing:.3px}
+.cv-ic{background:#EEF2FF;color:#6366F1}
+.li-ic{background:#E0F2FE;color:#0369A1}
+.cl-ic{background:#FEF3C7;color:#92400E}
+.ats-ic{background:#F0FDF4;color:#065F46}
+.adm-tool-name{font-size:10px;color:#888;margin-bottom:3px;font-weight:500}
+.adm-tool-val{font-size:20px;font-weight:700;color:#111}
+.adm-users-header{display:flex;justify-content:space-between;align-items:center;margin-top:20px;margin-bottom:10px;gap:12px;flex-wrap:wrap}
+.adm-search{padding:7px 11px;border:1px solid #d8d8d8;border-radius:7px;font-size:12px;font-family:inherit;outline:none;width:220px;transition:border-color .15s}
+.adm-search:focus{border-color:#6366F1}
+.adm-table-wrap{background:#fff;border:1px solid #eee;border-radius:10px;overflow:hidden;margin-bottom:20px;overflow-x:auto}
+.adm-badge{display:inline-block;padding:2px 9px;border-radius:8px;font-size:10px;font-weight:600;white-space:nowrap}
+.adm-badge-free{background:#f3f4f6;color:#555}
+.adm-badge-basic{background:#EEF2FF;color:#4338CA}
+.adm-badge-pro{background:#ECFDF5;color:#065F46}
+.adm-user-cell{display:flex;align-items:center;gap:9px;min-width:160px}
+.adm-av{width:28px;height:28px;border-radius:50%;background:#EEF2FF;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#6366F1;flex-shrink:0}
+.adm-user-name{font-size:12px;font-weight:600;color:#111;white-space:nowrap}
+.adm-user-email{font-size:10px;color:#aaa;white-space:nowrap}
+.adm-action-btn{padding:4px 9px;border-radius:5px;border:1px solid #d8d8d8;background:#fff;font-size:10px;cursor:pointer;color:#555;transition:background .12s}
+.adm-action-btn:hover{background:#f5f5f5}
+.adm-action-btn-danger{border-color:#FECACA;color:#DC2626}
+.adm-action-btn-danger:hover{background:#FEF2F2}
+.adm-action-btn-success{border-color:#A7F3D0;color:#065F46}
+.adm-action-btn-success:hover{background:#ECFDF5}
+.adm-plan-select{padding:3px 6px;border-radius:5px;border:1px solid #d8d8d8;background:#fff;font-size:11px;font-family:inherit;cursor:pointer;outline:none;margin:0 3px}
+.adm-plan-select:focus{border-color:#6366F1}
+.adm-notice{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;font-size:11px;color:#92400E;margin-bottom:16px}
+@media(max-width:1100px){.adm-stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.adm-stats{grid-template-columns:repeat(2,1fr)}.adm-tool-grid{grid-template-columns:repeat(2,1fr)}.adm-search{width:100%}.adm-users-header{flex-direction:column;align-items:flex-start}}
+
+/* ═══ JOB TAILOR ═══ */
+.kw-chip-missing{background:#FEF2F2;color:#991B1B;border-color:#FECACA}
+
+/* ═══ KEYWORD EXTRACTOR ═══ */
+.kw-chip-soft{background:#F0FDF4;color:#166534;border-color:#BBF7D0}
+.kw-chip-qual{background:#FFFBEB;color:#92400E;border-color:#FDE68A}
+.kw-chip-ind{background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE}
+.kw-chip-ok{background:#ECFDF5;color:#065F46;border-color:#6EE7B7}
+
+/* ═══ INTERVIEW PREP ═══ */
+.iv-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:18px;margin-bottom:10px}
+.iv-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.iv-cat-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600}
+.iv-qnum{font-size:10px;color:#bbb;font-weight:600}
+.iv-question{font-size:14px;font-weight:600;color:#111;line-height:1.45;margin-bottom:8px}
+.iv-why{font-size:11px;color:#888;margin-bottom:10px;line-height:1.5}
+.iv-answer-toggle{display:flex;align-items:center;gap:6px;font-size:12px;color:#6366F1;cursor:pointer;font-weight:500;padding:6px 0;user-select:none}
+.iv-answer-toggle svg{transition:transform .2s}
+.iv-answer{background:#f9f9f9;border-radius:8px;padding:13px;font-size:12px;color:#444;line-height:1.7;margin-top:8px}
+
+/* ═══ JOB TRACKER ═══ */
+.tracker-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.tracker-stat{background:#fff;border:1px solid #eee;border-radius:9px;padding:14px;text-align:center}
+.tracker-stat-val{font-size:26px;font-weight:700;color:#111}
+.tracker-stat-lbl{font-size:11px;color:#aaa;margin-top:3px}
+.tracker-status-sel{padding:4px 8px;border-radius:6px;font-size:11px;font-family:inherit;font-weight:600;cursor:pointer;outline:none;border-width:1px;border-style:solid}
+
+/* ═══ RESPONSIVE — new tools ═══ */
+@media(max-width:900px){
+  .tracker-stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+  .two-col{grid-template-columns:1fr}
+  .tracker-stats{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ═══ BEFORE / AFTER COMPARISON SECTION ═══ */
+.ba-section{padding:60px clamp(20px,5vw,48px);background:#fafafa;border-top:1px solid #eee;border-bottom:1px solid #eee;width:100%}
+.ba-section .section-title{font-size:28px;font-weight:700;color:#111;text-align:center;letter-spacing:-.5px;margin-bottom:8px}
+.ba-section .section-sub{font-size:14px;color:#888;text-align:center;margin-bottom:40px}
+.ba-layout{display:grid;grid-template-columns:1fr 340px;gap:32px;align-items:start;max-width:1100px;margin:0 auto}
+
+/* Compare wrap */
+.ba-compare-wrap{display:flex;flex-direction:column;gap:0}
+.ba-compare{display:grid;grid-template-columns:1fr 32px 1fr;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1);background:#fff;min-height:460px;position:relative}
+
+/* Sides */
+.ba-side{padding:20px 18px;overflow:hidden;position:relative}
+.ba-original{background:#fff;border-right:none}
+.ba-optimized{background:#fafeff}
+
+/* Side labels */
+.ba-side-label{display:inline-block;padding:4px 12px;border-radius:20px;font-size:10px;font-weight:700;background:#f5f5f5;color:#888;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px}
+.ba-side-label-opt{background:#EEF2FF;color:#6366F1}
+
+/* CV mock content */
+.ba-cv-mock{font-size:10px;line-height:1.5;color:#333}
+.ba-name{font-size:15px;font-weight:700;color:#111;letter-spacing:-.3px}
+.ba-role{font-size:10px;margin-bottom:8px;margin-top:2px}
+.ba-divline{height:2px;background:#eee;margin-bottom:9px;border-radius:2px}
+.ba-section-title-mock{font-size:8px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:#aaa;margin-bottom:6px;margin-top:8px}
+.ba-job-title{font-size:10px;font-weight:600;color:#111;margin-bottom:2px}
+.ba-date{font-size:9px;color:#aaa;margin-bottom:6px}
+.ba-bullets{display:flex;flex-direction:column;gap:4px}
+.ba-bullet{font-size:9.5px;color:#555;line-height:1.45;padding-left:2px}
+.ba-bullet-weak{color:#999}
+.ba-bullet-strong{color:#333}
+.ba-kw{background:#D1FAE5;color:#065F46;border-radius:2px;padding:0 1px;font-weight:600}
+.ba-skills-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.ba-skill-tag{padding:2px 7px;border-radius:8px;font-size:9px;font-weight:500}
+.ba-skill-plain{background:#f5f5f5;color:#777}
+.ba-skill-opt{background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE}
+.ba-edu{font-size:9px;color:#666;margin-top:4px}
+
+/* Drag handle */
+.ba-handle-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;border-left:1px solid #eee;border-right:1px solid #eee;cursor:col-resize;position:relative;z-index:2}
+.ba-handle-line{flex:1;width:1px;background:#e0e0e0}
+.ba-handle-btn{width:28px;height:28px;border-radius:50%;background:#6366F1;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(99,102,241,.4);flex-shrink:0;margin:6px 0}
+
+/* Score bar */
+.ba-score-bar{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid #eee;border-radius:0 0 12px 12px;padding:13px 20px;border-top:none}
+.ba-score-item{display:flex;align-items:baseline;gap:6px}
+.ba-score-val{font-size:28px;font-weight:700}
+.ba-score-lbl{font-size:11px;color:#aaa}
+.ba-score-arrow{font-size:20px;color:#aaa;font-weight:300;flex:1;text-align:center}
+.ba-score-badge{padding:4px 12px;border-radius:20px;background:#ECFDF5;color:#065F46;font-size:13px;font-weight:700;border:1px solid #6EE7B7;white-space:nowrap}
+
+/* Changes column */
+.ba-changes{padding:4px 0}
+.ba-changes-title{font-size:20px;font-weight:700;color:#111;margin-bottom:20px;letter-spacing:-.3px}
+.ba-change-card{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:#fff;border:1px solid #eee;border-radius:10px;margin-bottom:10px;transition:box-shadow .15s}
+.ba-change-card:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.ba-change-ic{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ba-change-name{font-size:13px;font-weight:600;color:#111;margin-bottom:3px}
+.ba-change-desc{font-size:11px;color:#888;line-height:1.5}
+.ba-tagline{font-size:13px;color:#777;line-height:1.6;margin-top:16px;font-style:italic}
+
+/* Responsive */
+@media(max-width:960px){
+  .ba-layout{grid-template-columns:1fr}
+  .ba-changes{padding-top:0}
+}
+@media(max-width:600px){
+  .ba-compare{grid-template-columns:1fr 24px 1fr;min-height:320px}
+  .ba-side{padding:12px 10px}
+  .ba-name{font-size:11px}
+}
